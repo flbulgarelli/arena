@@ -1,0 +1,94 @@
+package org.uqbar.arena.widgets.tables;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.uqbar.arena.bindings.ObservableProperty;
+import org.uqbar.arena.widgets.Container;
+import org.uqbar.arena.widgets.Control;
+import org.uqbar.lacar.ui.model.ControlBuilder;
+import org.uqbar.lacar.ui.model.PanelBuilder;
+import org.uqbar.lacar.ui.model.TableBuilder;
+import org.uqbar.lacar.ui.model.bindings.Binding;
+import org.uqbar.lacar.ui.model.bindings.Observable;
+
+public class Table<R> extends Control {
+	private Class<R> itemType;
+	private List<Column<R>> columns = new ArrayList<Column<R>>();
+
+	public Table(Container container, Class<R> itemType) {
+		super(container);
+		this.itemType = itemType;
+	}
+
+	// ********************************************************
+	// ** Configuration
+	// ********************************************************
+
+	/**
+	 * Asigna el contenido de esta tabla.
+	 * 
+	 * @param selected Nombre de la propiedad del modelo del contenedor desde la cuál se obtendrán los
+	 *            contenidos de esta tabla
+	 * 
+	 * @return Esta misma tabla, para enviar mensajes anidados
+	 */
+	public Table<R> bindContentsToProperty(String propertyName) {
+		return this.bindContents(new ObservableProperty(propertyName));
+	}
+
+	/**
+	 * Asigna el contenido de esta tabla.
+	 * 
+	 * @param model Una característica observable del modelo.
+	 * 
+	 * @return Esta misma tabla, para enviar mensajes anidados
+	 */
+	public Table<R> bindContents(Observable model) {
+		this.addBinding(model, new ObservableTableContents());
+		return this;
+	}
+
+	/**
+	 * Vincula la fila seleccionada de esta tabla con una propiedad del modelo asociado al contenedor.
+	 * 
+	 * @param selected Nombre de la propiedad contra la cual se desea vincular la fila seleccionada de esta
+	 *            tabla.
+	 * 
+	 * @return Esta misma tabla, para enviar mensajes anidados
+	 */
+	public <C extends ControlBuilder> Binding<C> bindSelection(String selected) {
+		return this.bindValue(new ObservableProperty(selected));
+	}
+
+	// ********************************************************
+	// ** Columns
+	// ********************************************************
+
+	public Table<R> addColumn(Column<R> column) {
+		this.columns.add(column);
+		return this;
+	}
+
+	public List<Column<R>> getColumns() {
+		return this.columns;
+	}
+
+	// ********************************************************
+	// ** Rendering
+	// ********************************************************
+
+	/**
+	 * @return Un {@link TableBuilder} que ya tiene agregadas las columnas de esta tabla.
+	 */
+	@Override
+	protected TableBuilder<R> createBuilder(PanelBuilder container) {
+		TableBuilder<R> tableBuilder = container.addTable(this.itemType);
+
+		for (Column<R> column : this.columns) {
+			column.showOn(tableBuilder);
+		}
+
+		return tableBuilder;
+	}
+}
