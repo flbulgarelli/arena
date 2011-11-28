@@ -11,11 +11,11 @@ import com.uqbar.renascent.framework.aop.FrameworkClassLoader;
  * 
  * Parametro para correr tests con este ClassLoader.
  * 
- * -Djava.system.class.loader=org.unqbar.arena.aop.VideoclubClassLoader
+ * -Djava.system.class.loader=org.unqbar.arena.aop.ArenaClassLoader
  */
-public class VideoclubClassLoader extends FrameworkClassLoader {
+public class ArenaClassLoader extends FrameworkClassLoader {
 
-	public VideoclubClassLoader(ClassLoader parent) {
+	public ArenaClassLoader(ClassLoader parent) {
 		super(parent);
 	}
 	

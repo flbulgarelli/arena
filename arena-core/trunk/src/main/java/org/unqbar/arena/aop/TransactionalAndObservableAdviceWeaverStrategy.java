@@ -10,12 +10,12 @@ import javassist.expr.ExprEditor;
 
 import com.uqbar.commons.collections.Predicate;
 import com.uqbar.poo.aop.ObservableBehaviorAdviceWeaverStrategy;
+import com.uqbar.pot.aop.TransactionalBehaviorAdviceWeaverStrategy;
 import com.uqbar.renascent.aop.pointcut.predicate.HasAnnotationPredicate;
 import com.uqbar.renascent.aop.pointcut.predicate.OrPredicate;
 import com.uqbar.renascent.aop.pointcut.predicate.SuperClassPredicate;
 import com.uqbar.renascent.framework.aop.AdviceWeaver;
 import com.uqbar.renascent.framework.aop.IBehaviorAdviceWeaverStrategy;
-import com.uqbar.renascent.framework.aop.TransactionalBehaviorAdviceWeaverStrategy;
 import com.uqbar.renascent.framework.aop.WeavingInstrumentor;
 
 /**
