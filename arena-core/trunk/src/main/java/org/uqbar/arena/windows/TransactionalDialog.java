@@ -1,7 +1,6 @@
 package org.uqbar.arena.windows;
 
 import org.uqbar.commons.model.ObservableObject;
-import org.uqbar.lacar.ui.model.Action;
 
 import com.uqbar.renascent.common.transaction.ObjectTransaction;
 import com.uqbar.renascent.common.transaction.TaskOwner;
