@@ -1,4 +1,4 @@
-package com.uqbar.apo;
+package com.uqbar.apo.util;
 
 public interface IExampleObject {
 

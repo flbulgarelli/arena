@@ -27,5 +27,10 @@ public class MessageSend implements Action {
 	public void execute() {
 		ReflectionUtils.invokeMethod(this.target, this.methodName);
 	}
+
+	@Override
+	public void execute(Object... objects) {
+		ReflectionUtils.invokeMethod(this.target, this.methodName, objects);
+	}
 	
 }

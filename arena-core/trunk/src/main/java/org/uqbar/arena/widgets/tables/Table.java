@@ -83,7 +83,7 @@ public class Table<R> extends Control {
 	 */
 	@Override
 	protected TableBuilder<R> createBuilder(PanelBuilder container) {
-		TableBuilder<R> tableBuilder = container.addTable(this.itemType);
+		TableBuilder<R> tableBuilder = container.addTable(this.itemType, getWidth(), getHeigth());
 
 		for (Column<R> column : this.columns) {
 			column.showOn(tableBuilder);

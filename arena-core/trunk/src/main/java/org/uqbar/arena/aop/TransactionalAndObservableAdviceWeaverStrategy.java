@@ -1,4 +1,4 @@
-package org.unqbar.arena.aop;
+package org.uqbar.arena.aop;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -7,6 +7,10 @@ import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.expr.ExprEditor;
+
+import org.uqbar.commons.utils.Observable;
+import org.uqbar.commons.utils.Transactional;
+import org.uqbar.commons.utils.TransactionalAandObservable;
 
 import com.uqbar.commons.collections.Predicate;
 import com.uqbar.poo.aop.ObservableBehaviorAdviceWeaverStrategy;
@@ -30,27 +34,22 @@ public class TransactionalAndObservableAdviceWeaverStrategy  implements IBehavio
 	public void addInstrumentors(ClassPool classPool,
 			Map<Predicate<CtClass>, ExprEditor> weavingInstrumentors) {
 		
-		WeavingInstrumentor weavingInstrumentorSuperclassPredicate = new WeavingInstrumentor();
-
-		observableBehaviorAdviceWeaverStrategy.configureInstrumentor(weavingInstrumentorSuperclassPredicate);
-		transactionalBehaviorAdviceWeaverStrategy.configureInstrumentor(weavingInstrumentorSuperclassPredicate);
+		WeavingInstrumentor weavingInstrumentor = new WeavingInstrumentor();
 		
-		weavingInstrumentors.put(new SuperClassPredicate(classPool, AdviceWeaver.CLASSNAME_PERSISTIBLE),
-				weavingInstrumentorSuperclassPredicate);
-					// persistence
+		observableBehaviorAdviceWeaverStrategy.configureInstrumentor(weavingInstrumentor);
+		transactionalBehaviorAdviceWeaverStrategy.configureInstrumentor(weavingInstrumentor);
 		
-		WeavingInstrumentor weavingInstrumentorOrPredicate = new WeavingInstrumentor();
-		
-		observableBehaviorAdviceWeaverStrategy.configureInstrumentor(weavingInstrumentorOrPredicate);
-		transactionalBehaviorAdviceWeaverStrategy.configureInstrumentor(weavingInstrumentorOrPredicate);
-		// transactions - collections
+		// transactions - 
 		weavingInstrumentors.put(new OrPredicate<CtClass>(
-			new SuperClassPredicate(classPool, "com.uqbar.renascent.common.collections.Itr"),
-			new SuperClassPredicate(classPool, "com.uqbar.renascent.common.collections.AbstractCollection"),
-			new SuperClassPredicate(classPool, "com.uqbar.renascent.common.collections.SubListListIterator"),
-			new SuperClassPredicate(classPool, "com.uqbar.renascent.common.collections.BasicList"),
-			new HasAnnotationPredicate(classPool, "org.uqbar.commons.utils.Transactional")),
-			weavingInstrumentorOrPredicate);
+				new HasAnnotationPredicate(classPool, Transactional.class.getName()),
+				new HasAnnotationPredicate(classPool, Observable.class.getName()),
+			new HasAnnotationPredicate(classPool, TransactionalAandObservable.class.getName())),
+			weavingInstrumentor);
+		
+		// observable - 
+//		weavingInstrumentors.put(new OrPredicate<CtClass>(
+//			new HasAnnotationPredicate(classPool, TransactionalAandObservable.class.getName())),
+//			observableWeavingInstrumentor);
 
 		
 	}
@@ -59,8 +58,8 @@ public class TransactionalAndObservableAdviceWeaverStrategy  implements IBehavio
 	public void applyAdviceToCtClass(CtClass ctClass,
 			Entry<Predicate<CtClass>, ExprEditor> entry)
 			throws CannotCompileException {
-		observableBehaviorAdviceWeaverStrategy.applyAdviceToCtClass(ctClass, entry);
 		transactionalBehaviorAdviceWeaverStrategy.applyAdviceToCtClass(ctClass, entry);
+		observableBehaviorAdviceWeaverStrategy.applyAdviceToCtClass(ctClass, entry);
 		
 	}
 

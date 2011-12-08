@@ -1,105 +1,138 @@
 package com.uqbar.apo;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import junit.framework.Assert;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.junit.Before;
 import org.junit.Test;
-import org.uqbar.commons.utils.ReflectionUtils;
 
+import com.uqbar.apo.util.ExampleObject;
+import com.uqbar.apo.util.IExampleObject;
+import com.uqbar.apo.util.TestRealm;
 import com.uqbar.renascent.framework.aop.transaction.ObjectTransactionManager;
 import com.uqbar.renascent.framework.aop.transaction.utils.BasicTaskOwner;
 
 /**
  * @author nny
  * 
- *  * -Djava.system.class.loader=org.unqbar.arena.aop.VideoclubClassLoader
- *
+ * -Djava.system.class.loader=org.uqbar.arena.aop.ArenaClassLoader 
  */
-public class TestObservable  {
+public class TestObservable  extends AbstractTestObsevable{
 
-	private static final int AGE = 123;
-	private static final String VALUE1 = "nombre1";
 	private static final String VALUE2 = "nombre2";
 	private static final String VALUE3 = "nombre3";
+	private static final String VALUE4 = "nombre4";
 	
-	private Log logger = LogFactory.getLog(TestObservable.class);
 	
+	@Before
+	public void setUp() {
+		TestRealm.install();
+	}
+
 
 	@Test
 	public void testListenerWithoutTransaction(){
-		final IExampleObject observableObject = new ExampleObservableObject(VALUE1, AGE);
-		final IExampleObject observer = new ExampleObject();
+		final IExampleObject observableObject = createSourceObject();
+		final IExampleObject observer = createObserverObject();
 
 		
 		bindProperty(observableObject, observer, ExampleObject.NAME);
 		
 		observableObject.setName(VALUE2);
 		
-		assertValues(observableObject, observer, VALUE2, observableObject.getName(), VALUE2, VALUE2);
+		assertValues(observableObject, observer, VALUE2, VALUE2, VALUE2, VALUE2);
 		
 	}
 	
 	@Test
 	public void testListenerWithSipleTransaction(){
-		BasicTaskOwner owner = new BasicTaskOwner("Test");
-		final IExampleObject observableObject = new ExampleObservableObject(VALUE1, AGE);
-		final IExampleObject observer = new ExampleObject();
-		
-		this.bindProperty(observableObject, observer, "name");
-		
+		BasicTaskOwner owner = createOwnerTransaction();
 		ObjectTransactionManager.begin(owner);
-		//Apenas creo una transaccion verifico los valores
+
+		final IExampleObject observableObject = createSourceObject();
+		final IExampleObject observer = createObserverObject();
+
 		assertValues(observableObject, observer, VALUE1, null, VALUE1, null);
+
+		this.bindProperty(observableObject, observer, "name");
+
+		
+		//Apenas creo una transaccion verifico los valores
+		assertValues(observableObject, observer, VALUE1, VALUE1, VALUE1, VALUE1);
 		
 		//primer cambio
 		observableObject.setName(VALUE2);
-		assertValues(observableObject, observer, VALUE2, observableObject.getName(), VALUE1, VALUE2);
+		assertValues(observableObject, observer, VALUE2, VALUE2, VALUE1, VALUE2);
 		
 		//segundo cambio cambio
 		observableObject.setName(VALUE3);
-		assertValues(observableObject, observer, VALUE3, observableObject.getName(), VALUE1, VALUE3);
+		assertValues(observableObject, observer, VALUE3, VALUE3, VALUE1, VALUE3);
 		
 		
 		ObjectTransactionManager.commit(owner);
 		//verifico despues del comit
-		assertValues(observableObject, observer, VALUE3, observableObject.getName(), VALUE3, VALUE3);
+		assertValues(observableObject, observer, VALUE3, VALUE3, VALUE3, VALUE3);
 	}
 
-	protected void assertValues(IExampleObject observableObject, IExampleObject observer, Object observableGetValue,
-			Object observerGetValue, Object observableFieldValue, Object observerFieldVale) {
+	
+	@Test
+	public void testListenerWithNestedTransaction(){
+		BasicTaskOwner owner = createOwnerTransaction();
 		
-		Assert.assertEquals(observableObject.getName(), observableGetValue);	
-		Assert.assertEquals(observer.getName(), observerGetValue);
+		//Primer transaccion
+		ObjectTransactionManager.begin(owner);
+
+		final IExampleObject observableObject = createSourceObject();
+		final IExampleObject observer = createObserverObject();
+
+		assertValues(observableObject, observer, VALUE1, null, VALUE1, null);
+
+		this.bindProperty(observableObject, observer, "name");
 		
-		//invoca por reflexcion para no pasar por el aspecto
-		Assert.assertEquals(ReflectionUtils.readField(observableObject, ExampleObject.NAME), observableFieldValue);
-		Assert.assertEquals(ReflectionUtils.readField(observer, ExampleObject.NAME), observerFieldVale);
+		//Apenas creo una transaccion verifico los valores
+		assertValues(observableObject, observer, VALUE1, VALUE1, VALUE1, VALUE1);
+		
+		//primer cambio
+		observableObject.setName(VALUE2);
+		assertValues(observableObject, observer, VALUE2, VALUE2, VALUE1, VALUE2);
+
+		//Segunda transaccion
+		ObjectTransactionManager.begin(owner);
+		
+		final IExampleObject observer2 = new ExampleObject("observer2", null, null);
+		
+		this.bindProperty(observableObject, observer2, "name");
+		
+		//segundo cambio 
+		observableObject.setName(VALUE3);
+		assertValues(observableObject, observer, VALUE3, VALUE2, VALUE1, VALUE2);
+		assertValues(observableObject, observer2, VALUE3, VALUE3, VALUE1, VALUE3);
+		
+		//Tercera transaccion
+		ObjectTransactionManager.begin(owner);
+		observableObject.setName(VALUE4);
+		assertValues(observableObject, observer, VALUE4, VALUE2, VALUE1, VALUE2);
+		assertValues(observableObject, observer2, VALUE4, VALUE3, VALUE1, VALUE3);
+		
+		//Primer Commit
+		ObjectTransactionManager.commit(owner);
+		assertValues(observableObject, observer, VALUE4, VALUE2, VALUE1, VALUE2);
+		assertValues(observableObject, observer2, VALUE4, VALUE3, VALUE1, VALUE3);
+
+		//Segundo Commit
+		ObjectTransactionManager.commit(owner);
+		assertValues(observableObject, observer, VALUE4, VALUE2, VALUE1, VALUE2);
+		assertValues(observableObject, observer2, VALUE4, VALUE3, VALUE1, VALUE3);
+		
+		//Tercer Commit
+		ObjectTransactionManager.commit(owner);
+		//verifico despues del ultimo comit
+		assertValues(observableObject, observer, VALUE4, VALUE4, VALUE4, VALUE4);
+		assertValues(observableObject, observer2, VALUE4, VALUE4, VALUE4, VALUE4);
+		
+		
 	}
 
-	private void bindProperty(Object observable, Object observer, String property) {
-		ReflectionUtils.invokeMethod(observable, "addPropertyChangeListener", ExampleObject.NAME, createPropertyChangeListener(observer));
-	}
 
-	protected PropertyChangeListener createPropertyChangeListener(
-			final Object observer) {
-		return new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				StringBuffer message = new StringBuffer("firePropertyChange\n");
-				message.append("\t source: " + evt.getSource() + "\n");
-				message.append("\t property: " + evt.getPropertyName() + "\n");
-				message.append("\t oldValue: " + evt.getOldValue() + "\n");
-				message.append("\t newValue: " + evt.getNewValue() + "\n");
-				
-				logger.debug(message.toString());
-				ReflectionUtils.invokeSetter(observer, evt.getPropertyName(), evt.getNewValue());
-			}
-		};
+	protected BasicTaskOwner createOwnerTransaction() {
+		return new BasicTaskOwner("Test");
 	}
-
 }
+

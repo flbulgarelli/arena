@@ -97,7 +97,7 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 		this.windowDescriptor.showOn(builder);
 
 		this.pack();
-
+		
 		return builder.getWidget();
 	}
 

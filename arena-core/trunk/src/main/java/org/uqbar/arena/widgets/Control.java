@@ -24,6 +24,8 @@ import com.uqbar.commons.collections.CollectionFactory;
 public abstract class Control extends Widget {
 	private Collection<Binding<ControlBuilder>> bindings = CollectionFactory.createCollection();
 	protected List<Closure<ControlBuilder>> configurations = CollectionFactory.createList();
+	private int width = 100;
+	private int heigth = 100;
 
 	public Control() {
 		this(null);
@@ -140,4 +142,28 @@ public abstract class Control extends Widget {
 	}
 	
 	protected abstract ControlBuilder createBuilder(PanelBuilder container);
+	
+	
+	/*
+	 * Accesors
+	 */
+	
+	public int getWidth() {
+		return width;
+	}
+
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+
+	public int getHeigth() {
+		return heigth;
+	}
+
+
+	public void setHeigth(int heigth) {
+		this.heigth = heigth;
+	}
 }

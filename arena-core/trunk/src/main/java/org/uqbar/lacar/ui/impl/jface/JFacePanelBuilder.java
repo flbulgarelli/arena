@@ -12,13 +12,19 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.uqbar.arena.widgets.tree.Tree;
+import org.uqbar.arena.widgets.Widget;
+import org.uqbar.arena.widgets.tree.TreeNode;
 import org.uqbar.lacar.ui.impl.jface.bindings.ObservableErrorPanelForegroundColor;
 import org.uqbar.lacar.ui.impl.jface.bindings.ObservableStatusMessage;
+import org.uqbar.lacar.ui.impl.jface.lists.JFaceListBuilder;
 import org.uqbar.lacar.ui.impl.jface.tables.JFaceTableBuilder;
+import org.uqbar.lacar.ui.impl.jface.tree.JFaceTreeBuilder;
 import org.uqbar.lacar.ui.model.Action;
 import org.uqbar.lacar.ui.model.ButtonBuilder;
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.LabelBuilder;
+import org.uqbar.lacar.ui.model.ListBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
 import org.uqbar.lacar.ui.model.SelectorBuilder;
 import org.uqbar.lacar.ui.model.SkineableBuilder;
@@ -78,8 +84,18 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 	}
 
 	@Override
-	public <R> TableBuilder<R> addTable(Class<R> itemType) {
-		return new JFaceTableBuilder<R>(this, itemType);
+	public <R> TableBuilder<R> addTable(Class<R> itemType, int width, int heigth) {
+		return new JFaceTableBuilder<R>(this, itemType, width, heigth);
+	}
+	
+	@Override
+	public ControlBuilder addTree(Tree tree, String propertyNode, int width, int heigth) {
+		return new JFaceTreeBuilder(this, tree, propertyNode,  width, heigth);
+	}
+	
+	@Override
+	public <T> ListBuilder<T> addList(Action onSelect, String propertyElement, int width, int heigth) {
+		return new JFaceListBuilder<T>(this, onSelect, propertyElement,  width, heigth);
 	}
 
 	// ********************************************************
@@ -170,4 +186,5 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 			child.pack();
 		}
 	}
+
 }

@@ -5,11 +5,10 @@ import java.util.List;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-
-import com.uqbar.commons.collections.CollectionFactory;
-
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
 import org.uqbar.lacar.ui.impl.jface.JFaceControlBuilder;
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
@@ -18,6 +17,8 @@ import org.uqbar.lacar.ui.model.ColumnBuilder;
 import org.uqbar.lacar.ui.model.LabelProvider;
 import org.uqbar.lacar.ui.model.TableBuilder;
 import org.uqbar.ui.jface.controller.TableObservableValue;
+
+import com.uqbar.commons.collections.CollectionFactory;
 
 public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements TableBuilder<R> {
 	private TableViewer viewer;
@@ -28,20 +29,26 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 	// ** Creation
 	// ********************************************************
 
-	public JFaceTableBuilder(JFaceContainer container, Class<R> itemType) {
+	public JFaceTableBuilder(JFaceContainer container, Class<R> itemType, int width, int heigth) {
 		super(container);
 
 		this.itemType = itemType;
+		this.setWidth(width);
+		this.setHeigth(heigth);
 		this.viewer = this.createTableViewer(this.getContainer().getJFaceComposite());
 		this.initialize(this.viewer.getTable());
 	}
 
 	private TableViewer createTableViewer(Composite jFaceComposite) {
-		TableViewer viewer = new TableViewer(jFaceComposite, SWT.SINGLE | SWT.FULL_SELECTION);
+		TableViewer viewer = new TableViewer(jFaceComposite, SWT.H_SCROLL
+				| SWT.V_SCROLL | SWT.SINGLE | SWT.BORDER);
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLayout(new TableLayout());
-
+		
+		// Layout the viewer
+		RowData layoutData = new RowData(getWidth(), getHeigth());
+		viewer.getControl().setLayoutData(layoutData);
 		return viewer;
 	}
 

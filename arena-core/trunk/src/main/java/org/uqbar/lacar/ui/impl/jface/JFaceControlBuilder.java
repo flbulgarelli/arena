@@ -16,6 +16,8 @@ import org.uqbar.lacar.ui.model.WidgetBuilder;
  * @author npasserini
  */
 public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidgetBuilder<T> implements ControlBuilder {
+	private int width;
+	private int heigth;
 
 	public JFaceControlBuilder(JFaceContainer container) {
 		super(container);
@@ -62,5 +64,21 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 	 */
 	public void bind(IObservableValue model, IObservableValue view) {
 		new JFaceBindingBuilder(this, view, model).build();
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeigth() {
+		return heigth;
+	}
+
+	public void setHeigth(int heigth) {
+		this.heigth = heigth;
 	}
 }

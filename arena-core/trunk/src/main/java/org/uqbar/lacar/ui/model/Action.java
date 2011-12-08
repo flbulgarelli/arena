@@ -12,5 +12,7 @@ public interface Action {
 	 * Ejecuta la acción definida por este objeto.
 	 */
 	public void execute();
+	
+	public <T> void execute(T...objects);
 
 }
