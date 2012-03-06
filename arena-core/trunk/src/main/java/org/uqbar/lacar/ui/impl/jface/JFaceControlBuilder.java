@@ -3,9 +3,9 @@ package org.uqbar.lacar.ui.impl.jface;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.lacar.ui.model.ControlBuilder;
@@ -26,6 +26,7 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 	public JFaceControlBuilder(JFaceContainer container, T jfaceWidget) {
 		super(container, jfaceWidget);
 	}
+	
 
 	// ********************************************************
 	// ** Bindings
@@ -65,11 +66,30 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 	public void bind(IObservableValue model, IObservableValue view) {
 		new JFaceBindingBuilder(this, view, model).build();
 	}
+	
+	@Override
+	public void pack() {
+		configureLayoutData();
+		super.pack();
+	}
+	
+	protected void configureLayoutData(){
+		if(getWidth() != 0 && getHeigth() != 0){
+			RowData layoutData = new RowData(getWidth(), getHeigth());
+			this.getControlLayout().setLayoutData(layoutData);
+		}
+	}
+	
+
+	protected Control getControlLayout() {
+		return getWidget();
+	}
 
 	public int getWidth() {
 		return width;
 	}
-
+	
+	@Override
 	public void setWidth(int width) {
 		this.width = width;
 	}
@@ -78,6 +98,7 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 		return heigth;
 	}
 
+	@Override
 	public void setHeigth(int heigth) {
 		this.heigth = heigth;
 	}

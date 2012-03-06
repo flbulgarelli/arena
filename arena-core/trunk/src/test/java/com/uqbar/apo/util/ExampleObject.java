@@ -1,6 +1,5 @@
 package com.uqbar.apo.util;
 
-import java.beans.PropertyChangeListener;
 
 import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.commons.utils.ReflectionUtils;
@@ -52,6 +51,12 @@ public class ExampleObject extends ObservableObject implements IExampleObject {
 	public String toString() {
 		String fieldValue = (String) ReflectionUtils.readField(this, ExampleObject.NAME);
 		return this.testRole + " (transaction = " + this.name + ", field = " + fieldValue + ")";
+	}
+
+
+	@Override
+	public String getTestRole() {
+		return testRole;
 	}
 	
 

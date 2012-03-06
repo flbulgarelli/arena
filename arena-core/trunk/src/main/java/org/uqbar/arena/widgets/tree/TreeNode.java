@@ -3,35 +3,33 @@ package org.uqbar.arena.widgets.tree;
 import org.uqbar.arena.widgets.Node;
 import org.uqbar.arena.widgets.tables.PropertyLabelProvider;
 import org.uqbar.arena.widgets.tables.TransformerLabelProvider;
-import org.uqbar.lacar.ui.model.ColumnBuilder;
+import org.uqbar.lacar.ui.impl.jface.tree.TreeBuilder;
 import org.uqbar.lacar.ui.model.LabelProvider;
-import org.uqbar.lacar.ui.model.TableBuilder;
 
-import com.uqbar.commons.collections.Closure;
 import com.uqbar.commons.collections.Transformer;
 
-public class TreeNode<R> implements Node {
+public class TreeNode<T> implements Node<T> {
 
-	private Node parent;
-	private LabelProvider<R> labelProvider;
+	private Node<T> parent;
+	private LabelProvider<T> labelProvider;
 	private Object data;
 
-	public TreeNode(Tree parent) {
+	public TreeNode(Tree<T> parent) {
 		this.parent = parent;
 		parent.addTreeItem(this);
 	}
 
-	public TreeNode(TreeNode parent) {
+	public TreeNode(TreeNode<T> parent) {
 		this.parent = parent;
 		parent.getParent().addTreeItem(this);
 	}
 
-	public void addTreeItem(TreeNode treeItem) {
+	public void addTreeItem(TreeNode<T> treeItem) {
 		this.getParent().addTreeItem(treeItem);
 	}
 
 	@Override
-	public Node getParent() {
+	public Node<T> getParent() {
 		return parent;
 	}
 
@@ -39,13 +37,13 @@ public class TreeNode<R> implements Node {
 	// ** Binding
 	// ********************************************************
 
-	public TreeNode<R> bindContentsToProperty(String propertyName) {
-		this.labelProvider = new PropertyLabelProvider<R>(propertyName);
+	public TreeNode<T> bindContentsToProperty(String propertyName) {
+		this.labelProvider = new PropertyLabelProvider<T>(propertyName);
 		return this;
 	}
 
-	public <U> TreeNode<R> bindContentsToTransformer(Transformer<R, U> transformer) {
-		this.labelProvider = new TransformerLabelProvider<R, U>(transformer);
+	public <U> TreeNode<T> bindContentsToTransformer(Transformer<T, U> transformer) {
+		this.labelProvider = new TransformerLabelProvider<T, U>(transformer);
 		return this;
 	}
 	
@@ -53,8 +51,8 @@ public class TreeNode<R> implements Node {
 	// ** Rendering
 	// ********************************************************
 
-	public void showOn(TableBuilder<R> tree) {
-		tree.addColumn(this.labelProvider);
+	public void showOn(TreeBuilder<T> tree) {
+		tree.addNode(this.labelProvider);
 	}
 
 	public Object getData() {

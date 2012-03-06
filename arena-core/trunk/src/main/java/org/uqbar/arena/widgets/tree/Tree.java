@@ -3,35 +3,24 @@ package org.uqbar.arena.widgets.tree;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uqbar.arena.bindings.ObservableProperty;
 import org.uqbar.arena.widgets.Container;
 import org.uqbar.arena.widgets.Control;
 import org.uqbar.arena.widgets.Node;
 import org.uqbar.arena.widgets.Panel;
-import org.uqbar.arena.widgets.lists.ObservableListContents;
-import org.uqbar.arena.widgets.tables.Table;
 import org.uqbar.lacar.ui.model.Action;
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
 import org.uqbar.lacar.ui.model.bindings.Observable;
 
-public class Tree<T>  extends Control implements Node{
+public class Tree<T>  extends Control implements Node<T>{
 	private static final long serialVersionUID = 1L;
 	private Action onClickItem;
 	private Action onExpand;
-	
-	public Action getOnClickItem() {
-		return onClickItem;
-	}
-	
-	public Action getOnExpand() {
-		return onExpand;
-	}
 
 	/**
 	 * Los componentes contenidos en este {@link Panel}
 	 */
-	private List<TreeNode> children = new ArrayList<TreeNode>();
+	private List<TreeNode<T>> children = new ArrayList<TreeNode<T>>();
 	private String propertyNode;
 	
 	
@@ -39,7 +28,7 @@ public class Tree<T>  extends Control implements Node{
 		super(container);
 	}
 	
-	public void addTreeItem(TreeNode treeItem){
+	public void addTreeItem(TreeNode<T> treeItem){
 		this.children.add(treeItem);
 	}
 	
@@ -49,7 +38,7 @@ public class Tree<T>  extends Control implements Node{
 	 * 
 	 * @param model Una característica observable del modelo.
 	 * 
-	 * @return Esta misma tabla, para enviar mensajes anidados
+	 * @return Este mismo Árbol, para enviar mensajes anidados
 	 */
 	public Tree<T> bindContents(Observable model) {
 		this.addBinding(model, new ObservableTreeContents());
@@ -67,28 +56,36 @@ public class Tree<T>  extends Control implements Node{
 
 	@Override
 	protected ControlBuilder createBuilder(PanelBuilder container) {
-		return container.addTree(this, propertyNode, getWidth(), getHeigth());
+		return container.addTree(this, propertyNode);
 	}
 	
 	
-	public Tree onClickItem(Action onClickItem) {
+	public Tree<T> onClickItem(Action onClickItem) {
 		this.onClickItem = onClickItem;
 		return this;
 	}
 	
-	public Tree onExpand(Action onExpand) {
+	public Tree<T> onExpand(Action onExpand) {
 		this.onExpand = onExpand;
 		return this;
 	}
 
 
-	public List<TreeNode> getChildren() {
+	public List<TreeNode<T>> getChildren() {
 		return children;
 	}
 
 	@Override
-	public Node getParent() {
+	public Node<T> getParent() {
 		return null;
+	}
+	
+	public Action getOnClickItem() {
+		return onClickItem;
+	}
+	
+	public Action getOnExpand() {
+		return onExpand;
 	}
 
 }

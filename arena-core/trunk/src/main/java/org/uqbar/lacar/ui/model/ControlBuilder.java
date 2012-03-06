@@ -31,5 +31,9 @@ public interface ControlBuilder extends WidgetBuilder {
 	 * Usually you'll need this to show/hide a control based on some other condition (binding).
 	 */
 	public BindingBuilder observeVisible();
+
+	public void setWidth(int preferredSize);
+
+	public void setHeigth(int preferredSize);
 	
 }

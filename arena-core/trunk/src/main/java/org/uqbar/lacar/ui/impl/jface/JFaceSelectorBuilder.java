@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.widgets.Combo;
+import org.uqbar.commons.model.IModel;
+import org.uqbar.commons.model.Model;
 import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.lacar.ui.impl.jface.actions.JFaceActionAdapter;
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
@@ -53,7 +55,9 @@ public class JFaceSelectorBuilder extends JFaceControlBuilder<Combo> implements 
 	
 	@Override
 	public JFaceSelectorBuilder onSelection(Action action) {
-		this.getWidget().addSelectionListener(new JFaceActionAdapter(this.getContainer(), action));
+		if(action != null){
+			this.getWidget().addSelectionListener(new JFaceActionAdapter(this.getContainer(), action));
+		}
 		return this;
 	}
 	
@@ -80,11 +84,11 @@ public class JFaceSelectorBuilder extends JFaceControlBuilder<Combo> implements 
 	
 	protected String getProperty(String propertyName, Object object) {
 		Object value;
-		if (object instanceof ObservableObject) {
-			value = ((ObservableObject) object).getProperty(propertyName);
+		if (object instanceof IModel) {
+			value = ((IModel) object).getProperty(propertyName);
 		}
 		else {
-			value = ObservableObject.getPropertyValue(object, propertyName);
+			value = Model.getPropertyValue(object, propertyName);
 		}
 		return value == null ? "" : value.toString();
 	}

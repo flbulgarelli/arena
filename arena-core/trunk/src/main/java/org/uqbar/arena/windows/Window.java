@@ -2,17 +2,19 @@ package org.uqbar.arena.windows;
 
 import java.util.List;
 
-import com.uqbar.commons.collections.CollectionFactory;
-import com.uqbar.commons.loggeable.HierarchicalLogger;
-import com.uqbar.commons.loggeable.Loggeable;
-
 import org.uqbar.arena.widgets.Container;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.Widget;
+import org.uqbar.commons.model.IModel;
+import org.uqbar.commons.model.Model;
 import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.lacar.ui.model.PanelBuilder;
 import org.uqbar.lacar.ui.model.ViewDescriptor;
 import org.uqbar.lacar.ui.model.WindowBuilder;
+
+import com.uqbar.commons.collections.CollectionFactory;
+import com.uqbar.commons.loggeable.HierarchicalLogger;
+import com.uqbar.commons.loggeable.Loggeable;
 
 /**
  * Superclase de todas las ventanas.
@@ -21,7 +23,7 @@ import org.uqbar.lacar.ui.model.WindowBuilder;
  * 
  * @author npasserini
  */
-public abstract class Window<T extends ObservableObject> implements Container, ViewDescriptor<PanelBuilder>,
+public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilder>,
 		WindowOwner, Loggeable {
 	/**
 	 * Puede ser la ventana padre o bien la aplicación en caso de que esta sea una ventana de primer nivel.
@@ -36,8 +38,8 @@ public abstract class Window<T extends ObservableObject> implements Container, V
 	/**
 	 * Objeto del modelo (de dominio o de aplicación) asociado a esta ventana.
 	 */
-	private T model;
-
+	private IModel<T> model;
+	
 	/**
 	 * El conjunto de los componentes que dependen <i>directamente</i> de la ventana. Normalmente esto
 	 * consiste únicamente de un {@link Panel}.
@@ -56,16 +58,26 @@ public abstract class Window<T extends ObservableObject> implements Container, V
 	 */
 	private boolean contentsReady;
 
+	@SuppressWarnings("unchecked")
 	public Window(WindowOwner owner, T model) {
 		this.owner = owner;
-		this.model = model;
+		if(model instanceof IModel){
+			this.model = (IModel<T>) model;
+		}else {
+			this.model = new Model<T>(model);
+		}
 	}
 
 	@Override
-	public T getModel() {
+	public IModel<T> getModel() {
 		return this.model;
 	}
 
+	public T getModelObject() {
+		return this.model.getSource();
+	}
+	
+	
 	// ********************************************************
 	// ** Configuración de la ventana
 	// ********************************************************
@@ -127,6 +139,10 @@ public abstract class Window<T extends ObservableObject> implements Container, V
 
 	public void close() {
 		this.delegate.close();
+	}
+	
+	@Override
+	public void cancelTask() {
 	}
 
 	// ********************************************************

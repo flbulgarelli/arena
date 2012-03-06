@@ -1,8 +1,6 @@
 package org.uqbar.lacar.ui.impl.jface.tables;
 
 import org.eclipse.jface.viewers.TableViewer;
-
-import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.lacar.ui.model.Adapter;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.ui.jface.controller.OneToManyContentProvider;
@@ -16,7 +14,7 @@ public class JFaceTableContentsBindingBuilder implements BindingBuilder {
 	}
 
 	@Override
-	public void observeProperty(ObservableObject model, String propertyName) {
+	public void observeProperty(Object model, String propertyName) {
 		// ATENCION, el content provider DEBE ser asignado ANTES que el input.
 		this.tableViewer.setContentProvider(new OneToManyContentProvider(propertyName));
 		this.tableViewer.setInput(model);

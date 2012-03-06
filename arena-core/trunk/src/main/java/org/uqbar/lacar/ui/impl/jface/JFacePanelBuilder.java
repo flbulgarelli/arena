@@ -84,18 +84,18 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 	}
 
 	@Override
-	public <R> TableBuilder<R> addTable(Class<R> itemType, int width, int heigth) {
-		return new JFaceTableBuilder<R>(this, itemType, width, heigth);
+	public <R> TableBuilder<R> addTable(Class<R> itemType) {
+		return new JFaceTableBuilder<R>(this, itemType);
 	}
 	
 	@Override
-	public ControlBuilder addTree(Tree tree, String propertyNode, int width, int heigth) {
-		return new JFaceTreeBuilder(this, tree, propertyNode,  width, heigth);
+	public <T> ControlBuilder addTree(Tree<T> tree, String propertyNode) {
+		return new JFaceTreeBuilder<T>(this, tree, propertyNode);
 	}
 	
 	@Override
-	public <T> ListBuilder<T> addList(Action onSelect, String propertyElement, int width, int heigth) {
-		return new JFaceListBuilder<T>(this, onSelect, propertyElement,  width, heigth);
+	public <T> ListBuilder<T> addList(Action onSelect, String propertyElement) {
+		return new JFaceListBuilder<T>(this, onSelect, propertyElement);
 	}
 
 	// ********************************************************

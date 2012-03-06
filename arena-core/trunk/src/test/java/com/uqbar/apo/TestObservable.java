@@ -37,7 +37,11 @@ public class TestObservable  extends AbstractTestObsevable{
 		
 		observableObject.setName(VALUE2);
 		
-		assertValues(observableObject, observer, VALUE2, VALUE2, VALUE2, VALUE2);
+		assertGetterValue(observableObject, VALUE2);
+		assertGetterValue(observer, VALUE2);
+		
+		assertFieldValue(observableObject, VALUE2);
+		assertFieldValue(observer, VALUE2);	
 		
 	}
 	
@@ -49,26 +53,49 @@ public class TestObservable  extends AbstractTestObsevable{
 		final IExampleObject observableObject = createSourceObject();
 		final IExampleObject observer = createObserverObject();
 
-		assertValues(observableObject, observer, VALUE1, null, VALUE1, null);
+		assertGetterValue(observableObject, VALUE1);
+		assertGetterValue(observer, null);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, null);	
 
 		this.bindProperty(observableObject, observer, "name");
 
 		
 		//Apenas creo una transaccion verifico los valores
-		assertValues(observableObject, observer, VALUE1, VALUE1, VALUE1, VALUE1);
+		assertGetterValue(observableObject, VALUE1);
+		assertGetterValue(observer, VALUE1);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE1);	
 		
 		//primer cambio
 		observableObject.setName(VALUE2);
-		assertValues(observableObject, observer, VALUE2, VALUE2, VALUE1, VALUE2);
+		
+		assertGetterValue(observableObject, VALUE2);
+		assertGetterValue(observer, VALUE2);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE2);	
 		
 		//segundo cambio cambio
 		observableObject.setName(VALUE3);
-		assertValues(observableObject, observer, VALUE3, VALUE3, VALUE1, VALUE3);
+		
+		assertGetterValue(observableObject, VALUE3);
+		assertGetterValue(observer, VALUE3);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE3);	
 		
 		
 		ObjectTransactionManager.commit(owner);
+		
 		//verifico despues del comit
-		assertValues(observableObject, observer, VALUE3, VALUE3, VALUE3, VALUE3);
+		assertGetterValue(observableObject, VALUE3);
+		assertGetterValue(observer, VALUE3);
+		
+		assertFieldValue(observableObject, VALUE3);
+		assertFieldValue(observer, VALUE3);	
 	}
 
 	
@@ -82,16 +109,29 @@ public class TestObservable  extends AbstractTestObsevable{
 		final IExampleObject observableObject = createSourceObject();
 		final IExampleObject observer = createObserverObject();
 
-		assertValues(observableObject, observer, VALUE1, null, VALUE1, null);
+		assertGetterValue(observableObject, VALUE1);
+		assertGetterValue(observer, null);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, null);	
 
 		this.bindProperty(observableObject, observer, "name");
 		
 		//Apenas creo una transaccion verifico los valores
-		assertValues(observableObject, observer, VALUE1, VALUE1, VALUE1, VALUE1);
+		assertGetterValue(observableObject, VALUE1);
+		assertGetterValue(observer, VALUE1);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE1);	
 		
 		//primer cambio
 		observableObject.setName(VALUE2);
-		assertValues(observableObject, observer, VALUE2, VALUE2, VALUE1, VALUE2);
+		
+		assertGetterValue(observableObject, VALUE2);
+		assertGetterValue(observer, VALUE2);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE2);	
 
 		//Segunda transaccion
 		ObjectTransactionManager.begin(owner);
@@ -102,30 +142,61 @@ public class TestObservable  extends AbstractTestObsevable{
 		
 		//segundo cambio 
 		observableObject.setName(VALUE3);
-		assertValues(observableObject, observer, VALUE3, VALUE2, VALUE1, VALUE2);
-		assertValues(observableObject, observer2, VALUE3, VALUE3, VALUE1, VALUE3);
+		
+		assertGetterValue(observableObject, VALUE3);
+		assertGetterValue(observer, VALUE2);
+		assertGetterValue(observer2, VALUE3);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE2);
+		assertFieldValue(observer2, VALUE3);	
+		
 		
 		//Tercera transaccion
 		ObjectTransactionManager.begin(owner);
 		observableObject.setName(VALUE4);
-		assertValues(observableObject, observer, VALUE4, VALUE2, VALUE1, VALUE2);
-		assertValues(observableObject, observer2, VALUE4, VALUE3, VALUE1, VALUE3);
+		
+		assertGetterValue(observableObject, VALUE4);
+		assertGetterValue(observer, VALUE2);
+		assertGetterValue(observer2, VALUE3);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE2);
+		assertFieldValue(observer2, VALUE3);
 		
 		//Primer Commit
 		ObjectTransactionManager.commit(owner);
-		assertValues(observableObject, observer, VALUE4, VALUE2, VALUE1, VALUE2);
-		assertValues(observableObject, observer2, VALUE4, VALUE3, VALUE1, VALUE3);
+		
+		assertGetterValue(observableObject, VALUE4);
+		assertGetterValue(observer, VALUE2);
+		assertGetterValue(observer2, VALUE4);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE2);
+		assertFieldValue(observer2, VALUE4);
 
 		//Segundo Commit
 		ObjectTransactionManager.commit(owner);
-		assertValues(observableObject, observer, VALUE4, VALUE2, VALUE1, VALUE2);
-		assertValues(observableObject, observer2, VALUE4, VALUE3, VALUE1, VALUE3);
+		
+		assertGetterValue(observableObject, VALUE4);
+		assertGetterValue(observer, VALUE4);
+		assertGetterValue(observer2, VALUE4);
+		
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE4);
+		assertFieldValue(observer2, VALUE4);
 		
 		//Tercer Commit
 		ObjectTransactionManager.commit(owner);
+		
 		//verifico despues del ultimo comit
-		assertValues(observableObject, observer, VALUE4, VALUE4, VALUE4, VALUE4);
-		assertValues(observableObject, observer2, VALUE4, VALUE4, VALUE4, VALUE4);
+		assertGetterValue(observableObject, VALUE4);
+		assertGetterValue(observer, VALUE4);
+		assertGetterValue(observer2, VALUE4);
+		
+		assertFieldValue(observableObject, VALUE4);
+		assertFieldValue(observer, VALUE4);
+		assertFieldValue(observer2, VALUE4);
 		
 		
 	}

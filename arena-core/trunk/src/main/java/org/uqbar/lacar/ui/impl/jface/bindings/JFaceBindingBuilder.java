@@ -11,7 +11,7 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.uqbar.commons.model.ObservableObject;
+import org.uqbar.commons.model.IModel;
 import org.uqbar.lacar.ui.impl.jface.JFaceWidgetBuilder;
 import org.uqbar.lacar.ui.model.Adapter;
 import org.uqbar.lacar.ui.model.BindingBuilder;
@@ -45,7 +45,7 @@ public class JFaceBindingBuilder implements BindingBuilder {
 	// ********************************************************
 
 	@Override
-	public void observeProperty(ObservableObject model, String propertyName) {
+	public void observeProperty(Object model, String propertyName) {
 		this.model = this.observeValue(model, propertyName);
 	}
 

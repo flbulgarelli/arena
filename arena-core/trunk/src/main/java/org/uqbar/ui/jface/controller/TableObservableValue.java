@@ -8,7 +8,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.uqbar.commons.model.ObservableObject;
 
 /**
  * 
@@ -18,7 +17,7 @@ public class TableObservableValue extends AbstractObservableValue {
 	private final Table table;
 	private boolean updating = false;
 
-	private ObservableObject currentValue;
+	private Object currentValue;
 
 	private SelectionListener listener;
 	private Object itemType;
@@ -26,7 +25,7 @@ public class TableObservableValue extends AbstractObservableValue {
 	public TableObservableValue(Table table, Class<?> itemType) {
 		this.table = table;
 		this.itemType = itemType;
-		this.currentValue = (ObservableObject) doGetValue();
+		this.currentValue = doGetValue();
 
 		if ((table.getStyle() & SWT.MULTI) > 0) {
 			throw new IllegalArgumentException("SWT.SINGLE support only for a List selection"); //$NON-NLS-1$
@@ -37,7 +36,7 @@ public class TableObservableValue extends AbstractObservableValue {
 			public void widgetSelected(SelectionEvent e) {
 				if (!TableObservableValue.this.updating) {
 					Object oldValue = TableObservableValue.this.currentValue;
-					TableObservableValue.this.currentValue = (ObservableObject) doGetValue();
+					TableObservableValue.this.currentValue =  doGetValue();
 					fireValueChange(Diffs.createValueDiff(oldValue, TableObservableValue.this.currentValue));
 				}
 			}
@@ -65,7 +64,7 @@ public class TableObservableValue extends AbstractObservableValue {
 				this.table.select(index); // -1 will not "unselect"
 			}
 			if (value != null) {
-				this.currentValue = (ObservableObject) ((TableItem) value).getData();
+				this.currentValue =  ((TableItem) value).getData();
 			}
 		}
 		finally {

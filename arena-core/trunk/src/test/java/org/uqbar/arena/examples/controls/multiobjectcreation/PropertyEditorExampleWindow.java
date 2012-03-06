@@ -30,7 +30,7 @@ public class PropertyEditorExampleWindow extends MainWindow<UbicarCosa>{
 			.bindValueToProperty("posicion");
 		
 		new Selector(mainPanel)
-			.setContents(this.getModel().getUbicables(), "class.simpleName");
+			.setContents(this.getModelObject().getUbicables(), "class.simpleName");
 		
 		// 	esfera
 		// 		estrellas

@@ -1,6 +1,6 @@
 package org.uqbar.arena.widgets;
 
-import org.uqbar.commons.model.ObservableObject;
+import org.uqbar.commons.model.IModel;
 
 /**
  * Interfaz que implementan todos los elementos visuales que pueden contener {@link Widget}s.
@@ -18,8 +18,8 @@ public interface Container {
 	 * 
 	 * @return The model.
 	 */
-	public ObservableObject getModel();
-
+	public IModel<?> getModel();
+	
 	/**
 	 * Agrega un {@link Widget} de este contenedor.
 	 * 

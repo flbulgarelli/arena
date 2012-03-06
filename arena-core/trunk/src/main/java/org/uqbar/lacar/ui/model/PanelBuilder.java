@@ -28,9 +28,11 @@ public interface PanelBuilder {
 
 	public SelectorBuilder addSelector(List options, String descriptionProperty, boolean nullValue, Action onSelection);
 
-	public <R> TableBuilder<R> addTable(Class<R> itemType, int width, int heigth);
+	public <R> TableBuilder<R> addTable(Class<R> itemType);
 
-	public <T>ListBuilder<T> addList(Action onSelect, String propertyElement, int width, int heigth);
+	public <T>ListBuilder<T> addList(Action onSelect, String propertyElement);
+	
+	public <T>ControlBuilder addTree(Tree<T> tree, String propertyNode);
 	
 	// ********************************************************
 	// ** Panels
@@ -52,7 +54,6 @@ public interface PanelBuilder {
 
 	public void setPreferredWidth(int width);
 
-	public ControlBuilder addTree(Tree tree, String propertyNode, int i, int j);
 
 
 }

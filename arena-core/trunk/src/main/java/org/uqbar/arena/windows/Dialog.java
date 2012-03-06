@@ -5,6 +5,7 @@ import java.util.List;
 import com.uqbar.commons.collections.CollectionFactory;
 
 import org.uqbar.arena.widgets.Panel;
+import org.uqbar.arena.windows.Dialog.DialogState;
 import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.commons.model.UserException;
 import org.uqbar.lacar.ui.model.Action;
@@ -26,11 +27,12 @@ import org.uqbar.lacar.ui.model.Action;
  * 
  * @author npasserini
  */
-public abstract class Dialog<T extends ObservableObject> extends SimpleWindow<T> implements TaskWindow {
+public abstract class Dialog<T> extends SimpleWindow<T> implements TaskWindow {
 	public static final String ACCEPT = "accept";
 	public static final String CANCEL = "cancel";
 	private List<Action> acceptActions = CollectionFactory.createList();
 	private List<Action> cancelActions = CollectionFactory.createList();
+	protected DialogState state;
 
 	public Dialog(WindowOwner owner, T model) {
 		super(owner, model);
@@ -61,11 +63,7 @@ public abstract class Dialog<T extends ObservableObject> extends SimpleWindow<T>
 	@Override
 	public void accept() {
 		this.executeTask();
-
-		for (Action action : this.acceptActions) {
-			action.execute();
-		}
-
+		
 		this.close();
 	}
 
@@ -76,32 +74,77 @@ public abstract class Dialog<T extends ObservableObject> extends SimpleWindow<T>
 	public void cancel() {
 		this.cancelTask();
 
-		for (Action action : this.cancelActions) {
-			action.execute();
-		}
-
 		this.close();
 	}
+	
+
 
 	/**
 	 * Hook para ejecutar la tarea asociada a la ventana. Este método no debería tener lógica de negocio, sino
-	 * delegar en el modelo.
+	 * delegar en el modelo. Al sobrescribirlo hay que llamar al super, para no perder este comportamiento.
 	 * 
 	 * @throws UserException En caso que la ejecución no sea exitosa. Eso evitará que se cierre la ventana.
 	 */
-	protected abstract void executeTask();
+	protected  void executeTask(){
+		for (Action action : this.acceptActions) {
+			action.execute();
+		}
+		this.state = DialogState.ACCEPTED;
+	}
+	
+	@Override
+	public void open() {
+		this.state = DialogState.OPEN;
+		super.open();
+	}
+	
 
 	/**
-	 * Hook para ejecutar la cancelación de la tarea asociada a la ventana. Por defecto no hace nada.
+	 * Hook para ejecutar la cancelación de la tarea asociada a la ventana. Por defecto ejecuta las cancelTask que estan 
+	 * configuradas. Al sobrescribirlo hay que llamar al super, para no perder este comportamiento.
 	 * 
 	 * @throws UserException En caso que no se pueda o no se desee cancelar la tarea. Eso evitará que se
 	 *             cierre la ventana.
 	 */
-	protected void cancelTask() {
+	@Override
+	public void cancelTask() {
+		this.state.doCancel(this);
 	}
 	
 	@Override
 	protected void addActions(Panel actionsPanel) {
+	}
+	
+	protected enum DialogState {
+		
+		OPEN(){
+			@Override
+			protected void doCancel(Dialog<?> dialog) {
+
+				for (Action action : dialog.cancelActions) {
+					action.execute();
+				}
+				dialog.state = CANCELLED;
+				
+			}
+		},
+		
+		CANCELLED(){
+			@
+			Override
+			protected void doCancel(Dialog<?> dialog) {
+			}
+		},
+		
+		ACCEPTED(){
+			
+			@Override
+			protected void doCancel(Dialog<?> dialog) {
+			}
+		};
+		
+		protected abstract void doCancel(Dialog<?> dialog);
+		
 	}
 
 }

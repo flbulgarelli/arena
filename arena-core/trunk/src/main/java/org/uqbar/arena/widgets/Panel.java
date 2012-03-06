@@ -3,14 +3,16 @@ package org.uqbar.arena.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.uqbar.commons.exceptions.ProgramException;
-import com.uqbar.commons.loggeable.HierarchicalLogger;
-
 import org.uqbar.arena.layout.ColumnLayout;
 import org.uqbar.arena.layout.HorizontalLayout;
 import org.uqbar.arena.layout.Layout;
-import org.uqbar.commons.model.ObservableObject;
+import org.uqbar.arena.layout.VerticalLayout;
+import org.uqbar.commons.model.IModel;
+import org.uqbar.commons.model.Model;
 import org.uqbar.lacar.ui.model.PanelBuilder;
+
+import com.uqbar.commons.exceptions.ProgramException;
+import com.uqbar.commons.loggeable.HierarchicalLogger;
 
 /**
  * Un Panel es básicamente un {@link Widget} que puede contener otros {@link Widget}.
@@ -18,7 +20,7 @@ import org.uqbar.lacar.ui.model.PanelBuilder;
  * @author npasserini
  */
 public class Panel extends Widget implements Container {
-	private ObservableObject model;
+	private IModel<?> model;
 	private int width = 250;
 
 	/**
@@ -31,14 +33,19 @@ public class Panel extends Widget implements Container {
 	// ** Panel creation
 	// ********************************************************
 
-	public Panel(Container container, ObservableObject model) {
-		super(container);
-		this.model = model;
-	}
-
 	public Panel(Container container) {
 		this(container, container.getModel());
 	}
+	
+	public Panel(Container container, Object model) {
+		this(container, new Model<Object>(model));
+	}
+	
+	public Panel(Container container, IModel<?> model) {
+		super(container);
+		this.model = model;
+	}
+	
 
 	// ********************************************************
 	// ** Binding
@@ -51,7 +58,12 @@ public class Panel extends Widget implements Container {
 	 * "vinculados", en caso de modificaciones posteriores al modelo el panel no se entera.
 	 */
 	public Panel bindContents(String propertyName) {
-		this.model = (ObservableObject) this.model.getProperty(propertyName);
+		Object propertyModel = this.model.getProperty(propertyName);
+		if(propertyModel instanceof IModel){
+			this.model = (IModel) propertyModel;
+		}else{
+			this.model = new Model<Object>(propertyModel); 
+		}
 		return this;
 	}
 
@@ -66,6 +78,10 @@ public class Panel extends Widget implements Container {
 
 	public void setHorizontalLayout() {
 		this.setLayout(new HorizontalLayout());
+	}
+	
+	public void setVerticalLayout() {
+		this.setLayout(new VerticalLayout());
 	}
 
 	public void setLayoutInColumns(int columnCount) {
@@ -82,7 +98,7 @@ public class Panel extends Widget implements Container {
 	}
 
 	@Override
-	public ObservableObject getModel() {
+	public IModel getModel() {
 		return this.model;
 	}
 

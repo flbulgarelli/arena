@@ -6,8 +6,11 @@ import org.eclipse.core.databinding.AggregateValidationStatus;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
@@ -75,6 +78,12 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 
 		// Una configuración adicional.
 		window.setBlockOnOpen(true);
+		
+		window.getShell().addListener(SWT.Close, new Listener() {
+			public void handleEvent(Event event) {
+				windowDescriptor.cancelTask();
+			}
+		});
 
 		// Al hacer open se podría evitar el create anterior, pero necesito hacerlo para poder hacer getShell
 		// entre ambos.
@@ -99,6 +108,7 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 		this.pack();
 		
 		return builder.getWidget();
+		
 	}
 
 	// ********************************************************

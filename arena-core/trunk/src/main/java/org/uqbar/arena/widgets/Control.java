@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.uqbar.arena.bindings.ObservableProperty;
 import org.uqbar.arena.bindings.ObservableValue;
+import org.uqbar.arena.widgets.tables.Column;
 import org.uqbar.lacar.ui.model.BindingBuilder;
+import org.uqbar.lacar.ui.model.ColumnBuilder;
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
 import org.uqbar.lacar.ui.model.bindings.Binding;
@@ -144,26 +146,21 @@ public abstract class Control extends Widget {
 	protected abstract ControlBuilder createBuilder(PanelBuilder container);
 	
 	
-	/*
-	 * Accesors
-	 */
+	public void setWidth(final int preferredSize) {
+		this.configurations.add(new Closure<ControlBuilder>() {
+			@Override
+			public void execute(ControlBuilder builder) {
+				builder.setWidth(preferredSize);
+			}
+		});
+	}
 	
-	public int getWidth() {
-		return width;
-	}
-
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-
-	public int getHeigth() {
-		return heigth;
-	}
-
-
-	public void setHeigth(int heigth) {
-		this.heigth = heigth;
+	public void setHeigth(final int preferredSize) {
+		this.configurations.add(new Closure<ControlBuilder>() {
+			@Override
+			public void execute(ControlBuilder builder) {
+				builder.setHeigth(preferredSize);
+			}
+		});
 	}
 }

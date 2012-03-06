@@ -1,6 +1,6 @@
 package org.uqbar.lacar.ui.model;
 
-import org.uqbar.commons.model.ObservableObject;
+import org.uqbar.commons.model.IModel;
 
 /**
  * Colabora en la construcción de un binding.
@@ -19,7 +19,7 @@ public interface BindingBuilder {
 	 * @param model El objeto que posee la propiedad a observar.
 	 * @param propertyName El nombre de la propiedad a observar.
 	 */
-	public void observeProperty(ObservableObject model, String propertyName);
+	public void observeProperty(Object model, String propertyName);
 
 	/**
 	 * Agrega un adapter. Los adapters se ejecutan en el orden recibido cuando se transforma de vista a modelo

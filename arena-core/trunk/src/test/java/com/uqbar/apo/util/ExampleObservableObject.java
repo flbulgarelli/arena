@@ -2,9 +2,10 @@ package com.uqbar.apo.util;
 
 import org.uqbar.commons.utils.ReflectionUtils;
 import org.uqbar.commons.utils.Transactional;
+import org.uqbar.commons.utils.TransactionalAndObservable;
 
 
-@Transactional
+@TransactionalAndObservable
 public class ExampleObservableObject implements IExampleObject {
 	private final String testRole;
 	private String name;
@@ -42,7 +43,12 @@ public class ExampleObservableObject implements IExampleObject {
 	@Override
 	public String toString() {
 		String fieldValue = (String) ReflectionUtils.readField(this, ExampleObject.NAME);
-		return this.testRole + " (transaction = " + this.name + ", field = " + fieldValue + ")";
+		return this.getTestRole() + " (transaction = " + this.name + ", field = " + fieldValue + ")";
+	}
+
+	@Override
+	public String getTestRole() {
+		return testRole;
 	}
 
 }

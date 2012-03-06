@@ -3,11 +3,11 @@ package org.uqbar.arena.widgets;
 import org.uqbar.arena.widgets.tree.TreeNode;
 
 
-public interface Node {
+public interface Node<T> {
 	
-	public void addTreeItem(TreeNode item);
+	public void addTreeItem(TreeNode<T> item);
 	
-	public Node getParent();
+	public Node<T> getParent();
 
 
 }

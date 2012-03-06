@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
 import org.uqbar.lacar.ui.impl.jface.JFaceControlBuilder;
@@ -29,12 +30,10 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 	// ** Creation
 	// ********************************************************
 
-	public JFaceTableBuilder(JFaceContainer container, Class<R> itemType, int width, int heigth) {
+	public JFaceTableBuilder(JFaceContainer container, Class<R> itemType) {
 		super(container);
 
 		this.itemType = itemType;
-		this.setWidth(width);
-		this.setHeigth(heigth);
 		this.viewer = this.createTableViewer(this.getContainer().getJFaceComposite());
 		this.initialize(this.viewer.getTable());
 	}
@@ -46,9 +45,6 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLayout(new TableLayout());
 		
-		// Layout the viewer
-		RowData layoutData = new RowData(getWidth(), getHeigth());
-		viewer.getControl().setLayoutData(layoutData);
 		return viewer;
 	}
 
@@ -89,11 +85,17 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 		for (JFaceColumnBuilder<R> column : this.columns) {
 			column.pack();
 		}
+		super.pack();
 	}
 
 	// ********************************************************
 	// ** Internal accessors
 	// ********************************************************
+	
+	@Override
+	protected Control getControlLayout() {
+		return this.viewer.getControl();
+	}
 
 	public TableViewer getJFaceTableViewer() {
 		return this.viewer;

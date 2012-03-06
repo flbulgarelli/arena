@@ -19,6 +19,12 @@ public class JFaceDialogBuilder extends JFaceWindowBuilder {
 			protected Control createContents(Composite window) {
 				return JFaceDialogBuilder.this.createWindowContents(window);
 			}
+			
 		};
 	}
+
+	public JFaceWindowBuilder getParent() {
+		return parent;
+	}
+
 }

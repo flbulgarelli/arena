@@ -25,8 +25,8 @@ public class AbstractTestObsevable {
 
 	protected void bindProperty(Object observable, Object observer,
 			String property) {
-		JFaceBindingBuilder builder = new JFaceBindingBuilder(
-				new DataBindingContext());
+		JFaceBindingBuilder builder = new JFaceBindingBuilder(new DataBindingContext());
+		
 		builder.setModel(builder.observeValue(observable, property));
 		builder.setView(builder.observeValue(observer, property));
 		builder.build();
@@ -44,21 +44,16 @@ public class AbstractTestObsevable {
 	// ** Auxiliar methods
 	// **************************************************************
 
-	protected void assertValues(IExampleObject observableObject,
-			IExampleObject observer, Object observableGetValue,
-			Object observerGetValue, Object observableFieldValue,
-			Object observerFieldVale) {
-
-		assertEquals("La getter del observalbe no tiene el valor esperado",
-				observableGetValue, observableObject.getName());
-		assertEquals("El getter del observer no tiene el valor esperado",
-				observerGetValue, observer.getName());
-
-		// invoca por reflection para no pasar por el aspecto
-		assertEquals("El field del observable no tiene el valor esperado",
-				observableFieldValue, getFieldValue(observableObject));
-		assertEquals("El field del observer no tiene el valor esperado",
-				observerFieldVale, getFieldValue(observer));
+	
+	protected void assertGetterValue(IExampleObject object, Object value){
+		assertEquals("La getter del " + object.getTestRole() +" no tiene el valor esperado",
+				value, object.getName());
 	}
+	
+	protected void assertFieldValue(IExampleObject object, Object value){
+		assertEquals("El field del "+ object.getTestRole() +" no tiene el valor esperado",
+				value, getFieldValue(object));
+	}
+	
 
 }

@@ -9,7 +9,7 @@ import org.uqbar.commons.model.ObservableObject;
  * 
  * @author npasserini
  */
-public abstract class MainWindow<T extends ObservableObject> extends Window<T> {
+public abstract class MainWindow<T> extends Window<T> {
 	private Application application;
 
 	public MainWindow(T model) {

@@ -1,7 +1,8 @@
 package org.uqbar.arena.bindings;
 
 import org.uqbar.arena.widgets.Container;
-import org.uqbar.commons.model.ObservableObject;
+import org.uqbar.commons.model.IModel;
+import org.uqbar.commons.model.Model;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.lacar.ui.model.bindings.Observable;
 
@@ -12,13 +13,19 @@ import org.uqbar.lacar.ui.model.bindings.Observable;
  */
 public class ObservableProperty implements Observable {
 	private final String propertyName;
-	private ObservableObject model;
+	private IModel<?> model;
 
 	public ObservableProperty(String propertyName) {
 		this.propertyName = propertyName;
 	}
 
-	public ObservableProperty(ObservableObject model, String propertyName) {
+	public ObservableProperty(IModel<?> model, String propertyName) {
+		this.model = model;
+		this.propertyName = propertyName;
+	}
+	
+	public ObservableProperty(Object modelObject, String propertyName) {
+		this.model = new Model<Object>(modelObject);
 		this.propertyName = propertyName;
 	}
 
@@ -43,7 +50,7 @@ public class ObservableProperty implements Observable {
 	 * @param model El modelo contra el que bindear
 	 * @return Este mismo {@link ObservableProperty}, comodidad para enviar mensajes anidados.
 	 */
-	public ObservableProperty setModel(ObservableObject model) {
+	public ObservableProperty setModel(IModel<?> model) {
 		// Validar que el contenedor tiene la propiedad que nos interesa.
 		model.getGetter(this.propertyName);
 
@@ -58,7 +65,7 @@ public class ObservableProperty implements Observable {
 
 	@Override
 	public void configure(BindingBuilder binder) {
-		binder.observeProperty(this.model, this.propertyName);
+		binder.observeProperty(this.model.getSource(), this.propertyName);
 	}
 	
 }

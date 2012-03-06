@@ -1,7 +1,5 @@
 package com.uqbar.apo;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +10,7 @@ import com.uqbar.apo.util.TestRealm;
 /**
  * @author nny
  * 
- * -Djava.system.class.loader=org.unqbar.arena.aop.ArenaClassLoader
+ * -Djava.system.class.loader=org.uqbar.arena.aop.ArenaClassLoader
  * 
  */
 public class TestArenaObservableValue extends AbstractTestObsevable {
@@ -30,17 +28,27 @@ public class TestArenaObservableValue extends AbstractTestObsevable {
 		final IExampleObject observer = createObserverObject();
 
 		//Los valores sin cambios
-		assertValues(observableObject, observer, VALUE1, null, VALUE1, null);
+		assertGetterValue(observableObject, VALUE1);
+		assertGetterValue(observer, null);
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, null);		
+		
 		
 		bindProperty(observableObject, observer, ExampleObject.NAME);
 		
 		//Se syncroniza
-		assertValues(observableObject, observer, VALUE1, VALUE1, VALUE1, VALUE1);
+		assertGetterValue(observableObject, VALUE1);
+		assertGetterValue(observer, VALUE1);
+		assertFieldValue(observableObject, VALUE1);
+		assertFieldValue(observer, VALUE1);
 		
 		observableObject.setName(VALUE2);
 
 		//se actualiza
-		assertValues(observableObject, observer, VALUE2, VALUE2, VALUE2, VALUE2);
+		assertGetterValue(observableObject, VALUE2);
+		assertGetterValue(observer, VALUE2);
+		assertFieldValue(observableObject, VALUE2);
+		assertFieldValue(observer, VALUE2);
 	}
 
 }

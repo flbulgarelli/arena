@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 
 import org.uqbar.arena.layout.VerticalLayout;
 import org.uqbar.arena.widgets.Panel;
+import org.uqbar.commons.model.IModel;
 import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.ui.jface.builder.ErrorsPanel;
 import org.uqbar.ui.jface.view.ErrorViewer;
@@ -18,7 +19,7 @@ import org.uqbar.ui.jface.view.ErrorViewer;
  * 
  * @author npasserini
  */
-public abstract class SimpleWindow<T extends ObservableObject> extends Window<T> implements ErrorViewer {
+public abstract class SimpleWindow<T> extends Window<T> implements ErrorViewer {
 	private String taskDescription;
 
 	public SimpleWindow(WindowOwner parent, T model) {

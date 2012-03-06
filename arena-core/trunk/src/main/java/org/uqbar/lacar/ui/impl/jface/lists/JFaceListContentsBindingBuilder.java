@@ -1,7 +1,6 @@
 package org.uqbar.lacar.ui.impl.jface.lists;
 
 import org.eclipse.jface.viewers.ListViewer;
-import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.lacar.ui.model.Adapter;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.ui.jface.controller.OneToManyContentProvider;
@@ -16,7 +15,7 @@ public class JFaceListContentsBindingBuilder implements BindingBuilder {
 	}
 
 	@Override
-	public void observeProperty(ObservableObject model, String propertyName) {
+	public void observeProperty(Object model, String propertyName) {
 		// ATENCION, el content provider DEBE ser asignado ANTES que el input.
 		this.listViewer.setContentProvider(new OneToManyContentProvider(propertyName));
 		this.listViewer.setInput(model);

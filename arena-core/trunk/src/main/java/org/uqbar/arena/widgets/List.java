@@ -2,7 +2,6 @@ package org.uqbar.arena.widgets;
 
 import org.uqbar.arena.bindings.ObservableProperty;
 import org.uqbar.arena.widgets.lists.ObservableListContents;
-import org.uqbar.arena.widgets.tree.Tree;
 import org.uqbar.lacar.ui.model.Action;
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
@@ -47,7 +46,7 @@ public class List<T> extends Control {
 
 	@Override
 	protected ControlBuilder createBuilder(PanelBuilder container) {
-		return container.addList(onSelect, propertyElement,  this.getWidth(), this.getHeigth());
+		return container.addList(onSelect, propertyElement);
 	}
 
 
