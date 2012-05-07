@@ -28,9 +28,6 @@ class PureObjectTransactionMonitorPanel(parent: WindowOwner, model: ObjectTransa
 
     createList(panel)
     createTable(panel)
-    
-    mainPanel.setWidth(800);
-
   }
 
   def createTree(panel: Panel) {
@@ -53,20 +50,20 @@ class PureObjectTransactionMonitorPanel(parent: WindowOwner, model: ObjectTransa
   }
 
   def describeResultsGrid(table: Table[Entry]) {
-    var keyColumn = new Column[Entry](table);
-    keyColumn.setTitle("property");
-    keyColumn.setFixedSize(200);
-    keyColumn.bindContentsToProperty("key");
+    new Column[Entry](table)
+    	.setTitle("property")
+    	.setFixedSize(200)
+    	.bindContentsToProperty("key");
 
-    var valueColumn = new Column[Entry](table);
-    valueColumn.setTitle("value");
-    valueColumn.setFixedSize(200);
-    valueColumn.bindContentsToProperty("value");
-    
-    var fieldColumn = new Column[Entry](table);
-    fieldColumn.setTitle("original value");
-    fieldColumn.setFixedSize(200);
-    fieldColumn.bindContentsToProperty("fieldValue");
+    new Column[Entry](table)
+    	.setTitle("value")
+    	.setFixedSize(200)
+    	.bindContentsToProperty("value");
+
+    new Column[Entry](table)
+    	.setTitle("original value")
+    	.setFixedSize(200)
+    	.bindContentsToProperty("fieldValue")
   }
 
   def createList(panel: Panel) = {
@@ -103,7 +100,7 @@ class PureObjectTransactionMonitorPanel(parent: WindowOwner, model: ObjectTransa
     return b;
   }
 
-  def convertSetToListOfEntry[T](set: java.util.Set[T], source:Any): Buffer[Entry] = {
+  def convertSetToListOfEntry[T](set: java.util.Set[T], source: Any): Buffer[Entry] = {
     var buffer = Buffer[Entry]()
     set.asScala.foreach(p => p match {
       case entry: { def getKey(): T; def getValue(): T } => buffer.append(new Entry(entry.getKey(), entry.getValue(), source))

@@ -2,6 +2,7 @@ package org.uqbar.lacar.ui.impl.jface;
 
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
 import org.uqbar.lacar.ui.model.BindingBuilder;
@@ -20,5 +21,15 @@ public class JFaceTextBuilder extends JFaceSkineableControlBuilder<Text> {
 	@Override
 	public BindingBuilder observeValue() {
 		return new JFaceBindingBuilder(this, SWTObservables.observeText(this.getWidget(), SWT.Modify));
+	}
+	
+	protected void configureLayoutData(){
+		if(this.getWidth() != 0 ){
+			GridData layoutData = new GridData(GridData.FILL_HORIZONTAL );
+			layoutData.widthHint = this.getWidth();
+			
+			this.getControlLayout().setLayoutData(layoutData);
+		}
+		
 	}
 }

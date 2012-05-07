@@ -26,8 +26,6 @@ import com.uqbar.commons.collections.CollectionFactory;
 public abstract class Control extends Widget {
 	private Collection<Binding<ControlBuilder>> bindings = CollectionFactory.createCollection();
 	protected List<Closure<ControlBuilder>> configurations = CollectionFactory.createList();
-	private int width = 100;
-	private int heigth = 100;
 
 	public Control() {
 		this(null);
