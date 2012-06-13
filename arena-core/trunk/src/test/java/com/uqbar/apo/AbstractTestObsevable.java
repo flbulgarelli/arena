@@ -7,7 +7,7 @@ import org.uqbar.commons.utils.ReflectionUtils;
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
 
 import com.uqbar.apo.util.ExampleObject;
-import com.uqbar.apo.util.ExampleObservableObject;
+import com.uqbar.apo.util.ExampleObservableSObject;
 import com.uqbar.apo.util.IExampleObject;
 
 public class AbstractTestObsevable {
@@ -37,7 +37,7 @@ public class AbstractTestObsevable {
 	}
 
 	protected IExampleObject createSourceObject() {
-		return new ExampleObservableObject("source", VALUE1, AGE);
+		return new ExampleObservableSObject("source", VALUE1, AGE);
 	}
 
 	// **************************************************************
