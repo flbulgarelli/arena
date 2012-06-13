@@ -193,7 +193,7 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 
 	protected Shell getShell() {
 		// WARNING: Este método falla si no se invocó el #create primero.
-		return this.getJFaceWindow().getShell();
+		return this.getJFaceWindow().getShell(); 
 	}
 
 	/**

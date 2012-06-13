@@ -14,7 +14,7 @@ public class JFaceDialogBuilder extends JFaceWindowBuilder {
 
 	@Override
 	protected Window createJFaceWindow() {
-		return new Dialog(this.parent.getShell()) {
+		return new Dialog(this.parent.getJFaceWindow()) {
 			@Override
 			protected Control createContents(Composite window) {
 				return JFaceDialogBuilder.this.createWindowContents(window);
@@ -22,9 +22,4 @@ public class JFaceDialogBuilder extends JFaceWindowBuilder {
 			
 		};
 	}
-
-	public JFaceWindowBuilder getParent() {
-		return parent;
-	}
-
 }
