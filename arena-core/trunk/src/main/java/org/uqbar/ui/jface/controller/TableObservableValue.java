@@ -1,5 +1,7 @@
 package org.uqbar.ui.jface.controller;
 
+import javassist.expr.Instanceof;
+
 import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.value.AbstractObservableValue;
 import org.eclipse.swt.SWT;
@@ -64,7 +66,11 @@ public class TableObservableValue extends AbstractObservableValue {
 				this.table.select(index); // -1 will not "unselect"
 			}
 			if (value != null) {
-				this.currentValue =  ((TableItem) value).getData();
+				if(value instanceof TableItem){
+					this.currentValue =  ((TableItem) value).getData();
+				}else{
+					this.currentValue = value;
+				}
 			}
 		}
 		finally {

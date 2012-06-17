@@ -5,7 +5,7 @@ import com.uqbar.renascent.framework.aop.transaction.ObjectTransactionManager;
 
 public enum IsolationLevelEvents {
 	
-	FIRE_ALL(){
+	FIRE_ALL(""){
 
 		@Override
 		public boolean check(ObjectTransaction objectTransaction) {
@@ -14,7 +14,7 @@ public enum IsolationLevelEvents {
 		
 	},
 	
-	FIRE_COMMITTED(){
+	FIRE_COMMITTED(""){
 
 		@Override
 		public boolean check(ObjectTransaction objectTransaction) {
@@ -23,7 +23,7 @@ public enum IsolationLevelEvents {
 		
 	},
 	
-	FIRE_OlNLY_IN_MY_TRANSACTION(){
+	FIRE_OlNLY_IN_MY_TRANSACTION(""){
 
 		@Override
 		public boolean check(ObjectTransaction objectTransaction) {
@@ -32,9 +32,10 @@ public enum IsolationLevelEvents {
 		
 	};
 	
-	/**
-	 * TODO: Buscarle otro nombre
-	 */
+
+	private IsolationLevelEvents(final String code) {
+//		super(code);
+	}
 	public abstract boolean check(ObjectTransaction objectTransaction);
 
 }

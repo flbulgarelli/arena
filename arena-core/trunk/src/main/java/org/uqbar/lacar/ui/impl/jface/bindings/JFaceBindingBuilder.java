@@ -8,6 +8,7 @@ import java.beans.PropertyDescriptor;
 import org.eclipse.core.databinding.BindingException;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
@@ -109,7 +110,18 @@ public class JFaceBindingBuilder implements BindingBuilder {
 	}
 
 	public IObservableValue observeValue(Object bean, String propertyName) {
-		return this.observeValue(Realm.getDefault(), bean, propertyName);
+		String firstProperty = propertyName;
+		String[] parts = propertyName.split("\\."); 
+		if(propertyName.contains(".")){
+			firstProperty = parts[0];
+		}
+		
+		IObservableValue detailObservable = BeansObservables.observeValue(bean, firstProperty);
+		for (int i = 1; i < parts.length; i++) {
+			detailObservable = BeansObservables.observeDetailValue(Realm.getDefault(), detailObservable, parts[i] , getPropertyDescriptor(detailObservable.getValue().getClass(), parts[i]).getPropertyType());
+		}
+		
+		return detailObservable; 
 	}
 
 	public IObservableValue observeValue(Realm realm, Object bean, String propertyName) {

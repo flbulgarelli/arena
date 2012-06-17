@@ -36,15 +36,16 @@ public class Panel extends Widget implements Container {
 	public Panel(Container container) {
 		this(container, container.getModel());
 	}
+
+	public Panel(Container container, IModel<?> model) {
+		super(container);
+		this.model = model;
+	}
 	
 	public Panel(Container container, Object model) {
 		this(container, new Model<Object>(model));
 	}
 	
-	public Panel(Container container, IModel<?> model) {
-		super(container);
-		this.model = model;
-	}
 	
 
 	// ********************************************************
