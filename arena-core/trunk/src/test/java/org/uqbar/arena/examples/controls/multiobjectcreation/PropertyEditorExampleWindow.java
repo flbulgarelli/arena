@@ -1,8 +1,5 @@
 package org.uqbar.arena.examples.controls.multiobjectcreation;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.uqbar.arena.bindings.ObservableProperty;
 import org.uqbar.arena.layout.VerticalLayout;
 import org.uqbar.arena.widgets.Label;
@@ -26,17 +23,16 @@ public class PropertyEditorExampleWindow extends MainWindow<UbicarCosa>{
 		mainPanel.setLayout(new VerticalLayout());
 		
 		new Label(mainPanel).setText("Posicion:");
-		new TextBox(mainPanel)
-			.bindValueToProperty("posicion");
+		new TextBox(mainPanel).bindValueToProperty("posicion");
 		
 		new Selector(mainPanel)
-			.setContents(this.getModelObject().getUbicables(), "class.simpleName");
+			.setContents(this.getModelObject().getUbicables(), "class").bindValueToProperty("ubicable");
 		
 		// 	esfera
 		// 		estrellas
 		Adapter<Ubicable, Boolean> esEsferaAdapter = this.esEsferaAdapter();
 		
-			//new Label(mainPanel).setText("Estrellas:");
+//			new Label(mainPanel).setText("Estrellas:");
 			TextBox estrellas = new TextBox(mainPanel);
 			estrellas.bindValueToProperty("ubicable.estrellas");
 			estrellas.bindVisible(new ObservableProperty("ubicable")).setAdapter(esEsferaAdapter);
@@ -44,8 +40,8 @@ public class PropertyEditorExampleWindow extends MainWindow<UbicarCosa>{
 	// personaje
 		// 		distanciaMaxima
 		new Label(mainPanel).setText("Distancia Maxima:");
-		new TextBox(mainPanel)
-			.bindValueToProperty("distanciaMaxima");
+//		new TextBox(mainPanel)
+//			.bindValueToProperty("distanciaMaxima");
 			
 		*/
 		

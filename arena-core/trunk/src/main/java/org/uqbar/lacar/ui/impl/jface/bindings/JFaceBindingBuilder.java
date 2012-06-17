@@ -109,6 +109,9 @@ public class JFaceBindingBuilder implements BindingBuilder {
 		this.dbc.bindValue(this.view, this.model, this.viewToModel, this.modelToView);
 	}
 
+	/**
+	 * Necesito traits!!
+	 */
 	public IObservableValue observeValue(Object bean, String propertyName) {
 		String firstProperty = propertyName;
 		String[] parts = propertyName.split("\\."); 

@@ -5,13 +5,13 @@ package org.uqbar.arena.examples.controls.multiobjectcreation;
  * @author jfernandes
  */
 public class Esfera extends Ubicable {
-	private int estrellas;
+	private Integer estrellas = 0;
 
-	public int getEstrellas() {
+	public Integer getEstrellas() {
 		return estrellas;
 	}
 
-	public void setEstrellas(int estrellas) {
+	public void setEstrellas(Integer estrellas) {
 		this.estrellas = estrellas;
 	}
 	

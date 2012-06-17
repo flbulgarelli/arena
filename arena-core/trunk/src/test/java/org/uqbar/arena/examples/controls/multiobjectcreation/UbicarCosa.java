@@ -15,8 +15,8 @@ public class UbicarCosa extends ObservableObject {
 	private List<Ubicable> ubicables = new ArrayList<Ubicable>();
 
 	public UbicarCosa() {
-		this.ubicables.add(this.ubicable = new Personaje());
-		this.ubicables.add(new Esfera());
+		this.ubicables.add(this.ubicable = new Esfera());
+		this.ubicables.add(new Personaje());
 	}
 	
 	public String getPosicion() {
@@ -24,7 +24,7 @@ public class UbicarCosa extends ObservableObject {
 	}
 	
 	public void setPosicion(String posicion) {
-		this.posicion = posicion;
+		setFieldValue("position", posicion);
 	}
 	
 	public Ubicable getUbicable() {
@@ -32,7 +32,7 @@ public class UbicarCosa extends ObservableObject {
 	}
 
 	public void setUbicable(Ubicable ubicable) {
-		this.ubicable = ubicable;
+		setFieldValue("ubicable", ubicable);
 	}
 	
 	public List<Ubicable> getUbicables() {
