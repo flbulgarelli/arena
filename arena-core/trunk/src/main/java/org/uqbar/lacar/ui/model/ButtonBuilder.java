@@ -5,7 +5,7 @@ package org.uqbar.lacar.ui.model;
  * 
  * @author npasserini
  */
-public interface ButtonBuilder extends ControlBuilder {
+public interface ButtonBuilder extends SkineableBuilder {
 
 	/**
 	 * Defines this button as the default action for the window.

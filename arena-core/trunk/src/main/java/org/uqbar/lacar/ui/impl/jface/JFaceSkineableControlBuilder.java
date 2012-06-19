@@ -1,7 +1,10 @@
 package org.uqbar.lacar.ui.impl.jface;
 
+import java.awt.Color;
+
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Control;
-import org.uqbar.arena.widgets.Color;
 import org.uqbar.lacar.ui.model.SkineableBuilder;
 
 
@@ -30,6 +33,17 @@ public abstract class JFaceSkineableControlBuilder<T extends Control> extends JF
 		this.getWidget().setBackground(swtColor);
 	}
 	
+	@Override
+	public void setFontSize(int size) {
+		FontData[] fontData = this.getWidget().getFont().getFontData();
+		for(int i = 0; i < fontData.length; ++i)
+		    fontData[i].setHeight(size);
+
+		final Font newFont = new Font(this.getWidget().getDisplay(), fontData);
+		this.getWidget().setFont(newFont);
+		
+		this.getWidget().getFont();
+	}
 	
 	protected org.eclipse.swt.graphics.Color getSWTColor(Color color) {
 		int blue = color.getBlue();

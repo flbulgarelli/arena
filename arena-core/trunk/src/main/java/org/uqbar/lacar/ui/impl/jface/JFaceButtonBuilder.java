@@ -16,7 +16,7 @@ import org.uqbar.lacar.ui.model.ButtonBuilder;
  * 
  * @author npasserini
  */
-public class JFaceButtonBuilder extends JFaceControlBuilder<Button> implements ButtonBuilder {
+public class JFaceButtonBuilder extends JFaceSkineableControlBuilder<Button> implements ButtonBuilder {
 	
 	public JFaceButtonBuilder(JFaceContainer context) {
 		super(context, new Button(context.getJFaceComposite(), SWT.PUSH));
@@ -49,6 +49,7 @@ public class JFaceButtonBuilder extends JFaceControlBuilder<Button> implements B
 		this.getWidget().addSelectionListener(new JFaceActionAdapter(this.getContainer(), action));
 		return this;
 	}
+	
 
 	// ********************************************************
 	// ** TODO Yet not implemented.

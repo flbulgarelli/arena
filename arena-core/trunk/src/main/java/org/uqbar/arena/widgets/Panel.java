@@ -27,7 +27,7 @@ public class Panel extends Widget implements Container {
 	 * Los componentes contenidos en este {@link Panel}
 	 */
 	private List<Widget> children = new ArrayList<Widget>();
-	private Layout layout;
+	private Layout layout  = new VerticalLayout();
 
 	// ********************************************************
 	// ** Panel creation

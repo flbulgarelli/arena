@@ -5,7 +5,7 @@ import scala.collection.JavaConverters.asScalaSetConverter
 trait CollectionUtil {
   def convertSetToList[T](set: java.util.Set[T]): List[T] = {
     var b = List[T]()
-    set.asScala.foreach(p => b.::(p))
+    set.asScala.foreach(p => b = b.::(p))
     return b;
   }
 

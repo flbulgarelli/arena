@@ -26,7 +26,7 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 	
 	@Override
 	protected void createMainTemplate(Panel mainPanel) {
-		new Button(mainPanel).setCaption("Open Monitor").onClick(new MessageSend(this, "openMonitor"));
+		final Button button = new Button(mainPanel).setCaption("Open Monitor").onClick(new MessageSend(this, "openMonitor"));
 		super.createMainTemplate(mainPanel);
 	}
 	

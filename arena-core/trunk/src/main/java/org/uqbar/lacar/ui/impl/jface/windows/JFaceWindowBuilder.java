@@ -13,11 +13,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
-import com.uqbar.commons.collections.CollectionFactory;
-import com.uqbar.commons.exceptions.ProgramException;
-
-import org.uqbar.arena.widgets.Color;
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
 import org.uqbar.lacar.ui.impl.jface.JFacePanelBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
@@ -25,6 +20,9 @@ import org.uqbar.lacar.ui.model.ViewDescriptor;
 import org.uqbar.lacar.ui.model.WidgetBuilder;
 import org.uqbar.lacar.ui.model.WindowBuilder;
 import org.uqbar.ui.jface.view.ErrorViewer;
+
+import com.uqbar.commons.collections.CollectionFactory;
+import com.uqbar.commons.exceptions.ProgramException;
 
 public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, WidgetBuilder {
 	private Window window;

@@ -4,6 +4,7 @@ import com.uqbar.renascent.common.transaction.ObjectTransaction
 import com.uqbar.renascent.framework.aop.transaction.ObjectTransactionImpl
 import scala.collection.mutable.Buffer
 import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import org.uqbar.commons.utils.Observable
 
 @Observable
@@ -32,20 +33,21 @@ class ObjectTransactionImplObservable(var objectTransaction:ObjectTransactionImp
 	
 	def getIdentityWrapper() = this.objectTransaction.getAttributeMap().keySet().toList
 
-	def getTableResult() = tableResult
+	def getTableResult() = tableResult.asJava
 
 	def setTableResult(tableResult:Buffer[Entry]) = this.tableResult = tableResult
 
-	def getListResult() = listResult
+	def getListResult() = listResult.asJava
 
-	def setListResult(listResult:List[Any]) = this.listResult = listResult;
+	def setListResult[A](listResult:List[A]) = this.listResult = listResult.toList;
 	
-	def getChildren():Buffer[Any] = {
+	def getChildren():java.util.List[Any] = {
 		var result = Buffer[Any]();
 		if(objectTransaction != null){
 			result.append(new ObjectTransactionImplObservable(objectTransaction));
 			objectTransaction.getParent() match {
 			  case transactionImp:ObjectTransactionImpl => this.objectTransaction = transactionImp 
+			  case _ => this.objectTransaction = null
 			};
 		}
 		return result;

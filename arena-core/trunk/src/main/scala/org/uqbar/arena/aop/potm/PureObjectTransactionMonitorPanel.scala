@@ -1,6 +1,6 @@
 package org.uqbar.arena.aop.potm
-import scala.collection.JavaConverters.asScalaSetConverter
-import scala.collection.JavaConverters.bufferAsJavaListConverter
+import scala.collection.JavaConverters._
+import scala.collection.JavaConverters._
 import scala.collection.mutable.Buffer
 
 import org.uqbar.arena.layout.VerticalLayout
@@ -19,6 +19,12 @@ class PureObjectTransactionMonitorPanel(parent: WindowOwner, model: ObjectTransa
 
   var ot: ObjectTransactionImpl = null
 
+	override def createMainTemplate(formBuilder:Panel) {
+		this.setTitle("Monitor de Transacciones");
+        setTaskDescription(model.getObjectTransaction().getOwner().getName());
+		super.createMainTemplate(formBuilder);
+	}
+  
   override def createFormPanel(mainPanel: Panel) = {
     mainPanel.setLayout(new VerticalLayout())
     ot = getModelObject().getObjectTransaction()
