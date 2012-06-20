@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>uqbar</groupId>
-	<artifactId>arena-core</artifactId>
+	<artifactId>arena</artifactId>
 	<packaging>jar</packaging>
 	<version>3.0-SNAPSHOT</version>
 	<name>arena</name>
@@ -78,11 +78,6 @@
 
 	<dependencies>
 		<!-- UQBAR -->
-		<dependency>
-			<groupId>uqbar</groupId>
-			<artifactId>uqbar-commons</artifactId>
-			<version>1.1</version>
-		</dependency>
 		<dependency>
 			<groupId>uqbar</groupId>
 			<artifactId>util-commons</artifactId>
