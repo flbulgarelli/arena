@@ -11,8 +11,9 @@ import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.core.databinding.observable.masterdetail.IObservableFactory;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.uqbar.commons.model.IModel;
+import org.eclipse.core.internal.databinding.beans.BeanObservableValueDecorator;
 import org.uqbar.lacar.ui.impl.jface.JFaceWidgetBuilder;
 import org.uqbar.lacar.ui.model.Adapter;
 import org.uqbar.lacar.ui.model.BindingBuilder;
@@ -113,41 +114,6 @@ public class JFaceBindingBuilder implements BindingBuilder {
 	 * Necesito traits!!
 	 */
 	public IObservableValue observeValue(Object bean, String propertyName) {
-		String firstProperty = propertyName;
-		String[] parts = propertyName.split("\\."); 
-		if(propertyName.contains(".")){
-			firstProperty = parts[0];
-		}
-		
-		IObservableValue detailObservable = BeansObservables.observeValue(bean, firstProperty);
-		for (int i = 1; i < parts.length; i++) {
-			detailObservable = BeansObservables.observeDetailValue(Realm.getDefault(), detailObservable, parts[i] , getPropertyDescriptor(detailObservable.getValue().getClass(), parts[i]).getPropertyType());
-		}
-		
-		return detailObservable; 
-	}
-
-	public IObservableValue observeValue(Realm realm, Object bean, String propertyName) {
-		PropertyDescriptor descriptor = getPropertyDescriptor(bean.getClass(), propertyName);
-		return new ArenaObservableValue(realm, bean, descriptor);
-	}
-
-	public PropertyDescriptor getPropertyDescriptor(Class<?> beanClass, String propertyName) {
-		BeanInfo beanInfo;
-		try {
-			beanInfo = Introspector.getBeanInfo(beanClass);
-		} catch (IntrospectionException e) {
-			// cannot introspect, give up
-			return null;
-		}
-		PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-		for (int i = 0; i < propertyDescriptors.length; i++) {
-			PropertyDescriptor descriptor = propertyDescriptors[i];
-			if (descriptor.getName().equals(propertyName)) {
-				return descriptor;
-			}
-		}
-		throw new BindingException(
-				"Could not find property with name " + propertyName + " in class " + beanClass); //$NON-NLS-1$ //$NON-NLS-2$
+		return JFaceBeansBeansObservables.observeProperty(bean, propertyName);
 	}
 }

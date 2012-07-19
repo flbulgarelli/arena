@@ -1,14 +1,15 @@
 package org.uqbar.arena.widgets.tables;
 
+import java.awt.Color;
 import java.util.List;
-
-import com.uqbar.commons.collections.Closure;
-import com.uqbar.commons.collections.CollectionFactory;
-import com.uqbar.commons.collections.Transformer;
 
 import org.uqbar.lacar.ui.model.ColumnBuilder;
 import org.uqbar.lacar.ui.model.LabelProvider;
 import org.uqbar.lacar.ui.model.TableBuilder;
+
+import com.uqbar.commons.collections.Closure;
+import com.uqbar.commons.collections.CollectionFactory;
+import com.uqbar.commons.collections.Transformer;
 
 /**
  * Una columna de una tabla.
@@ -65,6 +66,40 @@ public class Column<R> {
 		
 		return this;
 	}
+	
+	public Column<R> setBackground(final Color color) {
+		this.configurations.add(new Closure<ColumnBuilder<R>>() {
+			@Override
+			public void execute(ColumnBuilder<R> builder) {
+				builder.setBackground(color);
+			}
+		});
+		
+		return this;
+	}
+	
+	public Column<R> setForeground(final Color color) {
+		this.configurations.add(new Closure<ColumnBuilder<R>>() {
+			@Override
+			public void execute(ColumnBuilder<R> builder) {
+				builder.setForeground(color);
+			}
+		});
+		
+		return this;
+	}
+	
+	public Column<R> setFont(final int size) {
+		this.configurations.add(new Closure<ColumnBuilder<R>>() {
+			@Override
+			public void execute(ColumnBuilder<R> builder) {
+				builder.setFontSize(size);
+			}
+		});
+		
+		return this;
+	}
+	
 
 	// ********************************************************
 	// ** Binding

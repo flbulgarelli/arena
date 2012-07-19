@@ -2,15 +2,17 @@ package org.uqbar.arena.aop.windows;
 
 import org.uqbar.arena.actions.MessageSend;
 import org.uqbar.arena.aop.potm.ObjectTransactionImplObservable;
-import org.uqbar.arena.aop.potm.PureObjectTransactionMonitorPanel;
+import org.uqbar.arena.aop.potm.PureObjectTransactionMonitorWindow;
 import org.uqbar.arena.widgets.Button;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.windows.Dialog;
+import org.uqbar.arena.windows.Window;
 import org.uqbar.arena.windows.WindowOwner;
+import org.uqbar.commons.model.UserException;
 
-import com.uqbar.renascent.common.transaction.ObjectTransaction;
-import com.uqbar.renascent.common.transaction.TaskOwner;
-import com.uqbar.renascent.framework.aop.transaction.ObjectTransactionManager;
+import com.uqbar.aop.transaction.ObjectTransactionManager;
+import com.uqbar.common.transaction.ObjectTransaction;
+import com.uqbar.common.transaction.TaskOwner;
 
 public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOwner {
 	private static final long serialVersionUID = 1L;
@@ -26,7 +28,7 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 	
 	@Override
 	protected void createMainTemplate(Panel mainPanel) {
-		final Button button = new Button(mainPanel).setCaption("Open Monitor").onClick(new MessageSend(this, "openMonitor"));
+		new Button(mainPanel).setCaption("Open Monitor").onClick(new MessageSend(this, "openMonitor")).setWidth(100).setHeigth(25);
 		super.createMainTemplate(mainPanel);
 	}
 	
@@ -54,27 +56,53 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 	@Override
 	protected void executeTask() {
 		super.executeTask();
+		this.commit();
+	}
+
+	protected void commit() {
 		ObjectTransactionManager.commit(this);
 		this.inTransaction = false;
 	}
 	
 	@Override
 	public void cancel() {
+		this.rollback();
+		super.cancel();
+	}
+	
+	
+	public MessageSend execute(Object target, String methodName){
+		return new MessageSend(target, methodName){
+			
+			@Override
+			public void execute() {
+				try{
+					ObjectTransactionManager.begin(TransactionalDialog.this);
+					ObjectTransactionManager.commit(TransactionalDialog.this);
+				}catch(Exception e){
+					ObjectTransactionManager.rollback(TransactionalDialog.this);
+					throw new UserException(e.toString(), e);
+				}
+				super.execute();
+			}
+		};
+	}
+
+	protected void rollback() {
 		ObjectTransactionManager.rollback(this);
 		this.inTransaction = false;
-		super.cancel();
 	}
 	
 	@Override
 	public void cancelTask() {
 		super.cancelTask();
 		if (this.inTransaction) {
-			ObjectTransactionManager.rollback(this);
+			this.rollback();
 		}
 	}
 	
 	public void openMonitor() {
-		new PureObjectTransactionMonitorPanel(this.getOwner(), new ObjectTransactionImplObservable()).open();
+		new PureObjectTransactionMonitorWindow(((Window)this), new ObjectTransactionImplObservable()).open();
 	}
 	
 }

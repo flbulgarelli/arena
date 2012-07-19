@@ -2,8 +2,8 @@ package org.uqbar.arena.aop;
 
 import javassist.ClassPool;
 
-import com.uqbar.renascent.framework.aop.AdviceWeaver;
-import com.uqbar.renascent.framework.aop.FrameworkClassLoader;
+import com.uqbar.aop.AdviceWeaver;
+import com.uqbar.aop.APOClassLoader;
 
 
 /**
@@ -13,7 +13,7 @@ import com.uqbar.renascent.framework.aop.FrameworkClassLoader;
  * 
  * -Djava.system.class.loader=org.uqbar.arena.aop.ArenaClassLoader
  */
-public class ArenaClassLoader extends FrameworkClassLoader {
+public class ArenaClassLoader extends APOClassLoader {
 
 	public ArenaClassLoader(ClassLoader parent) {
 		super(parent);

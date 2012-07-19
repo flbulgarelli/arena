@@ -1,7 +1,12 @@
 package org.uqbar.lacar.ui.impl.jface.tables;
 
+import java.awt.Color;
+
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Control;
 
 import org.uqbar.lacar.ui.model.ColumnBuilder;
 import org.uqbar.lacar.ui.model.LabelProvider;
@@ -55,6 +60,41 @@ public class JFaceColumnBuilder<Row> implements ColumnBuilder<Row> {
 	public void setFixedSize(int pixels) {
 		this.layoutBuilder = new FixedColumnLayoutBuilder(pixels);
 	}
+	
+	
+	@Override
+	public void setForeground(Color color) {
+		org.eclipse.swt.graphics.Color swtColor = getSWTColor(color);
+		this.getControl().setForeground(swtColor);
+	}
+
+	
+	@Override
+	public void setBackground(Color color) {
+		org.eclipse.swt.graphics.Color swtColor = getSWTColor(color);
+		this.getControl().setBackground(swtColor);
+	}
+	
+	@Override
+	public void setFontSize(int size) {
+		FontData[] fontData = this.getControl().getFont().getFontData();
+		for(int i = 0; i < fontData.length; ++i)
+		    fontData[i].setHeight(size);
+
+		final Font newFont = new Font(this.getControl().getDisplay(), fontData);
+		this.getControl().setFont(newFont);
+		
+		this.getControl().getFont();
+	}
+	
+	protected org.eclipse.swt.graphics.Color getSWTColor(Color color) {
+		int blue = color.getBlue();
+		int green = color.getGreen();
+		int red = color.getRed();
+		org.eclipse.swt.graphics.Color swtColor = new org.eclipse.swt.graphics.Color(getControl().getDisplay(), red, green, blue);
+		return swtColor;
+	}
+
 
 	// ********************************************************
 	// ** Internal accessors
@@ -66,6 +106,10 @@ public class JFaceColumnBuilder<Row> implements ColumnBuilder<Row> {
 
 	protected LabelProvider<Row> getLabelProvider() {
 		return this.labelProvider;
+	}
+
+	protected Control getControl() {
+		return this.tableViewerColumn.getViewer().getControl();
 	}
 
 	@Override

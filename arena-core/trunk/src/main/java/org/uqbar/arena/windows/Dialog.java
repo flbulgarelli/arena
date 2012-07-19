@@ -2,13 +2,11 @@ package org.uqbar.arena.windows;
 
 import java.util.List;
 
-import com.uqbar.commons.collections.CollectionFactory;
-
 import org.uqbar.arena.widgets.Panel;
-import org.uqbar.arena.windows.Dialog.DialogState;
-import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.commons.model.UserException;
 import org.uqbar.lacar.ui.model.Action;
+
+import com.uqbar.commons.collections.CollectionFactory;
 
 /**
  * Ventana (SimpleWindow) especial que implementa la interface {@link TaskWindow}.

@@ -2,7 +2,6 @@ package org.uqbar.arena.aop.windows.traits
 
 import scala.collection.mutable.Buffer
 
-import org.uqbar.arena.aop.windows.traits.DialogTrait
 import org.uqbar.arena.windows.SimpleWindow
 import org.uqbar.arena.windows.TaskWindow
 import org.uqbar.lacar.ui.model.Action

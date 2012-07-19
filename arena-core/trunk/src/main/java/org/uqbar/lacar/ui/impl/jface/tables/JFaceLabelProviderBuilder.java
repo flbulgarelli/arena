@@ -10,6 +10,7 @@ import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBeansBeansObservables;
 
 import com.uqbar.commons.collections.Transformer;
 

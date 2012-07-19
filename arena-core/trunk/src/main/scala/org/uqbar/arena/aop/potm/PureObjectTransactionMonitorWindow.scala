@@ -1,20 +1,24 @@
 package org.uqbar.arena.aop.potm
+import java.awt.Color
+
 import scala.collection.JavaConverters._
 import scala.collection.mutable.Buffer
 
+import org.uqbar.arena.actions.MessageSend
 import org.uqbar.arena.layout.VerticalLayout
 import org.uqbar.arena.widgets.tables.Column
 import org.uqbar.arena.widgets.tables.Table
 import org.uqbar.arena.widgets.tree.Tree
+import org.uqbar.arena.widgets.Button
 import org.uqbar.arena.widgets.Panel
 import org.uqbar.arena.windows.SimpleWindow
 import org.uqbar.arena.windows.WindowOwner
 
-import com.uqbar.renascent.framework.aop.transaction.IdentityWrapper
-import com.uqbar.renascent.framework.aop.transaction.ObjectTransactionImpl
+import com.uqbar.aop.transaction.IdentityWrapper
+import com.uqbar.aop.transaction.ObjectTransactionImpl
 
-class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTransactionImplObservable) 
-	extends SimpleWindow[ObjectTransactionImplObservable](parent, model) with CollectionUtil{
+class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTransactionImplObservable)
+  extends SimpleWindow[ObjectTransactionImplObservable](parent, model) with CollectionUtil {
 
   var ot: ObjectTransactionImpl = null
 
@@ -51,19 +55,19 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
 
   def describeResultsGrid(table: Table[Entry]) {
     new Column[Entry](table)
-    	.setTitle("property")
-    	.setFixedSize(200)
-    	.bindContentsToProperty("key");
+      .setTitle("property")
+      .setFixedSize(200)
+      .bindContentsToProperty("key");
 
     new Column[Entry](table)
-    	.setTitle("value")
-    	.setFixedSize(200)
-    	.bindContentsToProperty("value");
+      .setTitle("value")
+      .setFixedSize(200)
+      .bindContentsToProperty("value");
 
     new Column[Entry](table)
-    	.setTitle("original value")
-    	.setFixedSize(200)
-    	.bindContentsToProperty("fieldValue")
+      .setTitle("original value")
+      .setFixedSize(200)
+      .bindContentsToProperty("fieldValue")
   }
 
   def createList(panel: Panel) = {
@@ -94,6 +98,9 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
     }
   }
 
-
-  override def addActions(actionsPanel: Panel) = {}
+  override def addActions(actionsPanel: Panel) = {
+    var close = new Button(actionsPanel).setCaption("close").setAsDefault()
+    close.setFontSize(25).setBackground(Color.BLACK).setForeground(Color.WHITE).setWidth(100).setHeigth(50)
+    close.onClick(new MessageSend(this, "close"))
+  }
 }

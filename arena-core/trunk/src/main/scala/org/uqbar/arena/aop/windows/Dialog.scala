@@ -1,13 +1,13 @@
 package org.uqbar.arena.aop.windows
 
+import org.uqbar.arena.aop.windows.traits.DialogTrait
+import org.uqbar.arena.aop.windows.traits.TransactionalWindowTrait
 import org.uqbar.arena.widgets.Panel
 import org.uqbar.arena.windows.SimpleWindow
 import org.uqbar.arena.windows.Window
 import org.uqbar.arena.windows.WindowOwner
 import org.uqbar.arena.Application
-import com.uqbar.apo.util.ExampleObject
-import org.uqbar.arena.aop.windows.traits.DialogTrait
-import org.uqbar.arena.aop.windows.traits.TransactionalWindowTrait
+
 
 /**
  * Ventana (SimpleWindow) especial que implementa la interface {@link TaskWindow}.
@@ -38,14 +38,4 @@ class SDialog[T](owner: WindowOwner, model: T) extends SimpleWindow[T](owner, mo
 
 class STransactionalDialog[T](owner: WindowOwner, model: T) extends SDialog[T](owner, model) with TransactionalWindowTrait[T] {
 
-}
-
-object A {
-  def main(args: Array[String]) {
-  new Application() {
-			override def createMainWindow():Window[ExampleObject] = {
-				new SDialog(this, new ExampleObject("",  "", 3));
-			}
-		}.start();
-}
 }

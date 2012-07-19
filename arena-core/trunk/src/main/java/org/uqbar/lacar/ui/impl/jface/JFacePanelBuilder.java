@@ -13,8 +13,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.uqbar.arena.widgets.tree.Tree;
-import org.uqbar.arena.widgets.Widget;
-import org.uqbar.arena.widgets.tree.TreeNode;
 import org.uqbar.lacar.ui.impl.jface.bindings.ObservableErrorPanelForegroundColor;
 import org.uqbar.lacar.ui.impl.jface.bindings.ObservableStatusMessage;
 import org.uqbar.lacar.ui.impl.jface.lists.JFaceListBuilder;

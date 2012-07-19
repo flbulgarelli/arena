@@ -1,6 +1,5 @@
 package org.uqbar.arena.aop;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,14 +12,12 @@ import org.uqbar.commons.utils.Observable;
 import org.uqbar.commons.utils.Transactional;
 import org.uqbar.commons.utils.TransactionalAndObservable;
 
+import com.uqbar.aop.IBehaviorAdviceWeaverStrategy;
+import com.uqbar.aop.WeavingInstrumentor;
+import com.uqbar.aop.pointcut.predicate.APredicate;
+import com.uqbar.aop.pointcut.predicate.HasAnnotationPredicate;
 import com.uqbar.poo.aop.ObservableBehaviorAdviceWeaverStrategy;
 import com.uqbar.pot.aop.TransactionalBehaviorAdviceWeaverStrategy;
-import com.uqbar.renascent.aop.pointcut.predicate.APredicate;
-import com.uqbar.renascent.aop.pointcut.predicate.HasAnnotationPredicate;
-import com.uqbar.renascent.aop.pointcut.predicate.OrPredicate;
-import com.uqbar.renascent.aop.pointcut.predicate.SuperClassPredicate;
-import com.uqbar.renascent.framework.aop.IBehaviorAdviceWeaverStrategy;
-import com.uqbar.renascent.framework.aop.WeavingInstrumentor;
 
 /**
  */

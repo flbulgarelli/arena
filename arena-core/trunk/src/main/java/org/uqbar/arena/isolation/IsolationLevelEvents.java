@@ -1,11 +1,11 @@
 package org.uqbar.arena.isolation;
 
-import com.uqbar.renascent.common.transaction.ObjectTransaction;
-import com.uqbar.renascent.framework.aop.transaction.ObjectTransactionManager;
+import com.uqbar.aop.transaction.ObjectTransactionManager;
+import com.uqbar.common.transaction.ObjectTransaction;
 
 public enum IsolationLevelEvents {
 	
-	FIRE_ALL(""){
+	FIRE_UNCOMMITTED("FIRE_UNCOMMITTED"){
 
 		@Override
 		public boolean check(ObjectTransaction objectTransaction) {
@@ -14,7 +14,7 @@ public enum IsolationLevelEvents {
 		
 	},
 	
-	FIRE_COMMITTED(""){
+	FIRE_COMMITTED("FIRE_COMMITTED"){
 
 		@Override
 		public boolean check(ObjectTransaction objectTransaction) {
@@ -23,7 +23,7 @@ public enum IsolationLevelEvents {
 		
 	},
 	
-	FIRE_OlNLY_IN_MY_TRANSACTION(""){
+	SERIALIZABLE("SERIALIZABLE"){
 
 		@Override
 		public boolean check(ObjectTransaction objectTransaction) {
@@ -33,9 +33,13 @@ public enum IsolationLevelEvents {
 	};
 	
 
-	private IsolationLevelEvents(final String code) {
-//		super(code);
+	private final String name;
+	private IsolationLevelEvents(final String name) {
+		this.name = name;
 	}
-	public abstract boolean check(ObjectTransaction objectTransaction);
+	public String getName() {
+		return name;
+	}
 
+	public abstract boolean check(ObjectTransaction objectTransaction);
 }

@@ -5,9 +5,14 @@ import java.util.List;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
 import org.uqbar.lacar.ui.impl.jface.JFaceControlBuilder;
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
@@ -35,6 +40,14 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 		this.viewer = this.createTableViewer(this.getContainer().getJFaceComposite());
 		this.initialize(this.viewer.getTable());
 	}
+	
+	protected org.eclipse.swt.graphics.Color getSWTColor(java.awt.Color color) {
+		int blue = color.getBlue();
+		int green = color.getGreen();
+		int red = color.getRed();
+		org.eclipse.swt.graphics.Color swtColor = new org.eclipse.swt.graphics.Color(getWidget().getDisplay(), red, green, blue);
+		return swtColor;
+	}
 
 	private TableViewer createTableViewer(Composite jFaceComposite) {
 		TableViewer viewer = new TableViewer(jFaceComposite, SWT.H_SCROLL
@@ -42,7 +55,6 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLayout(new TableLayout());
-		
 		return viewer;
 	}
 

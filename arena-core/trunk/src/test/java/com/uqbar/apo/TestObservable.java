@@ -3,11 +3,11 @@ package com.uqbar.apo;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.uqbar.aop.transaction.ObjectTransactionManager;
+import com.uqbar.aop.transaction.utils.BasicTaskOwner;
 import com.uqbar.apo.util.ExampleObject;
 import com.uqbar.apo.util.IExampleObject;
 import com.uqbar.apo.util.TestRealm;
-import com.uqbar.renascent.framework.aop.transaction.ObjectTransactionManager;
-import com.uqbar.renascent.framework.aop.transaction.utils.BasicTaskOwner;
 
 /**
  * @author nny

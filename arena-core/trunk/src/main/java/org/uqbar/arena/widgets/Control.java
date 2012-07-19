@@ -144,21 +144,24 @@ public abstract class Control extends Widget {
 	protected abstract ControlBuilder createBuilder(PanelBuilder container);
 	
 	
-	public void setWidth(final int preferredSize) {
+	public Control setWidth(final int preferredSize) {
 		this.configurations.add(new Closure<ControlBuilder>() {
 			@Override
 			public void execute(ControlBuilder builder) {
 				builder.setWidth(preferredSize);
 			}
 		});
+		return this;
 	}
 	
-	public void setHeigth(final int preferredSize) {
+	public Control setHeigth(final int preferredSize) {
 		this.configurations.add(new Closure<ControlBuilder>() {
 			@Override
 			public void execute(ControlBuilder builder) {
 				builder.setHeigth(preferredSize);
 			}
 		});
+		
+		return this;
 	}
 }
