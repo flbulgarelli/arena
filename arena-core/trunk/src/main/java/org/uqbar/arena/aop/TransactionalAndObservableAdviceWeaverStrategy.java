@@ -1,34 +1,30 @@
 package org.uqbar.arena.aop;
 
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 
-import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.expr.ExprEditor;
 
 import org.uqbar.commons.utils.Observable;
 import org.uqbar.commons.utils.Transactional;
 import org.uqbar.commons.utils.TransactionalAndObservable;
 
-import com.uqbar.aop.IBehaviorAdviceWeaverStrategy;
+import com.uqbar.aop.Advice;
+import com.uqbar.aop.BehaviorAdviceWeaverStrategy;
 import com.uqbar.aop.WeavingInstrumentor;
-import com.uqbar.aop.pointcut.predicate.APredicate;
 import com.uqbar.aop.pointcut.predicate.HasAnnotationPredicate;
 import com.uqbar.poo.aop.ObservableBehaviorAdviceWeaverStrategy;
 import com.uqbar.pot.aop.TransactionalBehaviorAdviceWeaverStrategy;
 
 /**
  */
-public class TransactionalAndObservableAdviceWeaverStrategy  implements IBehaviorAdviceWeaverStrategy{
+public class TransactionalAndObservableAdviceWeaverStrategy  implements BehaviorAdviceWeaverStrategy{
 	
 	private ObservableBehaviorAdviceWeaverStrategy observableBehaviorAdviceWeaverStrategy = new ObservableBehaviorAdviceWeaverStrategy();
 	private TransactionalBehaviorAdviceWeaverStrategy transactionalBehaviorAdviceWeaverStrategy = new TransactionalBehaviorAdviceWeaverStrategy();
 	
 
-	public void addInstrumentors(ClassPool classPool,
-			Map<APredicate, ExprEditor> weavingInstrumentors) {
+	public void addAdvices(ClassPool classPool, List<Advice> advices) {
 		
 		WeavingInstrumentor observableWI = new WeavingInstrumentor();
 		
@@ -44,29 +40,24 @@ public class TransactionalAndObservableAdviceWeaverStrategy  implements IBehavio
 
 		
 		// transactional
-		weavingInstrumentors.put(new HasAnnotationPredicate(classPool, Transactional.class.getName()),
-				transactionalWI);
+		advices.add(new Advice(new HasAnnotationPredicate(classPool, Transactional.class.getName()), transactionalWI));
 
 		// Obbservable 
-		weavingInstrumentors.put(new HasAnnotationPredicate(classPool, Observable.class.getName()),
-				observableWI);
+		advices.add(new Advice(new HasAnnotationPredicate(classPool, Observable.class.getName()),
+				observableWI));
 		
 		// transactional and observable
-		weavingInstrumentors.put(new HasAnnotationPredicate(classPool, TransactionalAndObservable.class.getName()),
-			ObservableAndTransactionalWI);
+		advices.add(new Advice(new HasAnnotationPredicate(classPool, TransactionalAndObservable.class.getName()),
+			ObservableAndTransactionalWI));
 	}
 
 	@Override
-	public void applyAdviceToCtClass(CtClass ctClass,
-			Entry<APredicate, ExprEditor> entry)
-			throws CannotCompileException {
-		transactionalBehaviorAdviceWeaverStrategy.applyAdviceToCtClass(ctClass, entry);
-		observableBehaviorAdviceWeaverStrategy.applyAdviceToCtClass(ctClass, entry);
-		
+	public void applyAdviceToCtClass(CtClass ctClass, Advice advice)	{
+		transactionalBehaviorAdviceWeaverStrategy.applyAdviceToCtClass(ctClass, advice);
+		observableBehaviorAdviceWeaverStrategy.applyAdviceToCtClass(ctClass, advice);
 	}
 
 	@Override
 	public void configureInstrumentor(WeavingInstrumentor instrumentor) {
 	}
-	
 }
