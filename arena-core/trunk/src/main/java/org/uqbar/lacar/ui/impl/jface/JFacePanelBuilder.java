@@ -25,7 +25,7 @@ import org.uqbar.lacar.ui.model.LabelBuilder;
 import org.uqbar.lacar.ui.model.ListBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
 import org.uqbar.lacar.ui.model.SelectorBuilder;
-import org.uqbar.lacar.ui.model.SkineableBuilder;
+import org.uqbar.lacar.ui.model.SkinnableBuilder;
 import org.uqbar.lacar.ui.model.TableBuilder;
 import org.uqbar.lacar.ui.model.WidgetBuilder;
 import org.uqbar.ui.jface.view.ErrorViewer;
@@ -49,7 +49,7 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 	}
 
 	@Override
-	public SkineableBuilder addTextBox() {
+	public SkinnableBuilder addTextBox() {
 		return new JFaceTextBuilder(this);
 	}
 	

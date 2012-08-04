@@ -19,7 +19,7 @@ import org.uqbar.lacar.ui.model.TextControlBuilder;
  * 
  * @author npasserini
  */
-public class JFaceTextBuilder extends JFaceSkineableControlBuilder<Text>  implements TextControlBuilder {
+public class JFaceTextBuilder extends JFaceSkinnableControlBuilder<Text>  implements TextControlBuilder {
 
 	public JFaceTextBuilder(JFaceContainer container) {
 		super(container, new Text(container.getJFaceComposite(), SWT.SINGLE | SWT.BORDER));

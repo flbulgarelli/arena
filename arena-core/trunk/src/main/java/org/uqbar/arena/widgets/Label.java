@@ -10,7 +10,7 @@ import org.uqbar.lacar.ui.model.PanelBuilder;
  * 
  * @author npasserini
  */
-public class Label extends SkineableControl {
+public class Label extends SkinnableControl {
 	private String text;
 
 	public Label(Panel container) {

@@ -18,7 +18,7 @@ public interface PanelBuilder {
 
 	public LabelBuilder addLabel();
 
-	public SkineableBuilder addTextBox();
+	public SkinnableBuilder addTextBox();
 	
 	public ControlBuilder addSpinner(Integer minValue, Integer maxValue);
 

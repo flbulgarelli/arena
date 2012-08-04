@@ -2,7 +2,7 @@ package org.uqbar.arena.widgets;
 
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
-import org.uqbar.lacar.ui.model.SkineableBuilder;
+import org.uqbar.lacar.ui.model.SkinnableBuilder;
 import org.uqbar.lacar.ui.model.TextControlBuilder;
 
 import com.uqbar.commons.collections.Closure;
@@ -12,7 +12,7 @@ import com.uqbar.commons.collections.Closure;
  * 
  * @author npasserini
  */
-public class TextBox extends SkineableControl {
+public class TextBox extends SkinnableControl {
 	private static final long serialVersionUID = 1L;
 
 	public TextBox(Panel container) {
@@ -21,7 +21,7 @@ public class TextBox extends SkineableControl {
 
 	@Override
 	protected ControlBuilder createBuilder(PanelBuilder container) {
-		SkineableBuilder textBox = container.addTextBox();
+		SkinnableBuilder textBox = container.addTextBox();
 		this.configureSkineableBuilder(textBox);
 		return textBox;
 	}

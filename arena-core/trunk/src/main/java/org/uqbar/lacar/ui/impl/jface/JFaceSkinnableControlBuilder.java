@@ -5,17 +5,17 @@ import java.awt.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Control;
-import org.uqbar.lacar.ui.model.SkineableBuilder;
+import org.uqbar.lacar.ui.model.SkinnableBuilder;
 
 
-public abstract class JFaceSkineableControlBuilder<T extends Control> extends JFaceControlBuilder<T>  implements SkineableBuilder{
+public abstract class JFaceSkinnableControlBuilder<T extends Control> extends JFaceControlBuilder<T>  implements SkinnableBuilder{
 	
 
-	public JFaceSkineableControlBuilder(JFaceContainer container) {
+	public JFaceSkinnableControlBuilder(JFaceContainer container) {
 		super(container);
 	}
 	
-	public JFaceSkineableControlBuilder(JFaceContainer container, T jfaceWidget) {
+	public JFaceSkinnableControlBuilder(JFaceContainer container, T jfaceWidget) {
 		super(container, jfaceWidget);
 	}
 	

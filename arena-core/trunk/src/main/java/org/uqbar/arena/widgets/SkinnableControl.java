@@ -2,25 +2,25 @@ package org.uqbar.arena.widgets;
 
 import java.awt.Color;
 
-import org.uqbar.lacar.ui.model.SkineableBuilder;
+import org.uqbar.lacar.ui.model.SkinnableBuilder;
 
-public abstract class SkineableControl extends Control {
+public abstract class SkinnableControl extends Control {
 	private static final long serialVersionUID = 1L;
 	
 	private Color foreground;
 	private Color background;
 	private int fontSize;
 	
-	public SkineableControl(Container container) {
+	public SkinnableControl(Container container) {
 		super(container);
 	}
 	
-	public SkineableControl setForeground(Color foreground) {
+	public SkinnableControl setForeground(Color foreground) {
 		this.foreground = foreground;
 		return this;
 	}
 
-	public SkineableControl setBackground(Color background) {
+	public SkinnableControl setBackground(Color background) {
 		this.background = background;
 		return this;
 	}
@@ -29,12 +29,12 @@ public abstract class SkineableControl extends Control {
 		return fontSize;
 	}
 
-	public SkineableControl setFontSize(int fontSize) {
+	public SkinnableControl setFontSize(int fontSize) {
 		this.fontSize = fontSize;
 		return this;
 	}
 
-	protected void configureSkineableBuilder(SkineableBuilder builder){
+	protected void configureSkineableBuilder(SkinnableBuilder builder){
 		if(foreground != null){
 			builder.setForeground(foreground);			
 		}

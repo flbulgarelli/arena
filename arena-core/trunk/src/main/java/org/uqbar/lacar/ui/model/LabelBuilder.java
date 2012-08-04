@@ -2,7 +2,7 @@ package org.uqbar.lacar.ui.model;
 
 
 
-public interface LabelBuilder extends SkineableBuilder{
+public interface LabelBuilder extends SkinnableBuilder{
 
 	/**
 	 * Se asigna un valor fijo sin binding.

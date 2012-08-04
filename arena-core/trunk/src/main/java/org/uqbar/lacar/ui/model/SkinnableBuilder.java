@@ -3,7 +3,7 @@ package org.uqbar.lacar.ui.model;
 import java.awt.Color;
 
 
-public interface SkineableBuilder extends ControlBuilder {
+public interface SkinnableBuilder extends ControlBuilder {
 	
 	void setForeground(Color color);
 	

@@ -24,7 +24,7 @@ import com.uqbar.commons.collections.Closure;
  * 
  * @author npasserini
  */
-public class Button extends SkineableControl {
+public class Button extends SkinnableControl {
 	private String caption = this.nextCaption();
 	private Action onClick = new NoopAction();
 	public Button(Container container) {

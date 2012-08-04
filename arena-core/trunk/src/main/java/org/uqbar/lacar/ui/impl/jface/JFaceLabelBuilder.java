@@ -7,7 +7,7 @@ import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.lacar.ui.model.LabelBuilder;
 
-public class JFaceLabelBuilder extends JFaceSkineableControlBuilder<Label> implements LabelBuilder {
+public class JFaceLabelBuilder extends JFaceSkinnableControlBuilder<Label> implements LabelBuilder {
 
 	// ********************************************************
 	// ** Constructors
