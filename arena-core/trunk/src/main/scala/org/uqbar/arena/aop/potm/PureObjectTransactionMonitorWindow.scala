@@ -99,8 +99,8 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
   }
 
   override def addActions(actionsPanel: Panel) = {
-    var close = new Button(actionsPanel).setCaption("close").setAsDefault()
-    close.setFontSize(25).setBackground(Color.BLACK).setForeground(Color.WHITE).setWidth(100).setHeigth(50)
+    var close = new Button(actionsPanel).setCaption("close")
+    close.setFontSize(25).setWidth(100).setHeigth(50)
     close.onClick(new MessageSend(this, "close"))
   }
 }

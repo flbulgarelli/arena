@@ -83,7 +83,7 @@ public abstract class Dialog<T> extends SimpleWindow<T> implements TaskWindow {
 	 * 
 	 * @throws UserException En caso que la ejecución no sea exitosa. Eso evitará que se cierre la ventana.
 	 */
-	protected  void executeTask(){
+	protected void executeTask(){
 		for (Action action : this.acceptActions) {
 			action.execute();
 		}
