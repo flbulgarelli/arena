@@ -93,7 +93,7 @@ trait DialogTrait[T] extends SimpleWindow[T] with TaskWindow {
     }
   }
 
-  sealed case class DialogState() {
+  class DialogState() {
     def doCancel(dialog: DialogTrait[T]) = {}
   }
 

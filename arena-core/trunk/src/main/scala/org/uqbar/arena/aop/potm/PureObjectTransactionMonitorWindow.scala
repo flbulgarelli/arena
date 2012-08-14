@@ -79,7 +79,7 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
   }
 
   def onSelectedItem(tI: ObjectTransactionImplObservable*) = {
-    tI.first.getObjectTransaction() match {
+    tI.head.getObjectTransaction() match {
       case objectT: ObjectTransactionImpl => {
         getModelObject().setListResult(convertSetToList(objectT.getAttributeMap().keySet()))
         this.ot = objectT
@@ -90,7 +90,7 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
 
   def onSelectionInList(objects: IdentityWrapper*) {
     if (ot != null) {
-      var provider = convertSetToListOfEntry(ot.getAttributeMap().get(objects.first).entrySet(), objects.first.getKey())
+      var provider = convertSetToListOfEntry(ot.getAttributeMap().get(objects.head).entrySet(), objects.head.getKey())
       if (provider == null) {
         provider = Buffer()
       }
