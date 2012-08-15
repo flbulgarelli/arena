@@ -17,13 +17,30 @@ public abstract class Application implements WindowOwner, Runnable {
 
 	public Application() {
 		this.delegate = new JFaceApplicationBuilder();
-		if (!this.getClass().getClassLoader().getClass().getName().equals(ArenaClassLoader.class.getName())) {
+		this.validateClassLoader();
+	}
+
+	/**
+	 * Se fija que se esté usando el class loader necesario
+	 */
+	protected void validateClassLoader() {
+		if (!this.getClass().getClassLoader().getClass().getName().equals(this.getNecesaryClassLoaderName())) {
 			throw new RuntimeException(
 					"Esta aplicación no está corriendo con el ClassLoader necesario. Corra la aplicación con el siguiente parámetro para la VM: -Djava.system.class.loader="
-							+ ArenaClassLoader.class.getName()
+							+ this.getNecesaryClassLoaderName()
 							+ ". El ClassLoader actual es: "
 							+ this.getClass().getClassLoader());
 		}
+	}
+
+	/**
+	 * Devuelve el nombre del classLoader que es capaz de cargar la aplicación
+	 * correctamente
+	 * 
+	 * @return
+	 */
+	protected String getNecesaryClassLoaderName() {
+		return ArenaClassLoader.class.getName();
 	}
 
 	/**
