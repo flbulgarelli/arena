@@ -20,7 +20,7 @@ public abstract class Application implements WindowOwner, Runnable {
 		if (!this.getClass().getClassLoader().getClass().getName().equals(ArenaClassLoader.class.getName())) {
 			throw new RuntimeException(
 					"Esta aplicación no está corriendo con el ClassLoader necesario. Corra la aplicación con el siguiente parámetro para la VM: -Djava.system.class.loader="
-							+ ArenaClassLoader.class
+							+ ArenaClassLoader.class.getName()
 							+ ". El ClassLoader actual es: "
 							+ this.getClass().getClassLoader());
 		}
