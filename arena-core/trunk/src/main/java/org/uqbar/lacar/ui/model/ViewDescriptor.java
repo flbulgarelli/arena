@@ -10,5 +10,5 @@ package org.uqbar.lacar.ui.model;
 public interface ViewDescriptor<T> {
 	public void showOn(T builder);
 	
-	public void cancelTask();
+	public void close();
 }

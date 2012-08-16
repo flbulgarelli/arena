@@ -54,20 +54,34 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 	}
 	
 	@Override
-	protected void executeTask() {
-		super.executeTask();
-		this.commit();
-	}
-
-	protected void commit() {
-		ObjectTransactionManager.commit(this);
+	public void cancel() {
 		this.inTransaction = false;
+		this.rollback();
+		super.cancel();
 	}
 	
 	@Override
-	public void cancel() {
-		this.rollback();
-		super.cancel();
+	public void close() {
+		super.close();
+		if (this.inTransaction) {
+			this.rollback();
+		}
+	}
+	
+	@Override
+	public void accept() {
+		try{
+			ObjectTransactionManager.begin(this);
+			this.inTransaction = false;
+			super.accept();
+			ObjectTransactionManager.commit(this);
+			this.commit();
+		}catch(Exception e){
+			this.inTransaction = true;
+			ObjectTransactionManager.rollback(this);
+			throw new UserException(e.toString(), e);
+		}
+
 	}
 	
 	
@@ -78,12 +92,12 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 			public void execute() {
 				try{
 					ObjectTransactionManager.begin(TransactionalDialog.this);
+					super.execute();
 					ObjectTransactionManager.commit(TransactionalDialog.this);
 				}catch(Exception e){
 					ObjectTransactionManager.rollback(TransactionalDialog.this);
 					throw new UserException(e.toString(), e);
 				}
-				super.execute();
 			}
 		};
 	}
@@ -93,16 +107,13 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 		this.inTransaction = false;
 	}
 	
-	@Override
-	public void cancelTask() {
-		super.cancelTask();
-		if (this.inTransaction) {
-			this.rollback();
-		}
+	protected void commit() {
+		ObjectTransactionManager.commit(this);
+		this.inTransaction = false;
 	}
-	
+
 	public void openMonitor() {
-		new PureObjectTransactionMonitorWindow(((Window)this), new ObjectTransactionImplObservable()).open();
+		new PureObjectTransactionMonitorWindow(this.getOwner(), new ObjectTransactionImplObservable()).open();
 	}
 	
 }

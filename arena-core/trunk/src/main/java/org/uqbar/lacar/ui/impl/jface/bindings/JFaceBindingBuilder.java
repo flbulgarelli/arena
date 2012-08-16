@@ -1,19 +1,9 @@
 package org.uqbar.lacar.ui.impl.jface.bindings;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-
-import org.eclipse.core.databinding.BindingException;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.conversion.IConverter;
-import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.core.databinding.observable.masterdetail.IObservableFactory;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.internal.databinding.beans.BeanObservableValueDecorator;
 import org.uqbar.lacar.ui.impl.jface.JFaceWidgetBuilder;
 import org.uqbar.lacar.ui.model.Adapter;
 import org.uqbar.lacar.ui.model.BindingBuilder;

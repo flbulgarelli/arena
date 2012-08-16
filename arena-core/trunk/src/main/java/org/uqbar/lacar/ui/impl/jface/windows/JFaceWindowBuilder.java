@@ -79,7 +79,7 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 		
 		window.getShell().addListener(SWT.Close, new Listener() {
 			public void handleEvent(Event event) {
-				windowDescriptor.cancelTask();
+				windowDescriptor.close();
 			}
 		});
 
@@ -138,7 +138,9 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 
 	@Override
 	public void close() {
-		this.getShell().close();
+		if(this.getShell() != null){
+			this.getShell().close();
+		}
 	}
 
 	// ********************************************************

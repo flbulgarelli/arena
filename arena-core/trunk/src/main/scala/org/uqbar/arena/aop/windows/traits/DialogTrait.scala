@@ -75,9 +75,8 @@ trait DialogTrait[T] extends SimpleWindow[T] with TaskWindow {
    * @throws UserException En caso que no se pueda o no se desee cancelar la tarea. Eso evitará que se
    *             cierre la ventana.
    */
-  protected override def cancelTask() {
+  protected def cancelTask() {
     this.dialogState.doCancel(this);
-    super.cancelTask()
   }
 
   def changeStateToCancelled() = this.dialogState = CANCELLED

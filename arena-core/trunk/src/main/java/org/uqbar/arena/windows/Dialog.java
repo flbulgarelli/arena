@@ -104,7 +104,6 @@ public abstract class Dialog<T> extends SimpleWindow<T> implements TaskWindow {
 	 * @throws UserException En caso que no se pueda o no se desee cancelar la tarea. Eso evitará que se
 	 *             cierre la ventana.
 	 */
-	@Override
 	public void cancelTask() {
 		this.state.doCancel(this);
 	}

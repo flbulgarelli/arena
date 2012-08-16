@@ -37,6 +37,7 @@ trait TransactionalWindowTrait[T] extends DialogTrait[T] with TaskOwner {
       override def execute() {
         try {
           ObjectTransactionManager.begin(TransactionalWindowTrait.this)
+          super.execute();
           ObjectTransactionManager.commit(TransactionalWindowTrait.this)
         } catch {
           case e: Exception => {
@@ -49,25 +50,45 @@ trait TransactionalWindowTrait[T] extends DialogTrait[T] with TaskOwner {
       }
     }
   }
+  
+	override def cancel() {
+		this.inTransaction = false;
+		this.rollback();
+		super.cancel();
+	}
+	
+	override def close() {
+		super.close();
+		if (this.inTransaction) {
+			this.rollback();
+		}
+	}
+	
+	override def accept() {
+		try{
+			ObjectTransactionManager.begin(this);
+			this.inTransaction = false;
+			super.accept();
+			ObjectTransactionManager.commit(this);
+			this.commit();
+		}catch{
+		  case e:Exception => {this.inTransaction = true;
+				ObjectTransactionManager.rollback(this);
+				throw new UserException(e.toString(), e);
+		  }
+		}
 
-  override def executeTask() = {
-    super.executeTask();
-    ObjectTransactionManager.commit(this);
-    this.inTransaction = false;
-  }
-
-  override def cancel() = {
-    ObjectTransactionManager.rollback(this);
-    this.inTransaction = false;
-    super.cancel();
-  }
-
-  override def cancelTask() = {
-    super.cancelTask();
-    if (this.inTransaction) {
-      ObjectTransactionManager.rollback(this);
-    }
-  }
+	}
+	
+	protected def rollback() {
+		ObjectTransactionManager.rollback(this);
+		this.inTransaction = false;
+	}
+	
+	protected def commit() {
+		ObjectTransactionManager.commit(this);
+		this.inTransaction = false;
+	}
 
   def openMonitor() = new PureObjectTransactionMonitorWindow(this, new ObjectTransactionImplObservable()).open();
 }

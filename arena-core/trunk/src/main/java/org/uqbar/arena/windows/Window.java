@@ -141,10 +141,6 @@ public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilde
 		this.delegate.close();
 	}
 	
-	@Override
-	public void cancelTask() {
-	}
-
 	// ********************************************************
 	// ** Internal
 	// ********************************************************
