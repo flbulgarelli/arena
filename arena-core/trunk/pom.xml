@@ -74,6 +74,38 @@
 			</dependencies>
 		</profile>
 		<profile>
+			<id>windows-64</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>amd64</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.swt.win32</groupId>
+					<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+					<version>3.4.1.v3449c</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>windows-64-2</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>x86_64</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.swt.win32</groupId>
+					<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+					<version>3.4.1.v3449c</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
 			<id>macos</id>
 			<activation>
 				<os>
