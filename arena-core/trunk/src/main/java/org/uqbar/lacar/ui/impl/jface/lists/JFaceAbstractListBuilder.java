@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
 import org.uqbar.lacar.ui.impl.jface.JFaceControlBuilder;
+import org.uqbar.lacar.ui.impl.jface.actions.JFaceActionAdapter;
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
 import org.uqbar.lacar.ui.model.Action;
 import org.uqbar.lacar.ui.model.BindingBuilder;
@@ -43,9 +44,12 @@ public abstract class JFaceAbstractListBuilder<T, Viewer extends AbstractListVie
 	@Override
 	public ListBuilder<T> onSelection(Action action) {
 		this.viewer.addSelectionChangedListener(new SelectionChangeListener(action));
+//		if (action != null) {
+//			this.getWidget().addSelectionListener(new JFaceActionAdapter(this.getContainer(), action));
+//		}
 		return this;
 	}
-	
+
 	// ********************************************************
 	// ** Internal accessors
 	// ********************************************************

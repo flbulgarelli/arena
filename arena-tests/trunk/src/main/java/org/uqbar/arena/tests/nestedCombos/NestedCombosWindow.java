@@ -2,11 +2,32 @@ package org.uqbar.arena.tests.nestedCombos;
 
 import org.uqbar.arena.bindings.PropertyAdapter;
 import org.uqbar.arena.layout.VerticalLayout;
+import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.List;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.Selector;
 import org.uqbar.arena.windows.MainWindow;
+import org.uqbar.lacar.ui.model.Action;
 
+/**
+ * Examples on various {@link Selector} features.<br>
+ * When a country is selected in the first {@link Selector}:
+ * <ul>
+ * <li>the elements in the {@link List} and second {@link Selector} should show the provinces of the selected
+ * country.</li>
+ * <li>the displayed country in the {@link Label} should show the selected country.</li>
+ * <li>the number of times should be incremented (testing {@link Selector#onSelection(Action)}</li>
+ * </ul>
+ * 
+ * All the elements in {@link Selector}s, {@link List}s and {@link Label}s should render nice Country or
+ * Province names (instead of an ugly {@link #toString()}.
+ * 
+ * The {@link List} of provinces and the {@link Selector} of provinces should be synchronized. Selecting an
+ * element in either of each should increment the last {@link Label} too (since they are synchronized, the
+ * count is incremented twice.
+ * 
+ * @author npasserini
+ */
 public class NestedCombosWindow extends MainWindow<NestedCombosDomain> {
 	public static void main(String[] args) {
 		new NestedCombosWindow().startApplication();
@@ -23,24 +44,44 @@ public class NestedCombosWindow extends MainWindow<NestedCombosDomain> {
 		Selector<Country> countries = new Selector<Country>(mainPanel);
 		// countries.setContents(this.getModelObject().getPossibleCountries(), "name");
 
+		PropertyAdapter nameAdapter = new PropertyAdapter(Country.class, "name");
+
 		countries.bindItemsToProperty("possibleCountries") //
-			.setAdapter(new PropertyAdapter(Country.class, "name"));
+			.setAdapter(nameAdapter); // Debería ser setItemsAdapter
 
 		countries.bindValueToProperty("country");
+		Action changedAction = new Action() {
+			@Override
+			public <T> void execute(T... objects) {
+				getModelObject().changed();
+			}
 
-		// Label country = new Label(mainPanel);
-		// country.bindValueToProperty("country");
+			@Override
+			public void execute() {
+			}
+		};
+
+		countries.onSelection(changedAction);
+
+		Label country = new Label(mainPanel);
+		country.bindValueToProperty("country"); // TODO esto todavía no se puede hacer:
+												// .setAdapter(nameAdapter);
 
 		List<Province> provincesList = new List<Province>(mainPanel);
 		provincesList.bindItemsToProperty("possibleProvinces") //
 			.setAdapter(new PropertyAdapter(Province.class, "name"));
+		provincesList.bindValueToProperty("province");
 		provincesList.setHeigth(100);
 		provincesList.setWidth(100);
+		provincesList.onSelection(changedAction);
 
 		Selector<Province> provinces = new Selector<Province>(mainPanel);
 		provinces.bindItemsToProperty("possibleProvinces").setAdapter(new PropertyAdapter(Province.class, "name"));
-		// provinces.bindItemsToProperty("country.provinces").setAdapter(new PropertyAdapter(Province.class,
-		// "name"));
 		provinces.bindValueToProperty("province");
+		provinces.onSelection(changedAction);
+
+		Label times = new Label(mainPanel);
+		times.bindValueToProperty("times"); // TODO esto todavía no se puede hacer: .setAdapter(nameAdapter);
+
 	}
 }

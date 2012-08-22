@@ -3,9 +3,6 @@ package org.uqbar.arena.tests.nestedCombos;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.databinding.beans.BeansObservables;
-import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.uqbar.commons.utils.Observable;
 
 @Observable
@@ -14,10 +11,15 @@ public class NestedCombosDomain {
 	private Province province;
 	private List<Country> possibleCountries = new ArrayList<Country>();
 	private List<Province> possibleProvinces = new ArrayList<Province>();
+	private int times = 0;
 
 	public NestedCombosDomain() {
 		this.addCountry("Argentina", "Buenos Aires", "Córdoba", "Santa Fé");
 		this.addCountry("Bolivia", "Cochabamba", "Potosí", "La Paz");
+	}
+
+	public void changed() {
+		this.times++;
 	}
 
 	public void addCountry(String name, String... provinces) {
@@ -59,5 +61,13 @@ public class NestedCombosDomain {
 
 	public void setPossibleProvinces(List<Province> possibleProvinces) {
 		this.possibleProvinces = possibleProvinces;
+	}
+
+	public int getTimes() {
+		return times;
+	}
+
+	public void setTimes(int times) {
+		this.times = times;
 	}
 }

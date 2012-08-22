@@ -24,12 +24,4 @@ public class JFaceSelectorBuilder<T> extends JFaceAbstractListBuilder<T, ComboVi
 		this.initialize(viewer.getCombo());
 		return viewer;
 	}
-
-	@Override
-	public ListBuilder<T> onSelection(Action action) {
-		if (action != null) {
-			this.getWidget().addSelectionListener(new JFaceActionAdapter(this.getContainer(), action));
-		}
-		return this;
-	}
 }
