@@ -72,8 +72,8 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
 
   def createList(panel: Panel) = {
     var list = new org.uqbar.arena.widgets.List(panel);
-    list.bindContentsToProperty("listResult")
-    list.onSelect(new Function[IdentityWrapper](onSelectionInList))
+    // list.bindItemsToProperty("listResult")
+    list.onSelection(new Function[IdentityWrapper](onSelectionInList))
     list.setWidth(500);
     list.setHeigth(200);
   }

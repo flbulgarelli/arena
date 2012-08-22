@@ -1,7 +1,7 @@
 package org.uqbar.lacar.ui.impl.jface.tables;
 
 import org.eclipse.jface.viewers.TableViewer;
-import org.uqbar.lacar.ui.model.Adapter;
+import org.uqbar.arena.bindings.Transformer;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.ui.jface.controller.OneToManyContentProvider;
 
@@ -21,7 +21,7 @@ public class JFaceTableContentsBindingBuilder implements BindingBuilder {
 	}
 
 	@Override
-	public <M, V> BindingBuilder setAdapter(Adapter<M, V> adapter) {
+	public <M, V> BindingBuilder adaptWith(Transformer<M, V> transformer) {
 		throw new UnsupportedOperationException("No está preparado para tener adapters.");
 	}
 

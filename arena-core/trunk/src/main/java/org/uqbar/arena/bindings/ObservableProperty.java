@@ -12,21 +12,20 @@ import org.uqbar.lacar.ui.model.bindings.Observable;
  * @author npasserini
  */
 public class ObservableProperty implements Observable {
-	private final String propertyName;
 	private IModel<?> model;
+	protected final String propertyName;
 
 	public ObservableProperty(String propertyName) {
 		this.propertyName = propertyName;
 	}
 
 	public ObservableProperty(IModel<?> model, String propertyName) {
+		this(propertyName);
 		this.model = model;
-		this.propertyName = propertyName;
 	}
-	
+
 	public ObservableProperty(Object modelObject, String propertyName) {
-		this.model = new Model<Object>(modelObject);
-		this.propertyName = propertyName;
+		this(new Model<Object>(modelObject), propertyName);
 	}
 
 	// ********************************************************
@@ -47,12 +46,13 @@ public class ObservableProperty implements Observable {
 	/**
 	 * Antes de registrar el modelo se lo valida, en caso de fallar la validación el modelo no se asigna.
 	 * Widget
+	 * 
 	 * @param model El modelo contra el que bindear
 	 * @return Este mismo {@link ObservableProperty}, comodidad para enviar mensajes anidados.
 	 */
 	public ObservableProperty setModel(IModel<?> model) {
 		// Validar que el contenedor tiene la propiedad que nos interesa.
-		model.getGetter(this.propertyName);
+		// model.getGetter(this.propertyName);
 
 		// Una vez validado se guarda el modelo recibido, es el modelo contra el que vamos a bindear.
 		this.model = model;
@@ -67,5 +67,4 @@ public class ObservableProperty implements Observable {
 	public void configure(BindingBuilder binder) {
 		binder.observeProperty(this.model.getSource(), this.propertyName);
 	}
-	
 }

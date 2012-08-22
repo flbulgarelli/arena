@@ -1,13 +1,13 @@
 package org.uqbar.lacar.ui.model.adapter;
 
-import org.uqbar.lacar.ui.model.Adapter;
+import org.uqbar.arena.bindings.Transformer;
 
 /**
  *  
  * 
  * @author jfernandes
  */
-public class NotNullAdapter implements Adapter<Object, Boolean> {
+public class NotNullTransformer implements Transformer<Object, Boolean> {
 
 	@Override
 	public Object viewToModel(Boolean valueFromView) {

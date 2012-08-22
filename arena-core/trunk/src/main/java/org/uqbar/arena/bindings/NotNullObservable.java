@@ -2,7 +2,7 @@ package org.uqbar.arena.bindings;
 
 import org.uqbar.commons.model.IModel;
 import org.uqbar.lacar.ui.model.BindingBuilder;
-import org.uqbar.lacar.ui.model.adapter.NotNullAdapter;
+import org.uqbar.lacar.ui.model.adapter.NotNullTransformer;
 
 /**
  * 
@@ -26,7 +26,7 @@ public class NotNullObservable extends ObservableProperty {
 	@Override
 	public void configure(BindingBuilder binder) {
 		super.configure(binder);
-		binder.setAdapter(new NotNullAdapter());
+		binder.adaptWith(new NotNullTransformer());
 	}
 
 }

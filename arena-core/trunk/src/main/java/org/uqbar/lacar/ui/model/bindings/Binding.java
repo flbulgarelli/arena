@@ -1,16 +1,18 @@
 package org.uqbar.lacar.ui.model.bindings;
 
-import org.uqbar.lacar.ui.model.Adapter;
+import org.uqbar.arena.bindings.Adapter;
+import org.uqbar.arena.bindings.Transformer;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.lacar.ui.model.ControlBuilder;
-import org.uqbar.lacar.ui.model.adapter.NotEmptyAdapter;
-import org.uqbar.lacar.ui.model.adapter.NotNullAdapter;
+import org.uqbar.lacar.ui.model.adapter.NotEmptyTransformer;
+import org.uqbar.lacar.ui.model.adapter.NotNullTransformer;
 
 /**
  * Abstracción que vincula dos propiedades observables: una del modelo y otra de la vista. El binding se
- * completa con un {@link Adapter} que permite ajustar las diferencias entre los valores manejados por modelo
- * y vista.
+ * completa con un {@link Transformer} que permite ajustar las diferencias entre los valores manejados por
+ * modelo y vista.
  * 
+ * @param<A> Adapter type
  * @author npasserini
  */
 public class Binding<C extends ControlBuilder> {
@@ -24,7 +26,7 @@ public class Binding<C extends ControlBuilder> {
 	 */
 	private final ViewObservable<C> view;
 
-	private Adapter<Object, Object> adapter;
+	private Adapter adapter;
 
 	/**
 	 * Constructor con un adapter por default.
@@ -38,13 +40,31 @@ public class Binding<C extends ControlBuilder> {
 	 * Asigna la estrategia que determina la forma de transformar los valores provenientes del modelo al
 	 * formato requerido por la vista y viceversa.
 	 * 
-	 * @param adapter Un {@link Adapter}
+	 * This modifies the adapter of this binding. You should use only one of {@link #setAdapter(Adapter)} and
+	 * {@link #setTransformer(Transformer)}.
+	 * 
+	 * @param adapter Un {@link Transformer}
 	 * @return Este mismo {@link BindingBuilder}, para encadenar mensajes.
 	 */
-	// El sistema de tipos de Java no tiene una forma de evitar esto.
-	@SuppressWarnings("unchecked")
-	public <M, V> Binding<C> setAdapter(Adapter<M, V> adapter) {
-		this.adapter = (Adapter<Object, Object>) adapter;
+	public Binding<C> setTransformer(final Transformer<?, ?> transformer) {
+		return this.setAdapter(new Adapter() {
+			@Override
+			public void configure(BindingBuilder binder) {
+				binder.adaptWith(transformer);
+			}
+		});
+	}
+
+	/**
+	 * This is the most general way to set the strategy that adapts the values in the model to the values in
+	 * the view.
+	 * 
+	 * Only one adapter is supported, if this method is called twice, the first adapter will be discarded.
+	 * 
+	 * @param adapter
+	 */
+	public Binding<C> setAdapter(Adapter adapter) {
+		this.adapter = adapter;
 		return this;
 	}
 
@@ -53,22 +73,22 @@ public class Binding<C extends ControlBuilder> {
 		this.model.configure(binder);
 
 		if (this.adapter != null) {
-			binder.setAdapter(this.adapter);
+			this.adapter.configure(binder);
 		}
 
 		binder.build();
 	}
-	
+
 	/**
-	 * Specifies that the output of this binding will be a boolean telling
-	 * if the string input value is not null or empty. 
+	 * Specifies that the output of this binding will be a boolean telling if the string input value is not
+	 * null or empty.
 	 */
 	public Binding<C> notEmpty() {
-		return this.setAdapter(new NotEmptyAdapter());
+		return this.setTransformer(new NotEmptyTransformer());
 	}
 
 	public Binding<C> notNull() {
-		return this.setAdapter(new NotNullAdapter());
+		return this.setTransformer(new NotNullTransformer());
 	}
-	
+
 }

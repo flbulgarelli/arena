@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.uqbar.arena.bindings.ObservableProperty;
 import org.uqbar.arena.bindings.ObservableValue;
-import org.uqbar.arena.widgets.tables.Column;
 import org.uqbar.lacar.ui.model.BindingBuilder;
-import org.uqbar.lacar.ui.model.ColumnBuilder;
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
 import org.uqbar.lacar.ui.model.bindings.Binding;
@@ -104,11 +102,14 @@ public abstract class Control extends Widget {
 	 * @param view Una característica observable de este control.
 	 * @return Devuelve this como una comodidad para enviar mensajes anidados.
 	 */
-	@SuppressWarnings("unchecked")
 	protected <C extends ControlBuilder> Binding<C> addBinding(Observable model, ViewObservable<C> view) {
 		model.setContainer(this.getContainer());
 
-		Binding<C> binding = new Binding<C>(model, view);
+		return this.addBinding(new Binding<C>(model, view));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <C extends ControlBuilder> Binding<C> addBinding(Binding<C> binding) {
 		this.bindings.add((Binding<ControlBuilder>) binding);
 		return binding;
 	}

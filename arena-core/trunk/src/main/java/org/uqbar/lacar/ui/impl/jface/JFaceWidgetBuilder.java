@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.uqbar.lacar.ui.model.WidgetBuilder;
 
 /**
- * Clase base para todos los objetos que saben construir {@link Widget} de JFace
+ * Clase base para todos los objetos que saben construir {@link Widget}s de JFace
  * 
  * @param <T> El tipo de Widget que construye este builder.
  * @author npasserini

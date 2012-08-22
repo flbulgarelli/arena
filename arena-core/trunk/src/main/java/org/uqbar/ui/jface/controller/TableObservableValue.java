@@ -1,7 +1,5 @@
 package org.uqbar.ui.jface.controller;
 
-import javassist.expr.Instanceof;
-
 import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.value.AbstractObservableValue;
 import org.eclipse.swt.SWT;

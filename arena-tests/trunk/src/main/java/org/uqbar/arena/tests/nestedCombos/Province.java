@@ -1,5 +1,8 @@
 package org.uqbar.arena.tests.nestedCombos;
 
+import org.uqbar.commons.utils.Observable;
+
+@Observable 
 public class Province {
 	private String name;
 

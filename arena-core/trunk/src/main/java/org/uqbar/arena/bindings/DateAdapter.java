@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.uqbar.commons.model.UserException;
-import org.uqbar.lacar.ui.model.Adapter;
 
 import com.uqbar.commons.StringUtils;
 
@@ -15,7 +14,7 @@ import com.uqbar.commons.StringUtils;
  * @see SimpleDateFormat
  * @author npasserini
  */
-public final class DateAdapter implements Adapter<Date, String> {
+public final class DateAdapter implements Transformer<Date, String> {
 	public String pattern = "dd/MM/yyyy";
 
 	@Override

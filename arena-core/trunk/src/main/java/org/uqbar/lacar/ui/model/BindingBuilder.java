@@ -1,10 +1,11 @@
 package org.uqbar.lacar.ui.model;
 
-import org.uqbar.commons.model.IModel;
+import org.uqbar.arena.bindings.Transformer;
 
 /**
  * Colabora en la construcción de un binding.
  * 
+ * @param<A> Adapter type
  * @author npasserini
  */
 public interface BindingBuilder {
@@ -14,21 +15,21 @@ public interface BindingBuilder {
 	// ********************************************************
 
 	/**
-	 * Observa una propiedad cualquiera de un objeto, por nombre.
+	 * Observes a property of a known object.
 	 * 
-	 * @param model El objeto que posee la propiedad a observar.
-	 * @param propertyName El nombre de la propiedad a observar.
+	 * @param model The owner of the property to be observed.
+	 * @param propertyName The name of the property to observe.
 	 */
 	public void observeProperty(Object model, String propertyName);
 
 	/**
-	 * Agrega un adapter. Los adapters se ejecutan en el orden recibido cuando se transforma de vista a modelo
-	 * y en el orden inverso para transformar de modelo a vista.
+	 * Sets an adapter strategy based on a {@link Transformer}. As the transformer is bidirectional, it can
+	 * transform the values from the model to the value needed in the view and viceversa.
 	 * 
-	 * @param adapter Un nuevo adapter que se agrega al final de la lista.
-	 * @return Este mismo {@link BindingBuilder}, para encadenar mensajes.
+	 * @param transformer The strategy
+	 * @return this.
 	 */
-	public <M,V> BindingBuilder setAdapter(Adapter<M,V> adapter);
+	public <M, V> BindingBuilder adaptWith(Transformer<M, V> transformer);
 
 	// ********************************************************
 	// ** Build

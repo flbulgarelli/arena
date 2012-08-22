@@ -1,4 +1,4 @@
-package org.uqbar.lacar.ui.model;
+package org.uqbar.arena.bindings;
 
 import org.uqbar.commons.model.UserException;
 
@@ -11,7 +11,7 @@ import org.uqbar.commons.model.UserException;
  * 
  * @author npasserini
  */
-public interface Adapter<M, V> {
+public interface Transformer<M, V> {
 	/**
 	 * Convert and/or validate a value coming from the view to the type and/or format needed in the model.
 	 * 

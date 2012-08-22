@@ -1,5 +1,7 @@
 package org.uqbar.arena.examples.controls.binding.enable;
 
+import java.util.ArrayList;
+
 import org.uqbar.arena.layout.VerticalLayout;
 import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;
@@ -11,7 +13,7 @@ import org.uqbar.arena.windows.MainWindow;
  * 
  * @author jfernandes
  */
-public class BindEnabledExampleWindow extends MainWindow {
+public class BindEnabledExampleWindow extends MainWindow<Address> {
 
 	public BindEnabledExampleWindow() {
 		super(new Address());
@@ -22,7 +24,7 @@ public class BindEnabledExampleWindow extends MainWindow {
 		mainPanel.setLayout(new VerticalLayout());
 		
 		new Label(mainPanel).setText("Country:");
-		new Selector(mainPanel)
+		new Selector<Country>(mainPanel)
 			.setContents(Address.createCountries(), "name")
 			.bindValueToProperty("country");
 		

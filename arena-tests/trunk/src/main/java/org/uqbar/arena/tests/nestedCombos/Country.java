@@ -3,6 +3,9 @@ package org.uqbar.arena.tests.nestedCombos;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.uqbar.commons.utils.Observable;
+
+@Observable
 public class Country {
 	private String name;
 	private List<Province> provinces = new ArrayList<Province>();

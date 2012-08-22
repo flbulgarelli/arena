@@ -9,7 +9,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.uqbar.arena.widgets.tree.Tree;
@@ -24,7 +23,6 @@ import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.LabelBuilder;
 import org.uqbar.lacar.ui.model.ListBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
-import org.uqbar.lacar.ui.model.SelectorBuilder;
 import org.uqbar.lacar.ui.model.SkinnableBuilder;
 import org.uqbar.lacar.ui.model.TableBuilder;
 import org.uqbar.lacar.ui.model.WidgetBuilder;
@@ -59,9 +57,11 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 	}
 
 	@Override
-	public SelectorBuilder addSelector(List options, String descriptionProperty, boolean nullValue, Action onSelection) {
-		Combo jfaceCombo = new Combo(this.getWidget(), SWT.LEFT | SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
-		return new JFaceSelectorBuilder(jfaceCombo, this, options, descriptionProperty,	nullValue).onSelection(onSelection);
+	public <T> ListBuilder<T> addSelector(boolean nullValue) {
+		// Combo jfaceCombo = new Combo(this.getWidget(), SWT.LEFT | SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
+		//return new JFaceSelectorBuilder(jfaceCombo, this, options, descriptionProperty,	nullValue).onSelection(onSelection);
+		
+		return new JFaceSelectorBuilder<T>(this);
 	}
 
 	@Override
@@ -92,8 +92,8 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 	}
 	
 	@Override
-	public <T> ListBuilder<T> addList(Action onSelect, String propertyElement) {
-		return new JFaceListBuilder<T>(this, onSelect, propertyElement);
+	public <T> ListBuilder<T> addList() {
+		return new JFaceListBuilder<T>(this);
 	}
 
 	// ********************************************************
@@ -176,7 +176,6 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 		this.children.add(child);
 		return this;
 	}
-	
 
 	@Override
 	public void pack() {
@@ -184,5 +183,4 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 			child.pack();
 		}
 	}
-
 }
