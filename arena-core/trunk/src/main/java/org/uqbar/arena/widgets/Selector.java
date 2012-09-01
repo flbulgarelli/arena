@@ -83,6 +83,12 @@ public class Selector<T> extends Control {
 		// TODO Agregar esta validación de otra manera.
 		// ProgramException.assertNotNull(this.options,
 		// "Tried to create a selector without setting the options!");
-		return container.addSelector(this.nullValue).onSelection(this.onSelection);
+		ListBuilder<Object> builder = container.addSelector(this.nullValue);
+		
+		if(this.onSelection != null){
+			builder.onSelection(this.onSelection);
+		}
+		
+		return builder;
 	}
 }
