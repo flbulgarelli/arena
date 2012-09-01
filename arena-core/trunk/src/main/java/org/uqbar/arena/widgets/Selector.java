@@ -1,8 +1,8 @@
 package org.uqbar.arena.widgets;
 
 import org.uqbar.arena.bindings.ObservableItems;
-
 import org.uqbar.arena.bindings.ObservableProperty;
+import org.uqbar.arena.bindings.ValueHolder;
 import org.uqbar.lacar.ui.model.Action;
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.ListBuilder;
@@ -13,6 +13,9 @@ import org.uqbar.lacar.ui.model.bindings.Binding;
  * @author npasserini
  */
 public class Selector<T> extends Control {
+	/**
+	 * 
+	 */
 	private boolean nullValue;
 	protected Action onSelection;
 
@@ -21,13 +24,14 @@ public class Selector<T> extends Control {
 	}
 
 	/**
-	 * @deprecated Use {@link #bindItemsToProperty(String)} and {@link #bindContentsToProperty(Class, String)}
+	 *
 	 */
-	public Selector<T> setContents(java.util.List<T> options, String descriptionProperty) {
-		// this.options = options;
-		// this.descriptionProperty = descriptionProperty;
-		// return this;
-		throw new UnsupportedOperationException();
+	public Selector<T> setContents(final java.util.List<T> options, String descriptionProperty) {
+		Object valueObject = new ValueHolder<java.util.List<T>>(options);
+		
+		this.bindItems(new ObservableProperty(valueObject, ValueHolder.VALUE));
+		
+		return this;
 	}
 
 	// ********************************************************
