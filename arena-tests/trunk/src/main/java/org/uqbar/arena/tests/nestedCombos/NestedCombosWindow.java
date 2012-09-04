@@ -1,7 +1,9 @@
 package org.uqbar.arena.tests.nestedCombos;
 
+import org.uqbar.arena.actions.MessageSend;
 import org.uqbar.arena.bindings.PropertyAdapter;
 import org.uqbar.arena.layout.VerticalLayout;
+import org.uqbar.arena.widgets.Button;
 import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.List;
 import org.uqbar.arena.widgets.Panel;
@@ -83,5 +85,10 @@ public class NestedCombosWindow extends MainWindow<NestedCombosDomain> {
 		Label times = new Label(mainPanel);
 		times.bindValueToProperty("times"); // TODO esto todavía no se puede hacer: .setAdapter(nameAdapter);
 
+		new Button(mainPanel).setCaption("Edit Province").onClick(new MessageSend(this, "editProvince"));
+	}
+	
+	public void editProvince() {
+		new EditProvinceDialog(this, this.getModelObject().getProvince()).open();
 	}
 }

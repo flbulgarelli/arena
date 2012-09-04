@@ -1,25 +1,28 @@
 package org.uqbar.arena.tests.nestedPropertyAccess;
 
+import org.uqbar.arena.bindings.PropertyAdapter;
+import org.uqbar.arena.tests.nestedCombos.Country;
+import org.uqbar.arena.tests.nestedCombos.NestedCombosDomain;
+import org.uqbar.arena.tests.nestedCombos.Province;
 import org.uqbar.arena.widgets.Panel;
-import org.uqbar.arena.widgets.tables.Column;
-import org.uqbar.arena.widgets.tables.Table;
+import org.uqbar.arena.widgets.Selector;
 import org.uqbar.arena.windows.MainWindow;
 
-public class NestedPropertyAccessWindow extends MainWindow<NestedPropertyAccessDomain> {
+public class NestedPropertyAccessWindow extends MainWindow<NestedCombosDomain> {
 
 	// ****************************************************************
 	// ** STATICS
 	// ****************************************************************
 
 	public static void main(String[] args) {
-		new NestedPropertyAccessWindow(new NestedPropertyAccessDomain(new Country("Argentina"))).startApplication();
+		new NestedPropertyAccessWindow(new NestedCombosDomain()).startApplication();
 	}
 
 	// ****************************************************************
 	// ** CONSTRUCTORS
 	// ****************************************************************
 
-	public NestedPropertyAccessWindow(NestedPropertyAccessDomain model) {
+	public NestedPropertyAccessWindow(NestedCombosDomain model) {
 		super(model);
 	}
 
@@ -29,12 +32,11 @@ public class NestedPropertyAccessWindow extends MainWindow<NestedPropertyAccessD
 
 	@Override
 	public void createContents(Panel mainPanel) {
+		Selector<Country> countries = new Selector<Country>(mainPanel);
+		countries.bindItemsToProperty("possibleCountries").setAdapter(new PropertyAdapter(Country.class, "name"));
+		countries.bindValueToProperty("country");
 
-		Table<Province> table = new Table<Province>(mainPanel, Province.class);
-		table.bindContentsToProperty("country.provinces");
-
-		Column<Province> nameColumn = new Column<Province>(table);
-		nameColumn.setTitle("Location");
-		nameColumn.bindContentsToProperty("name");
+		Selector<Province> provinces = new Selector<Province>(mainPanel);
+		provinces.bindItemsToProperty("country.provinces").setAdapter(new PropertyAdapter(Province.class, "name"));
 	}
 }

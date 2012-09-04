@@ -4,10 +4,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.uqbar.lacar.ui.impl.jface.actions.JFaceActionAdapter;
 import org.uqbar.lacar.ui.impl.jface.lists.JFaceAbstractListBuilder;
-import org.uqbar.lacar.ui.model.Action;
-import org.uqbar.lacar.ui.model.ListBuilder;
 
 /**
  * @param<T> El tipo de objetos que contendrá el combo.

@@ -126,7 +126,7 @@ public abstract class Control extends Widget {
 			configuration.execute(builder);
 		}
 		
-		configure(builder);
+		this.configure(builder);
 
 		// ATENCION: Las tablas necesitan que el pack se asigne antes que los bindings, esto es porque el
 		// binding necesita tener asignado un LabelProvider, que en la implementación actual se está asignando
