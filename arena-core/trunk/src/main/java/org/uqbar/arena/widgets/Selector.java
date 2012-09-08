@@ -13,9 +13,6 @@ import org.uqbar.lacar.ui.model.bindings.Binding;
  * @author npasserini
  */
 public class Selector<T> extends Control {
-	/**
-	 * 
-	 */
 	private boolean nullValue;
 	protected Action onSelection;
 
@@ -23,14 +20,13 @@ public class Selector<T> extends Control {
 		super(container);
 	}
 
-	/**
-	 *
-	 */
 	public Selector<T> setContents(final java.util.List<T> options, String descriptionProperty) {
 		Object valueObject = new ValueHolder<java.util.List<T>>(options);
-		
-		this.bindItems(new ObservableProperty(valueObject, ValueHolder.VALUE));
-		
+
+		this.bindItems(new ObservableProperty(valueObject, ValueHolder.VALUE)) //
+			//.setAdapter(new PropertyAdapter(null, descriptionProperty))
+		;
+
 		return this;
 	}
 
@@ -84,10 +80,10 @@ public class Selector<T> extends Control {
 		// ProgramException.assertNotNull(this.options,
 		// "Tried to create a selector without setting the options!");
 		ListBuilder<Object> listBuilder = container.addSelector(this.nullValue);
-		if(this.onSelection != null) {
+		if (this.onSelection != null) {
 			listBuilder.onSelection(this.onSelection);
 		}
-		
+
 		return listBuilder;
 	}
 }

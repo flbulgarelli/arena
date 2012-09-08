@@ -1,5 +1,11 @@
 package org.uqbar.lacar.ui.model;
 
+/**
+ * Extended interface for bindings of controls with a list of items. Provides methods for configuring and
+ * adapting the items of the list to be shown.
+ * 
+ * @author npasserini
+ */
 public interface ItemsBindingBuilder extends BindingBuilder {
 
 	/**
@@ -10,6 +16,6 @@ public interface ItemsBindingBuilder extends BindingBuilder {
 	 * @param propertyName The name of the property to use to transform.
 	 * @return this
 	 */
-	public <M, V> BindingBuilder adaptUsingProperty(Class<?> modelType, String propertyName);
+	public <M, V> BindingBuilder adaptItemsUsingProperty(Class<?> modelType, String propertyName);
 
 }

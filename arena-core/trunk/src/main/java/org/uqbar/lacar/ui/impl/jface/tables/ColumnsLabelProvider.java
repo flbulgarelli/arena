@@ -11,7 +11,6 @@ import org.eclipse.swt.graphics.Image;
 import com.uqbar.commons.collections.Transformer;
 
 /**
- * 
  * @author npasserini
  */
 public class ColumnsLabelProvider<R> extends LabelProvider implements ITableLabelProvider {

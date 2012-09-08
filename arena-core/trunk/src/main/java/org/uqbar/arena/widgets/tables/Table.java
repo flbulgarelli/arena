@@ -33,8 +33,8 @@ public class Table<R> extends Control {
 	 * 
 	 * @return Esta misma tabla, para enviar mensajes anidados
 	 */
-	public Table<R> bindContentsToProperty(String propertyName) {
-		return this.bindContents(new ObservableProperty(propertyName));
+	public Table<R> bindItemsToProperty(String propertyName) {
+		return this.bindItems(new ObservableProperty(propertyName));
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class Table<R> extends Control {
 	 * 
 	 * @return Esta misma tabla, para enviar mensajes anidados
 	 */
-	public Table<R> bindContents(Observable model) {
+	public Table<R> bindItems(Observable model) {
 		this.addBinding(model, new ObservableTableContents());
 		return this;
 	}
@@ -91,4 +91,27 @@ public class Table<R> extends Control {
 
 		return tableBuilder;
 	}
+
+	// ********************************************************
+	// ** Deprecated
+	// ********************************************************
+
+	/**
+	 * This method is retained only for backwards compatibility and will be removed in a future version.
+	 * 
+	 * @deprecated Use {@link #bindItemsToProperty(String)}
+	 */
+	public Table<R> bindContentsToProperty(String propertyName) {
+		return this.bindItemsToProperty(propertyName);
+	}
+
+	/**
+	 * This method is retained only for backwards compatibility and will be removed in a future version.
+	 * 
+	 * @deprecated Use {@link #bindItemsToProperty(String)}
+	 */
+	public Table<R> bindContents(Observable model) {
+		return this.bindItems(model);
+	}
+
 }

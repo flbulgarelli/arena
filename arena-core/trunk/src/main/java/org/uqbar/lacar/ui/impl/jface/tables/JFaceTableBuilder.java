@@ -2,17 +2,13 @@ package org.uqbar.lacar.ui.impl.jface.tables;
 
 import java.util.List;
 
+import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
 import org.uqbar.lacar.ui.impl.jface.JFaceControlBuilder;
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
@@ -20,10 +16,16 @@ import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.lacar.ui.model.ColumnBuilder;
 import org.uqbar.lacar.ui.model.LabelProvider;
 import org.uqbar.lacar.ui.model.TableBuilder;
-import org.uqbar.ui.jface.controller.TableObservableValue;
 
 import com.uqbar.commons.collections.CollectionFactory;
 
+/**
+ * Implementation of {@link TableBuilder} based on a JFace {@link TableViewer}.
+ * 
+ * @author npasserini
+ * 
+ * @param <R> The type of objects (models) shown in each row of the table.
+ */
 public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements TableBuilder<R> {
 	private TableViewer viewer;
 	private List<JFaceColumnBuilder<R>> columns = CollectionFactory.createList();
@@ -38,20 +40,20 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 
 		this.itemType = itemType;
 		this.viewer = this.createTableViewer(this.getContainer().getJFaceComposite());
-		this.initialize(this.viewer.getTable());
+		this.initialize(this.getViewer().getTable());
 	}
-	
+
 	protected org.eclipse.swt.graphics.Color getSWTColor(java.awt.Color color) {
 		int blue = color.getBlue();
 		int green = color.getGreen();
 		int red = color.getRed();
-		org.eclipse.swt.graphics.Color swtColor = new org.eclipse.swt.graphics.Color(getWidget().getDisplay(), red, green, blue);
+		org.eclipse.swt.graphics.Color swtColor = new org.eclipse.swt.graphics.Color(getWidget().getDisplay(), red,
+			green, blue);
 		return swtColor;
 	}
 
 	private TableViewer createTableViewer(Composite jFaceComposite) {
-		TableViewer viewer = new TableViewer(jFaceComposite, SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.SINGLE | SWT.BORDER);
+		TableViewer viewer = new TableViewer(jFaceComposite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE | SWT.BORDER);
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);
 		viewer.getTable().setLayout(new TableLayout());
@@ -75,12 +77,13 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 
 	@Override
 	public BindingBuilder observeValue() {
-		return new JFaceBindingBuilder(this, new TableObservableValue(this.getWidget(), this.itemType));
+		return new JFaceBindingBuilder(this, ViewersObservables.observeSingleSelection(this.getViewer()));
+		// return new JFaceBindingBuilder(this, new TableObservableValue(this.getWidget(), this.itemType));
 	};
 
 	@Override
 	public BindingBuilder observeContents() {
-		return new JFaceTableContentsBindingBuilder(this);
+		return new JFaceTableItemsBindingBuilder<R>(this);
 	}
 
 	// ********************************************************
@@ -89,8 +92,7 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 
 	@Override
 	public void pack() {
-		this.viewer.setLabelProvider(new JFaceLabelProviderBuilder<R>(this).createLabelProvider());
-		this.viewer.getTable().setLayout(new JFaceTableLayoutBuilder(this).createLayout());
+		this.getViewer().getTable().setLayout(new JFaceTableLayoutBuilder(this).createLayout());
 
 		for (JFaceColumnBuilder<R> column : this.columns) {
 			column.pack();
@@ -101,14 +103,14 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 	// ********************************************************
 	// ** Internal accessors
 	// ********************************************************
-	
+
 	@Override
 	protected Control getControlLayout() {
-		return this.viewer.getControl();
+		return this.getViewer().getControl();
 	}
 
 	public TableViewer getJFaceTableViewer() {
-		return this.viewer;
+		return this.getViewer();
 	}
 
 	public List<JFaceColumnBuilder<R>> getColumns() {
@@ -117,5 +119,9 @@ public class JFaceTableBuilder<R> extends JFaceControlBuilder<Table> implements 
 
 	public Class<R> getItemType() {
 		return this.itemType;
+	}
+
+	public TableViewer getViewer() {
+		return viewer;
 	}
 }

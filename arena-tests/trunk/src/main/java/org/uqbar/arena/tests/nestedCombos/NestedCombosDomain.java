@@ -18,6 +18,10 @@ public class NestedCombosDomain {
 		this.addCountry("Bolivia", "Cochabamba", "Potosí", "La Paz");
 	}
 
+	public void deleteProvince() {
+		this.possibleProvinces.remove(this.province);
+	}
+	
 	public void changed() {
 		this.times++;
 	}

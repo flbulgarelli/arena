@@ -4,34 +4,34 @@ import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
-import org.eclipse.jface.databinding.viewers.ViewersObservables;
-import org.eclipse.jface.viewers.AbstractListViewer;
-import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBeansBeansObservables;
-import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ListViewer;
+import org.uqbar.lacar.ui.impl.jface.bindings.JFaceObservableFactory;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.lacar.ui.model.ItemsBindingBuilder;
 
-public class JFaceListItemsBindingBuilder extends JFaceBindingBuilder implements ItemsBindingBuilder {
-	private AbstractListViewer listViewer;
+/**
+ * Creates bindings for the items of list viewers, such as {@link ListViewer} or {@link ComboViewer}
+ * 
+ * @author npasserini
+ */
+public class JFaceListItemsBindingBuilder extends JFaceItemsBindingBuilder implements ItemsBindingBuilder {
 	private IObservableSet itemsObservableSet;
 
 	public JFaceListItemsBindingBuilder(JFaceAbstractListBuilder<?, ?, ?> list) {
-		super(list, ViewersObservables.observeInput(list.getJFaceListViewer()));
-		this.listViewer = list.getJFaceListViewer();
+		super(list.getJFaceListViewer());
+	}
+
+	@Override
+	public <M, V> BindingBuilder adaptItemsUsingProperty(Class<?> modelType, String propertyName) {
+		IObservableMap labelProviderMap = BeansObservables.observeMap(itemsObservableSet, modelType, propertyName);
+		this.getViewer().setLabelProvider(new ObservableMapLabelProvider(labelProviderMap));
+		return this;
 	}
 
 	@Override
 	public void observeProperty(Object modelObject, String propertyName) {
+		this.itemsObservableSet = JFaceObservableFactory.observeSet(modelObject, propertyName);
 		super.observeProperty(modelObject, propertyName);
-		this.itemsObservableSet =
-				JFaceBeansBeansObservables.observeSet(modelObject, propertyName);
-				// BeansObservables.observeSet(Realm.getDefault(), modelObject, propertyName);
-	}
-
-	@Override
-	public <M, V> BindingBuilder adaptUsingProperty(Class<?> modelType, String propertyName) {
-		IObservableMap labelProviderMap = BeansObservables.observeMap(itemsObservableSet, modelType, propertyName);
-		this.listViewer.setLabelProvider(new ObservableMapLabelProvider(labelProviderMap));
-		return this;
 	}
 }

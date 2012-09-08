@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 
@@ -25,9 +25,11 @@ public class JFaceLabelProviderBuilder<R> implements LabelProviderBuilder<R> {
 	private Map<Integer, Transformer<R, ?>> calculatedColumns = new HashMap<Integer, Transformer<R, ?>>();
 	private final JFaceTableBuilder<R> table;
 	private ColumnsLabelProvider<R> columnsLabelProvider;
+	private final IObservableSet tableContents;
 
-	public JFaceLabelProviderBuilder(JFaceTableBuilder<R> table) {
+	public JFaceLabelProviderBuilder(JFaceTableBuilder<R> table, IObservableSet tableContents) {
 		this.table = table;
+		this.tableContents = tableContents;
 		this.columnsLabelProvider = new ColumnsLabelProvider<R>();
 	}
 
@@ -36,12 +38,12 @@ public class JFaceLabelProviderBuilder<R> implements LabelProviderBuilder<R> {
 			column.getLabelProvider().configure(this);
 		}
 
-		IObservableMap[] attributeMaps = BeansObservables.observeMaps(
-			new ObservableListContentProvider().getKnownElements(), this.table.getItemType(),
+		IObservableMap[] attributeMaps = BeansObservables.observeMaps(tableContents, this.table.getItemType(),
 			this.columnPropertyNames.toArray(new String[this.columnPropertyNames.size()]));
 
 		this.columnsLabelProvider.initialize(new ObservableMapLabelProvider(attributeMaps), this.calculatedColumns);
 		return this.columnsLabelProvider;
+		// return new ObservableMapLabelProvider(attributeMaps);
 	}
 
 	// ********************************************************

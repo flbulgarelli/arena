@@ -4,6 +4,7 @@ import static junit.framework.Assert.assertEquals;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.uqbar.commons.utils.ReflectionUtils;
+import org.uqbar.lacar.ui.impl.jface.bindings.JFaceObservableFactory;
 import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
 
 import com.uqbar.apo.util.ExampleObject;
@@ -23,12 +24,11 @@ public class AbstractTestObsevable {
 		return ReflectionUtils.readField(observer, ExampleObject.NAME);
 	}
 
-	protected void bindProperty(Object observable, Object observer,
-			String property) {
-		JFaceBindingBuilder builder = new JFaceBindingBuilder(new DataBindingContext());
-		
-		builder.setModel(builder.observeValue(observable, property));
-		builder.setView(builder.observeValue(observer, property));
+	protected void bindProperty(Object observable, Object observer, String propertyName) {
+		JFaceBindingBuilder builder = new JFaceBindingBuilder(new DataBindingContext(), //
+			JFaceObservableFactory.observeProperty(observable, propertyName),
+			JFaceObservableFactory.observeProperty(observer, propertyName));
+
 		builder.build();
 	}
 
@@ -44,16 +44,13 @@ public class AbstractTestObsevable {
 	// ** Auxiliar methods
 	// **************************************************************
 
-	
-	protected void assertGetterValue(IExampleObject object, Object value){
-		assertEquals("La getter del " + object.getTestRole() +" no tiene el valor esperado",
-				value, object.getName());
+	protected void assertGetterValue(IExampleObject object, Object value) {
+		assertEquals("La getter del " + object.getTestRole() + " no tiene el valor esperado", value, object.getName());
 	}
-	
-	protected void assertFieldValue(IExampleObject object, Object value){
-		assertEquals("El field del "+ object.getTestRole() +" no tiene el valor esperado",
-				value, getFieldValue(object));
+
+	protected void assertFieldValue(IExampleObject object, Object value) {
+		assertEquals("El field del " + object.getTestRole() + " no tiene el valor esperado", value,
+			getFieldValue(object));
 	}
-	
 
 }

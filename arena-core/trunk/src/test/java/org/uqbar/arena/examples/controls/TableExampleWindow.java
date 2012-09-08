@@ -31,7 +31,7 @@ public class TableExampleWindow extends MainWindow<Factura> {
 		mainPanel.setLayout(new ColumnLayout(1));
 		
 		Table<ItemFactura> table = new Table<ItemFactura>(mainPanel, ItemFactura.class);
-		table.bindContentsToProperty("items");
+		table.bindItemsToProperty("items");
 		
 		this.addColumns(table);
 	}

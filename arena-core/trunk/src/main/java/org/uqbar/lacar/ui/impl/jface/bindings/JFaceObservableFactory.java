@@ -18,7 +18,7 @@ import org.eclipse.core.internal.databinding.beans.BeanObservableValueDecorator;
 
 import scala.actors.threadpool.Arrays;
 
-public class JFaceBeansBeansObservables {
+public class JFaceObservableFactory {
 
 	public static IObservableValue observeProperty(Object bean, String propertyChain) {
 		return observeProperty(bean, getChainParts(propertyChain));

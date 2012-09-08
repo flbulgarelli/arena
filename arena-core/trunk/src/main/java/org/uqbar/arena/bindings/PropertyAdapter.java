@@ -15,6 +15,6 @@ public class PropertyAdapter implements Adapter {
 	@Override
 	public void configure(BindingBuilder binder) {
 		// TODO Cast
-		((ItemsBindingBuilder) binder).adaptUsingProperty(this.modelType, this.propertyName);
+		((ItemsBindingBuilder) binder).adaptItemsUsingProperty(this.modelType, this.propertyName);
 	}
 }

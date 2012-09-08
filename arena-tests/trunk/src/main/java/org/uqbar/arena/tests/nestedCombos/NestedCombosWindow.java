@@ -8,8 +8,13 @@ import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.List;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.Selector;
+import org.uqbar.arena.widgets.TextBox;
+import org.uqbar.arena.widgets.tables.Column;
+import org.uqbar.arena.widgets.tables.Table;
 import org.uqbar.arena.windows.MainWindow;
 import org.uqbar.lacar.ui.model.Action;
+
+import com.uqbar.commons.collections.Transformer;
 
 /**
  * Examples on various {@link Selector} features.<br>
@@ -44,7 +49,7 @@ public class NestedCombosWindow extends MainWindow<NestedCombosDomain> {
 		mainPanel.setLayout(new VerticalLayout());
 
 		Selector<Country> countries = new Selector<Country>(mainPanel);
-		// countries.setContents(this.getModelObject().getPossibleCountries(), "name");
+		countries.setContents(this.getModelObject().getPossibleCountries(), "name");
 
 		PropertyAdapter nameAdapter = new PropertyAdapter(Country.class, "name");
 
@@ -85,10 +90,24 @@ public class NestedCombosWindow extends MainWindow<NestedCombosDomain> {
 		Label times = new Label(mainPanel);
 		times.bindValueToProperty("times"); // TODO esto todavía no se puede hacer: .setAdapter(nameAdapter);
 
-		new Button(mainPanel).setCaption("Edit Province").onClick(new MessageSend(this, "editProvince"));
-	}
-	
-	public void editProvince() {
-		new EditProvinceDialog(this, this.getModelObject().getProvince()).open();
+		new TextBox(mainPanel).bindValueToProperty("province.name");
+		new Button(mainPanel) //
+			.setCaption("Delete Province")
+			.onClick(new MessageSend(this.getModelObject(), "deleteProvince"));
+
+		Table<Province> table = new Table<Province>(mainPanel, Province.class);
+		table.setWidth(200);
+		table.setHeigth(200);
+		table.bindItemsToProperty("possibleProvinces");
+		table.bindValueToProperty("province");
+
+		new Column<Province>(table).setTitle("Property").bindContentsToProperty("name");
+		new Column<Province>(table).setTitle("Transformer").bindContentsToTransformer(
+			new Transformer<Province, String>() {
+				@Override
+				public String transform(Province element) {
+					return element.getName();
+				}
+			});
 	}
 }

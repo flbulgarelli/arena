@@ -2,7 +2,6 @@ package org.uqbar.lacar.ui.impl.jface.lists;
 
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.viewers.AbstractListViewer;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
@@ -22,7 +21,6 @@ public abstract class JFaceAbstractListBuilder<T, Viewer extends AbstractListVie
 	public JFaceAbstractListBuilder(JFaceContainer container) {
 		super(container);
 		this.viewer = this.createViewer(container.getJFaceComposite());
-		this.viewer.setContentProvider(new ArrayContentProvider());
 	}
 
 	/**
