@@ -8,5 +8,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Relation {
-	Cascade[] cascade() default {Cascade.UPDATE};  
 }

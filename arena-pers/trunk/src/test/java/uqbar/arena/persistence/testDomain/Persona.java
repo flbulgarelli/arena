@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.uqbar.commons.model.Entity;
 
-import uqbar.arena.persistence.annotations.Cascade;
 import uqbar.arena.persistence.annotations.PersistentClass;
 import uqbar.arena.persistence.annotations.PersistentField;
 import uqbar.arena.persistence.annotations.Relation;
@@ -20,7 +19,8 @@ public class Persona extends Entity {
 	private String apellido;
 	private Date fechaNacimiento;
 	private int legajo;
-
+	private Celular preferido;
+	
 	public Persona() {
 		celulares = new ArrayList<Celular>();
 	}
@@ -34,7 +34,7 @@ public class Persona extends Entity {
 		this.legajo = legajo;
 	}
 
-	@Relation(cascade = {Cascade.CREATE, Cascade.UPDATE, Cascade.DELETE})
+	@Relation
 	public List<Celular> getCelulares() {
 		return celulares;
 	}
@@ -78,4 +78,58 @@ public class Persona extends Entity {
 	public void setLegajo(int legajo) {
 		this.legajo = legajo;
 	}
+
+	@Relation
+	public Celular getPreferido() {
+		return preferido;
+	}
+
+	public void setPreferido(Celular preferido) {
+		this.preferido = preferido;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((apellido == null) ? 0 : apellido.hashCode());
+		result = prime * result
+				+ ((celulares == null) ? 0 : celulares.hashCode());
+		result = prime * result
+				+ ((fechaNacimiento == null) ? 0 : fechaNacimiento.hashCode());
+		result = prime * result + legajo;
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Persona other = (Persona) obj;
+		if (apellido == null) {
+			if (other.apellido != null)
+				return false;
+		} else if (!apellido.equals(other.apellido))
+			return false;
+		if (fechaNacimiento == null) {
+			if (other.fechaNacimiento != null)
+				return false;
+		} else if (!fechaNacimiento.equals(other.fechaNacimiento))
+			return false;
+		if (legajo != other.legajo)
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		return true;
+	}
+	
 }

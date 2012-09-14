@@ -8,7 +8,7 @@ public class ConfigurationTest {
 
 	@Test
 	public void testConfigure() {
-		new Configuration().configure();
+		Configuration.configure();
 	}
 
 }

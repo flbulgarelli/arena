@@ -1,14 +1,40 @@
 package uqbar.arena.persistence.configuration
 
-import uqbar.arena.persistence.annotations.PersistentClass
-import scala.collection.mutable.Set
-import scala.collection.mutable.HashSet
+import java.lang.reflect.Method
 import uqbar.arena.persistence.Configuration
+import uqbar.arena.persistence.annotations.PersistentClass
+import uqbar.arena.persistence.annotations.PersistentField
+import uqbar.arena.persistence.ConfigurationException
+import uqbar.arena.persistence.annotations.Relation
+import uqbar.arena.persistence.mapping.EntityMapping
+import uqbar.arena.persistence.mapping.FieldMapping
+import uqbar.arena.persistence.mapping.RelationMapping
+import org.apache.commons.lang.StringUtils
 
-class EntityVisitor(configuration:Configuration) {
-	var entity:EntityDescriptor = null
-	
-	def classAnotation(clazz:Class[_], annotation:PersistentClass){
-	 	entity = new EntityDescriptor(clazz);
-	}
+class EntityVisitor() {
+  var entity: EntityMapping = null
+
+  def classAnotation(clazz: Class[_], annotation: PersistentClass) {
+    entity = new EntityMapping(clazz)
+    Configuration.entities.put(clazz.getCanonicalName(), entity)
+  }
+
+  def methodAnnotation(clazz: Class[_], method: Method, annotation: PersistentField) {
+	val name = extractName(method,annotation.annotationType().getName())
+	val fieldType = method.getGenericReturnType();
+	this.entity.mappings += new FieldMapping(name, fieldType)
+  }
+
+  def methodAnnotation(clazz: Class[_], method: Method, annotation: Relation) {
+	val name = extractName(method,annotation.annotationType().getName())
+	val fieldType = method.getGenericReturnType();
+	this.entity.mappings += new RelationMapping(name, fieldType)
+  }
+  
+  def extractName(method:Method, annotationName:String):String = {
+    if(!method.getName().startsWith("get")){
+      throw new ConfigurationException("La annotation " + annotationName + " solo es válida anotando un getter");
+    }
+    return StringUtils.uncapitalize(method.getName().substring(3));
+  }
 }
