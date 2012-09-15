@@ -3,6 +3,7 @@ package org.uqbar.lacar.ui.impl.jface;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
@@ -16,8 +17,8 @@ import org.uqbar.lacar.ui.model.WidgetBuilder;
  * @author npasserini
  */
 public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidgetBuilder<T> implements ControlBuilder {
-	private int width;
-	private int heigth;
+	private int width = SWT.DEFAULT;
+	private int heigth = SWT.DEFAULT;
 
 	public JFaceControlBuilder(JFaceContainer container) {
 		super(container);
@@ -26,7 +27,6 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 	public JFaceControlBuilder(JFaceContainer container, T jfaceWidget) {
 		super(container, jfaceWidget);
 	}
-	
 
 	// ********************************************************
 	// ** Bindings
@@ -38,11 +38,9 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 	}
 
 	protected ISWTObservableValue observeEnabled(T t) {
-		return t instanceof Text ?
-				SWTObservables.observeEditable(t)
-				: SWTObservables.observeEnabled(t);
+		return t instanceof Text ? SWTObservables.observeEditable(t) : SWTObservables.observeEnabled(t);
 	}
-	
+
 	@Override
 	public BindingBuilder observeVisible() {
 		return new JFaceBindingBuilder(this, SWTObservables.observeVisible(this.getWidget()));
@@ -51,7 +49,7 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 	// ********************************************************
 	// ** Low level binding methods
 	// ********************************************************
-	
+
 	/**
 	 * Utilizad para simplificar la construcción bindings de bajo nivel en forma manual.
 	 * 
@@ -66,20 +64,19 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 	public void bind(IObservableValue model, IObservableValue view) {
 		new JFaceBindingBuilder(this, view, model).build();
 	}
-	
+
 	@Override
 	public void pack() {
 		configureLayoutData();
 		super.pack();
 	}
-	
-	protected void configureLayoutData(){
-		if(getWidth() != 0 && getHeigth() != 0){
-			RowData layoutData = new RowData(getWidth(), getHeigth());
+
+	protected void configureLayoutData() {
+		if (this.getWidth() != SWT.DEFAULT || this.getHeigth() != SWT.DEFAULT) {
+			RowData layoutData = new RowData(this.getWidth(), this.getHeigth());
 			this.getControlLayout().setLayoutData(layoutData);
 		}
 	}
-	
 
 	protected Control getControlLayout() {
 		return getWidget();
@@ -88,7 +85,7 @@ public abstract class JFaceControlBuilder<T extends Control> extends JFaceWidget
 	public int getWidth() {
 		return width;
 	}
-	
+
 	@Override
 	public void setWidth(int width) {
 		this.width = width;

@@ -61,45 +61,19 @@ public class JFaceObservableFactory {
 		}
 	}
 
-	// public static IObservableSet observeSet(Object bean, String propertyName) {
-	// String firstProperty = propertyName;
-	// String[] parts = propertyName.split("\\.");
-	// if (propertyName.contains(".")) {
-	// firstProperty = parts[0];
-	// }
-	//
-	// DetailObservableSet observableValue;
-	// Class<?> propertyType;
-	// IObservableFactory valueFactory;
-	//
-	// final Realm realm = Realm.getDefault();
-	// IObservableSet detailObservable = BeansObservables.observeSet(realm, bean, firstProperty);
-	//
-	// for (int i = 1; i < parts.length; i++) {
-	// valueFactory = BeansObservables.valueFactory(realm, parts[i]);
-	// propertyType = getPropertyDescriptor((Class<?>) detailObservable.getElementType(), parts[i])
-	// .getPropertyType();
-	// observableValue = new DetailTransacionalObservableValue(detailObservable, valueFactory, propertyType);
-	// detailObservable = new BeanObservableValueDecorator(observableValue, detailObservable,
-	// getPropertyDescriptor((Class<?>) detailObservable.getValueType(), parts[i]));
-	// }
-	// return detailObservable;
-	// }
+	public static IObservableList observeList(Object bean, String propertyChain) {
+		List<String> propertyChainParts = getChainParts(propertyChain);
 
-	// public static IObservableMap[] observeMaps(IObservableSet domain, Class beanClass, String[]
-	// propertyNames) {
-	// IObservableMap[] result = new IObservableMap[propertyNames.length];
-	// for (int i = 1; i < propertyNames.length; i++) {
-	// final IObservableValue detail = observeProperty(beanClass, propertyNames[i]);
-	// IObservableValue observeProperty = new DetailObservableValue(detail,
-	// BeansObservables.mapPropertyFactory(Realm.getDefault(), propertyNames[i]), detail.getValueType());
-	// result[i] = observeDetailMap(observeProperty, propertyNames[i]);
-	// }
-	// return result;
-	// }
+		if (propertyChainParts.size() > 1) {
+			IObservableValue master = observeProperty(bean,
+				propertyChainParts.subList(0, propertyChainParts.size() - 1));
 
-	public static IObservableList observeList(Object bean, String propertyName) {
-		return BeansObservables.observeList(Realm.getDefault(), bean, propertyName);
+			return BeansObservables.observeDetailList(Realm.getDefault(), master,
+				propertyChainParts.get(propertyChainParts.size() - 1), null);
+		}
+		else {
+			return BeansObservables.observeList(Realm.getDefault(), bean, propertyChain);
+		}
 	}
 
 	public static IObservableMap observeDetailMap(IObservableValue master, String propertyName) {

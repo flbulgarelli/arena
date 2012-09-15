@@ -1,6 +1,4 @@
 package org.uqbar.arena.aop.potm
-import java.awt.Color
-
 import scala.collection.JavaConverters._
 import scala.collection.mutable.Buffer
 

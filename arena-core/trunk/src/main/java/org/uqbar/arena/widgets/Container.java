@@ -12,6 +12,7 @@ import org.uqbar.commons.model.IModel;
  * @author npasserini
  */
 public interface Container {
+	
 	/**
 	 * The business model associated to this container. The child {@link Widget}s of this container will be
 	 * display properties of this model (with few exceptions).

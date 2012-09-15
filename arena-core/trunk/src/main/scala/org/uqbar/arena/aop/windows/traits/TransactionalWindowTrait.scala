@@ -1,15 +1,17 @@
 package org.uqbar.arena.aop.windows.traits
 
 import org.uqbar.arena.actions.MessageSend
+import org.uqbar.arena.aop.potm.ObjectTransactionImplObservable
+import org.uqbar.arena.aop.potm.PureObjectTransactionMonitorWindow
+import org.uqbar.arena.aop.windows.traits.DialogTrait
 import org.uqbar.arena.widgets.Button
 import org.uqbar.arena.widgets.Panel
+import org.uqbar.commons.model.UserException
+import org.uqbar.commons.utils.Observable
+
+import com.uqbar.aop.transaction.ObjectTransactionManager
 import com.uqbar.common.transaction.ObjectTransaction
 import com.uqbar.common.transaction.TaskOwner
-import com.uqbar.aop.transaction.ObjectTransactionManager
-import org.uqbar.arena.windows.SimpleWindow
-import org.uqbar.arena.aop.potm.PureObjectTransactionMonitorWindow
-import org.uqbar.arena.aop.potm.ObjectTransactionImplObservable
-import org.uqbar.commons.model.UserException
 
 trait TransactionalWindowTrait[T] extends DialogTrait[T] with TaskOwner {
 
@@ -42,7 +44,7 @@ trait TransactionalWindowTrait[T] extends DialogTrait[T] with TaskOwner {
         } catch {
           case e: Exception => {
             ObjectTransactionManager.rollback(TransactionalWindowTrait.this)
-            throw new UserException(e.toString(), e)
+            throw new UserException(e.getMessage(), e)
           }
         }
         super.execute();
@@ -50,45 +52,46 @@ trait TransactionalWindowTrait[T] extends DialogTrait[T] with TaskOwner {
       }
     }
   }
-  
-	override def cancel() {
-		this.inTransaction = false;
-		this.rollback();
-		super.cancel();
-	}
-	
-	override def close() {
-		super.close();
-		if (this.inTransaction) {
-			this.rollback();
-		}
-	}
-	
-	override def accept() {
-		try{
-			ObjectTransactionManager.begin(this);
-			this.inTransaction = false;
-			super.accept();
-			ObjectTransactionManager.commit(this);
-			this.commit();
-		}catch{
-		  case e:Exception => {this.inTransaction = true;
-				ObjectTransactionManager.rollback(this);
-				throw new UserException(e.toString(), e);
-		  }
-		}
 
-	}
-	
-	protected def rollback() {
-		ObjectTransactionManager.rollback(this);
-		this.inTransaction = false;
-	}
-	
-	protected def commit() {
-		ObjectTransactionManager.commit(this);
-		this.inTransaction = false;
-	}
+  override def cancel() {
+    this.inTransaction = false;
+    this.rollback();
+    super.cancel();
+  }
+
+  override def close() {
+    super.close();
+    if (this.inTransaction) {
+      this.rollback();
+    }
+  }
+
+  override def accept() {
+    try {
+      ObjectTransactionManager.begin(this);
+      this.inTransaction = false;
+      super.accept();
+      ObjectTransactionManager.commit(this);
+      this.commit();
+    } catch {
+      case e: Exception => {
+        this.inTransaction = true;
+        ObjectTransactionManager.rollback(this);
+        throw new UserException(e.getMessage(), e);
+      }
+    }
+
+  }
+
+  protected def rollback() {
+    ObjectTransactionManager.rollback(this);
+    this.inTransaction = false;
+  }
+
+  protected def commit() {
+    ObjectTransactionManager.commit(this);
+    this.inTransaction = false;
+  }
 
   def openMonitor() = new PureObjectTransactionMonitorWindow(this, new ObjectTransactionImplObservable()).open();
 }

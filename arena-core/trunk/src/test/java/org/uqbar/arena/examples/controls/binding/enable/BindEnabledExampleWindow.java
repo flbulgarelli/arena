@@ -1,7 +1,5 @@
 package org.uqbar.arena.examples.controls.binding.enable;
 
-import java.util.ArrayList;
-
 import org.uqbar.arena.layout.VerticalLayout;
 import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;

@@ -33,7 +33,7 @@ public class Table<R> extends Control {
 	 * 
 	 * @return Esta misma tabla, para enviar mensajes anidados
 	 */
-	public Table<R> bindItemsToProperty(String propertyName) {
+	public Binding<TableBuilder<?>> bindItemsToProperty(String propertyName) {
 		return this.bindItems(new ObservableProperty(propertyName));
 	}
 
@@ -44,9 +44,8 @@ public class Table<R> extends Control {
 	 * 
 	 * @return Esta misma tabla, para enviar mensajes anidados
 	 */
-	public Table<R> bindItems(Observable model) {
-		this.addBinding(model, new ObservableTableContents());
-		return this;
+	public Binding<TableBuilder<?>> bindItems(Observable model) {
+		return this.addBinding(model, new ObservableTableContents());
 	}
 
 	/**
@@ -102,7 +101,8 @@ public class Table<R> extends Control {
 	 * @deprecated Use {@link #bindItemsToProperty(String)}
 	 */
 	public Table<R> bindContentsToProperty(String propertyName) {
-		return this.bindItemsToProperty(propertyName);
+		this.bindItemsToProperty(propertyName);
+		return this;
 	}
 
 	/**
@@ -111,7 +111,8 @@ public class Table<R> extends Control {
 	 * @deprecated Use {@link #bindItemsToProperty(String)}
 	 */
 	public Table<R> bindContents(Observable model) {
-		return this.bindItems(model);
+		this.bindItems(model);
+		return this;
 	}
 
 }

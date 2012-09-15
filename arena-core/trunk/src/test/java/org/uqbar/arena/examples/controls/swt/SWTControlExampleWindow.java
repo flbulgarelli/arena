@@ -9,16 +9,15 @@ import org.uqbar.arena.layout.VerticalLayout;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.SWTControlWidget;
 import org.uqbar.arena.windows.MainWindow;
-import org.uqbar.commons.model.ObservableObject;
 
 /**
  * 
  * @author jfernandes
  */
-public class SWTControlExampleWindow extends MainWindow {
+public class SWTControlExampleWindow extends MainWindow<Object> {
 
 	public SWTControlExampleWindow() {
-		super(new ObservableObject()); // el modelo no es importante acá.
+		super(new Object()); // el modelo no es importante acá.
 	}
 
 	/**

@@ -7,7 +7,6 @@ import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.Widget;
 import org.uqbar.commons.model.IModel;
 import org.uqbar.commons.model.Model;
-import org.uqbar.commons.model.ObservableObject;
 import org.uqbar.lacar.ui.model.PanelBuilder;
 import org.uqbar.lacar.ui.model.ViewDescriptor;
 import org.uqbar.lacar.ui.model.WindowBuilder;
@@ -23,8 +22,7 @@ import com.uqbar.commons.loggeable.Loggeable;
  * 
  * @author npasserini
  */
-public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilder>,
-		WindowOwner, Loggeable {
+public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilder>, WindowOwner, Loggeable {
 	/**
 	 * Puede ser la ventana padre o bien la aplicación en caso de que esta sea una ventana de primer nivel.
 	 */
@@ -39,7 +37,7 @@ public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilde
 	 * Objeto del modelo (de dominio o de aplicación) asociado a esta ventana.
 	 */
 	private IModel<T> model;
-	
+
 	/**
 	 * El conjunto de los componentes que dependen <i>directamente</i> de la ventana. Normalmente esto
 	 * consiste únicamente de un {@link Panel}.
@@ -61,9 +59,10 @@ public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilde
 	@SuppressWarnings("unchecked")
 	public Window(WindowOwner owner, T model) {
 		this.owner = owner;
-		if(model instanceof IModel){
+		if (model instanceof IModel) {
 			this.model = (IModel<T>) model;
-		}else {
+		}
+		else {
 			this.model = new Model<T>(model);
 		}
 	}
@@ -76,8 +75,7 @@ public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilde
 	public T getModelObject() {
 		return this.model.getSource();
 	}
-	
-	
+
 	// ********************************************************
 	// ** Configuración de la ventana
 	// ********************************************************
@@ -140,7 +138,7 @@ public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilde
 	public void close() {
 		this.delegate.close();
 	}
-	
+
 	// ********************************************************
 	// ** Internal
 	// ********************************************************

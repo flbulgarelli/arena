@@ -3,8 +3,6 @@ package org.uqbar.arena.aop.windows;
 import org.uqbar.arena.actions.MessageSend;
 import org.uqbar.arena.aop.potm.ObjectTransactionImplObservable;
 import org.uqbar.arena.aop.potm.PureObjectTransactionMonitorWindow;
-import org.uqbar.arena.widgets.Button;
-import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.windows.Dialog;
 import org.uqbar.arena.windows.WindowOwner;
 import org.uqbar.commons.model.UserException;
@@ -25,15 +23,15 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 		this.inTransaction = true;
 	}
 
-	@Override
-	protected void createMainTemplate(Panel mainPanel) {
-		new Button(mainPanel)
-			.setCaption("Open Monitor")
-			.onClick(new MessageSend(this, "openMonitor"))
-			.setWidth(100)
-			.setHeigth(25);
-		super.createMainTemplate(mainPanel);
-	}
+//	@Override
+//	protected void createMainTemplate(Panel mainPanel) {
+//		new Button(mainPanel)
+//			.setCaption("Open Monitor")
+//			.onClick(new MessageSend(this, "openMonitor"))
+//			.setWidth(100)
+//			.setHeigth(25);
+//		super.createMainTemplate(mainPanel);
+//	}
 
 	@Override
 	public String getName() {
@@ -82,7 +80,7 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 		catch (Exception e) {
 			this.inTransaction = true;
 			ObjectTransactionManager.rollback(this);
-			throw new UserException(e.toString(), e);
+			throw new UserException(e.getMessage(), e);
 		}
 
 	}
@@ -99,7 +97,7 @@ public abstract class TransactionalDialog<T> extends Dialog<T> implements TaskOw
 				}
 				catch (Exception e) {
 					ObjectTransactionManager.rollback(TransactionalDialog.this);
-					throw new UserException(e.toString(), e);
+					throw new UserException(e.getMessage(), e);
 				}
 			}
 		};

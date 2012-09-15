@@ -30,7 +30,7 @@ trait TransactionalObservableValue extends AbstractObservableValue {
 class DetailTransacionalObservableValue(outerObservableValue: IObservableValue, factory: IObservableFactory, detailType: Any)
   extends DetailObservableValue(outerObservableValue, factory, detailType) with TransactionalObservableValue
 
-class JavaBeanTransacionalObservableValue(realm:Realm, any:Any, descriptor:PropertyDescriptor )
+class JavaBeanTransacionalObservableValue(realm: Realm, any: Any, descriptor: PropertyDescriptor)
   extends JavaBeanObservableValue(realm, any, descriptor) with TransactionalObservableValue
   
 

@@ -1,8 +1,8 @@
 package org.uqbar.arena.examples.controls.spinner;
 
 import org.uqbar.arena.layout.VerticalLayout;
-import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;
+import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Spinner;
 import org.uqbar.arena.windows.MainWindow;
 

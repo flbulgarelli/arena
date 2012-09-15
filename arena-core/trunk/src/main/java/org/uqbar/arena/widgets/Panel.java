@@ -3,8 +3,6 @@ package org.uqbar.arena.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.uqbar.arena.layout.ColumnLayout;
-import org.uqbar.arena.layout.HorizontalLayout;
 import org.uqbar.arena.layout.Layout;
 import org.uqbar.arena.layout.VerticalLayout;
 import org.uqbar.commons.model.IModel;
@@ -14,39 +12,38 @@ import org.uqbar.lacar.ui.model.PanelBuilder;
 import com.uqbar.commons.exceptions.ProgramException;
 import com.uqbar.commons.loggeable.HierarchicalLogger;
 
-/**
- * Un Panel es básicamente un {@link Widget} que puede contener otros {@link Widget}.
- * 
- * @author npasserini
- */
 public class Panel extends Widget implements Container {
-	private IModel<?> model;
+	protected IModel<?> model;
+
 	private int width = 250;
 
 	/**
 	 * Los componentes contenidos en este {@link Panel}
 	 */
 	private List<Widget> children = new ArrayList<Widget>();
-	private Layout layout  = new VerticalLayout();
+	private Layout layout = new VerticalLayout();
 
 	// ********************************************************
 	// ** Panel creation
 	// ********************************************************
 
+	/**
+	 * Creates a panel which by default inherits the model from its container.
+	 * 
+	 * @param container
+	 */
 	public Panel(Container container) {
-		this(container, container.getModel());
+		super(container);
 	}
 
 	public Panel(Container container, IModel<?> model) {
-		super(container);
+		this(container);
 		this.model = model;
 	}
-	
+
 	public Panel(Container container, Object model) {
 		this(container, new Model<Object>(model));
 	}
-	
-	
 
 	// ********************************************************
 	// ** Binding
@@ -59,34 +56,30 @@ public class Panel extends Widget implements Container {
 	 * "vinculados", en caso de modificaciones posteriores al modelo el panel no se entera.
 	 */
 	public Panel bindContents(String propertyName) {
-		Object propertyModel = this.model.getProperty(propertyName);
-		if(propertyModel instanceof IModel){
-			this.model = (IModel) propertyModel;
-		}else{
-			this.model = new Model<Object>(propertyModel); 
+		Object propertyModel = this.getModel().getProperty(propertyName);
+		if (propertyModel instanceof IModel) {
+			this.model = (IModel<?>) propertyModel;
+		}
+		else {
+			this.model = new Model<Object>(propertyModel);
 		}
 		return this;
 	}
 
 	// ********************************************************
-	// ** Layout (DEPRECATED)
+	// ** Configuration
 	// ********************************************************
+
+	/**
+	 * Creates the contents of the panel. Default behavior is to create no contents (i.e. an empty Panel).
+	 * Subclasses can use this hook to configure specific contents.
+	 */
+	protected void createContents() {
+	}
 
 	public Panel setLayout(Layout layout) {
 		this.layout = layout;
 		return this;
-	}
-
-	public void setHorizontalLayout() {
-		this.setLayout(new HorizontalLayout());
-	}
-	
-	public void setVerticalLayout() {
-		this.setLayout(new VerticalLayout());
-	}
-
-	public void setLayoutInColumns(int columnCount) {
-		this.setLayout(new ColumnLayout(columnCount));
 	}
 
 	// ********************************************************
@@ -98,9 +91,18 @@ public class Panel extends Widget implements Container {
 		this.children.add(child);
 	}
 
+	/**
+	 * Returns the model associated to this Panel.
+	 * 
+	 * If no model has been associated explicitly to the panel, the container's model is used.
+	 */
 	@Override
-	public IModel getModel() {
-		return this.model;
+	public IModel<?> getModel() {
+		return this.model != null ? this.model : this.getContainer().getModel();
+	}
+
+	public Object getModelObject() {
+		return this.getModel().getSource();
 	}
 
 	// ********************************************************
@@ -109,6 +111,7 @@ public class Panel extends Widget implements Container {
 
 	@Override
 	public void showOn(PanelBuilder container) {
+		this.createContents();
 		if (this.layout == null) {
 			throw new ProgramException("No se especificó un layout para el Panel");
 		}
@@ -146,4 +149,5 @@ public class Panel extends Widget implements Container {
 		visitor.append("layout", this.layout);
 		visitor.append("children", this.children);
 	}
+
 }

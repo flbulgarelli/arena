@@ -1,9 +1,6 @@
 package org.uqbar.lacar.ui.model;
 
-import org.uqbar.arena.bindings.Transformer;
-
 /**
- * 
  * @author npasserini
  */
 public interface ControlBuilder extends WidgetBuilder {
