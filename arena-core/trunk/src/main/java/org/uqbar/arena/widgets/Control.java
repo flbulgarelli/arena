@@ -25,10 +25,6 @@ public abstract class Control extends Widget {
 	private Collection<Binding<ControlBuilder>> bindings = CollectionFactory.createCollection();
 	protected List<Closure<ControlBuilder>> configurations = CollectionFactory.createList();
 
-	public Control() {
-		this(null);
-		
-	}
 	public Control(Container container) {
 		super(container);
 	}

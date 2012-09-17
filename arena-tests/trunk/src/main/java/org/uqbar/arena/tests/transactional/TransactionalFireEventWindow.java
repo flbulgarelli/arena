@@ -1,14 +1,13 @@
 package org.uqbar.arena.tests.transactional;
 
 import org.uqbar.arena.actions.MessageSend;
+import org.uqbar.arena.layout.VerticalLayout;
 import org.uqbar.arena.widgets.Button;
 import org.uqbar.arena.widgets.Label;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.windows.MainWindow;
 
 public class TransactionalFireEventWindow extends MainWindow<FakeObject> {
-	private static final long serialVersionUID = 1L;
-
 	public static void main(String[] args) {
 		new TransactionalFireEventWindow().startApplication();
 	}

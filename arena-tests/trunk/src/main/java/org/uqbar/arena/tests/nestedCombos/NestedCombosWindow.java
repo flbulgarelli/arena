@@ -91,6 +91,11 @@ public class NestedCombosWindow extends MainWindow<NestedCombosDomain> {
 		times.bindValueToProperty("times"); // TODO esto todavía no se puede hacer: .setAdapter(nameAdapter);
 
 		new TextBox(mainPanel).bindValueToProperty("province.name");
+		
+		new Button(mainPanel) //
+			.setCaption("Edit Province")
+			.onClick(new MessageSend(this, "editProvince"));
+		
 		new Button(mainPanel) //
 			.setCaption("Delete Province")
 			.onClick(new MessageSend(this.getModelObject(), "deleteProvince"));
@@ -109,5 +114,9 @@ public class NestedCombosWindow extends MainWindow<NestedCombosDomain> {
 					return element.getName();
 				}
 			});
+	}
+	
+	public void editProvince() {
+		new EditProvinceDialog(this, this.getModelObject().getProvince()).open();
 	}
 }

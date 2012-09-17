@@ -1,13 +1,13 @@
 package org.uqbar.arena.tests.nestedCombos;
 
 import org.uqbar.arena.actions.MessageSend;
+import org.uqbar.arena.aop.windows.TransactionalDialog;
 import org.uqbar.arena.widgets.Button;
 import org.uqbar.arena.widgets.Panel;
 import org.uqbar.arena.widgets.TextBox;
-import org.uqbar.arena.windows.Dialog;
 import org.uqbar.arena.windows.WindowOwner;
 
-public class EditProvinceDialog extends Dialog<Province> {
+public class EditProvinceDialog extends TransactionalDialog<Province> {
 
 	public EditProvinceDialog(WindowOwner owner, Province model) {
 		super(owner, model);
