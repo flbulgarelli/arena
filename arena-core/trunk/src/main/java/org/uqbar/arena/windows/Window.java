@@ -68,7 +68,7 @@ public abstract class Window<T> implements Container, ViewDescriptor<PanelBuilde
 	}
 
 	@Override
-	public IModel<T> getModel() {
+	public IModel<?> getModel() {
 		return this.model;
 	}
 

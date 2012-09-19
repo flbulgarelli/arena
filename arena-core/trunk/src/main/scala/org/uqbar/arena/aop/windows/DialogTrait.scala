@@ -1,4 +1,4 @@
-package org.uqbar.arena.aop.windows.traits
+package org.uqbar.arena.aop.windows
 
 import scala.collection.mutable.Buffer
 

@@ -1,13 +1,10 @@
 package org.uqbar.arena.aop.windows
 
-import org.uqbar.arena.aop.windows.traits.DialogTrait
-import org.uqbar.arena.aop.windows.traits.TransactionalWindowTrait
 import org.uqbar.arena.widgets.Panel
 import org.uqbar.arena.windows.SimpleWindow
 import org.uqbar.arena.windows.Window
 import org.uqbar.arena.windows.WindowOwner
 import org.uqbar.arena.Application
-
 
 /**
  * Ventana (SimpleWindow) especial que implementa la interface {@link TaskWindow}.
@@ -27,13 +24,11 @@ import org.uqbar.arena.Application
  * @author npasserini
  */
 class SDialog[T](owner: WindowOwner, model: T) extends SimpleWindow[T](owner, model) with DialogTrait[T] {
+	val ACCEPT = "accept";
+	val CANCEL = "cancel";
 
-  val ACCEPT = "accept";
-  val CANCEL = "cancel";
-
-  override protected def createFormPanel(mainPanel: Panel) {}
-  override protected def addActions(actionPanel: Panel) {}
-
+	override protected def createFormPanel(mainPanel: Panel) {}
+	override protected def addActions(actionPanel: Panel) {}
 }
 
 class STransactionalDialog[T](owner: WindowOwner, model: T) extends SDialog[T](owner, model) with TransactionalWindowTrait[T] {
