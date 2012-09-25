@@ -25,13 +25,13 @@ class EntityVisitor() {
   def methodAnnotation(clazz: Class[_], method: Method, annotation: PersistentField) {
 	val name = extractName(method,annotation.annotationType().getName())
 	val fieldType = method.getGenericReturnType();
-	this.entity.mappings += new FieldMapping(name, fieldType)
+	this.entity.mappings += FieldMapping.create(name, fieldType)
   }
 
   def methodAnnotation(clazz: Class[_], method: Method, annotation: Relation) {
 	val name = extractName(method,annotation.annotationType().getName())
 	val fieldType = method.getGenericReturnType();
-	this.entity.mappings += new RelationMapping(name, fieldType)
+	this.entity.mappings += RelationMapping.create(name, fieldType)
   }
   
   def extractName(method:Method, annotationName:String):String = {

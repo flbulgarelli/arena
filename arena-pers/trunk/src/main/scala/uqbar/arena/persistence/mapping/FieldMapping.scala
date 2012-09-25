@@ -10,6 +10,12 @@ import java.lang.Long
 import uqbar.arena.persistence.Session
 import java.math.BigDecimal
 
+object FieldMapping {
+  def create(name:String, fieldType:Type):FieldMapping = {
+    return new FieldMapping(name,fieldType)
+  }
+}
+
 class FieldMapping(name: String, fieldType: Type) extends Mapping {
   val wrappedType = new TypeWrapper(fieldType)
   checkNativeOrEnum();

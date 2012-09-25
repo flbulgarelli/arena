@@ -12,9 +12,25 @@ import org.uqbar.commons.model.Entity
 import scala.collection.JavaConversions._
 import java.util.Collection
 
-class RelationMapping(name: String, fieldType: Type) extends Mapping {
-  val wrappedType = new TypeWrapper(fieldType)
+object RelationMapping {
+  def create(name: String, fieldType: Type): RelationMapping = {
+    val wrappedType = new TypeWrapper(fieldType)
+    if (wrappedType.isCollectionOfPersistent)
+      new CollectionRelationMapping(name, wrappedType)
+    else
+      new SimpleRelationMapping(name, wrappedType)
+  }
+}
+
+abstract class RelationMapping(name: String, wrappedType: TypeWrapper) extends Mapping {
   checkRelation();
+
+  def query(queryBuilder: QueryBuilder, target: Object) {
+    val value = ReflectionUtils.invokeGetter(target, this.name).asInstanceOf[Collection[Entity]]
+    if (value != null) {
+      throw new Exception("No se puede hacer query by example con relaciones entre objetos.")
+    }
+  }
 
   def checkRelation() {
     if (wrappedType.isNative && wrappedType.isEnum && wrappedType.isBuiltinType) {
@@ -24,11 +40,11 @@ class RelationMapping(name: String, fieldType: Type) extends Mapping {
       throw new ConfigurationException("La annotation PersistentField es solo aplicable a PersistentClass o a colecciones de PersistentClass:" + wrappedType.name);
     }
   }
+}
+
+class SimpleRelationMapping(name: String, wrappedType: TypeWrapper) extends RelationMapping(name, wrappedType) {
 
   def persist(session: Session, node: Node, target: Object): Unit = {
-    if (wrappedType.isCollectionOfPersistent)
-      return persistCollection(session, node, target)
-
     val value = ReflectionUtils.invokeGetter(target, this.name)
     val relType = DynamicRelationshipType.withName(this.name)
     val graphDB = session.graphDB
@@ -50,7 +66,26 @@ class RelationMapping(name: String, fieldType: Type) extends Mapping {
     node.createRelationshipTo(otherNode, relType)
   }
 
-  def persistCollection(session: Session, node: Node, target: Object): Unit = {
+  def hidrate(session: Session, node: Node, target: Object): Unit = {
+    val relType = DynamicRelationshipType.withName(this.name)
+    val graphDB = session.graphDB
+    val r = node.getSingleRelationship(relType, Direction.OUTGOING)
+
+    if (r == null) {
+      ReflectionUtils.invokeSetter(target, this.name, null)
+      return
+    }
+
+    val otherNode = r.getEndNode()
+
+    val entity: Any = session.get(otherNode.getProperty("clazzName").toString(), otherNode.getId().intValue())
+    ReflectionUtils.invokeSetter(target, this.name, entity)
+  }
+
+}
+
+class CollectionRelationMapping(name: String, wrappedType: TypeWrapper) extends RelationMapping(name, wrappedType) {
+  def persist(session: Session, node: Node, target: Object): Unit = {
     val relType = DynamicRelationshipType.withName(this.name)
     val graphDB = session.graphDB
     val rels = node.getRelationships(relType, Direction.OUTGOING)
@@ -70,7 +105,7 @@ class RelationMapping(name: String, fieldType: Type) extends Mapping {
     }
   }
 
-  def hidrateCollection(session: Session, node: Node, target: Object): Unit = {
+  def hidrate(session: Session, node: Node, target: Object): Unit = {
     val relType = DynamicRelationshipType.withName(this.name)
     val graphDB = session.graphDB
     val rels = node.getRelationships(relType, Direction.OUTGOING)
@@ -89,29 +124,4 @@ class RelationMapping(name: String, fieldType: Type) extends Mapping {
     }
   }
 
-  def hidrate(session: Session, node: Node, target: Object): Unit = {
-    if (wrappedType.isCollectionOfPersistent)
-      return hidrateCollection(session, node, target)
-
-    val relType = DynamicRelationshipType.withName(this.name)
-    val graphDB = session.graphDB
-    val r = node.getSingleRelationship(relType, Direction.OUTGOING)
-
-    if (r == null) {
-      ReflectionUtils.invokeSetter(target, this.name, null)
-      return
-    }
-
-    val otherNode = r.getEndNode()
-
-    val entity: Any = session.get(otherNode.getProperty("clazzName").toString(), otherNode.getId().intValue())
-    ReflectionUtils.invokeSetter(target, this.name, entity)
-  }
-
-  def query(queryBuilder: QueryBuilder, target: Object) {
-    val value = ReflectionUtils.invokeGetter(target, this.name).asInstanceOf[Collection[Entity]]
-    if (value != null) {
-      throw new Exception("No se puede hacer query by example con relaciones entre objetos.")
-    }
-  }
 }
