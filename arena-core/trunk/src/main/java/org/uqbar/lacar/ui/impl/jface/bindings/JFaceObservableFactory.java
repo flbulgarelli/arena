@@ -28,10 +28,6 @@ public class JFaceObservableFactory {
 	}
 
 	private static IObservableValue observeProperty(Object bean, List<String> propertyChainParts) {
-		return observeProperty(bean, bean.getClass(), propertyChainParts);
-	}
-	
-	private static IObservableValue observeProperty(Object bean, Class beanClass, List<String> propertyChainParts) {
 		String firstProperty = propertyChainParts.get(0);
 
 		DetailTransacionalObservableValue observableValue;
@@ -40,7 +36,7 @@ public class JFaceObservableFactory {
 
 		final Realm realm = Realm.getDefault();
 		IObservableValue detailObservable = new JavaBeanTransacionalObservableValue(realm, bean, getPropertyDescriptor(
-				beanClass, firstProperty));
+				bean.getClass(), firstProperty));
 
 		for (int i = 1; i < propertyChainParts.size(); i++) {
 			valueFactory = BeansObservables.valueFactory(realm, propertyChainParts.get(i));

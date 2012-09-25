@@ -1,10 +1,10 @@
 package com.uqbar.apo.util;
 
-import org.uqbar.commons.utils.Observable;
 import org.uqbar.commons.utils.ReflectionUtils;
+import org.uqbar.commons.utils.TransactionalAndObservable;
 
 
-@Observable
+@TransactionalAndObservable
 public class ExampleObservableObject implements IExampleObject {
 	private final String testRole;
 	private String name;

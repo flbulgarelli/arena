@@ -34,7 +34,7 @@ public class TestArenaObservableValue extends AbstractTestObsevable {
 		assertFieldValue(observer, null);		
 		
 		
-		bindProperty(observableObject, observer, ExampleObject.NAME);
+		bindProperty(observer, observableObject, ExampleObject.NAME);
 		
 		//Se syncroniza
 		assertGetterValue(observableObject, VALUE1);

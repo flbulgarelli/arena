@@ -16,9 +16,9 @@ import com.uqbar.apo.util.TestRealm;
  */
 public class TestObservable  extends AbstractTestObsevable{
 
-	private static final String VALUE2 = "nombre2";
-	private static final String VALUE3 = "nombre3";
-	private static final String VALUE4 = "nombre4";
+	private static final String VALUE2 = "VALUE2";
+	private static final String VALUE3 = "VALUE3";
+	private static final String VALUE4 = "VALUE$";
 	
 	
 	@Before
@@ -59,7 +59,7 @@ public class TestObservable  extends AbstractTestObsevable{
 		assertFieldValue(observableObject, VALUE1);
 		assertFieldValue(observer, null);	
 
-		this.bindProperty(observableObject, observer, "name");
+		this.bindProperty(observer, observableObject, "name");
 
 		
 		//Apenas creo una transaccion verifico los valores
@@ -115,7 +115,7 @@ public class TestObservable  extends AbstractTestObsevable{
 		assertFieldValue(observableObject, VALUE1);
 		assertFieldValue(observer, null);	
 
-		this.bindProperty(observableObject, observer, "name");
+		this.bindProperty(observer, observableObject, "name");
 		
 		//Apenas creo una transaccion verifico los valores
 		assertGetterValue(observableObject, VALUE1);

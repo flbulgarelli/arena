@@ -14,7 +14,7 @@ import com.uqbar.apo.util.IExampleObject;
 public class AbstractTestObsevable {
 
 	protected static final int AGE = 123;
-	protected static final String VALUE1 = "nombre1";
+	protected static final String VALUE1 = "VALUE1";
 
 	public AbstractTestObsevable() {
 		super();
