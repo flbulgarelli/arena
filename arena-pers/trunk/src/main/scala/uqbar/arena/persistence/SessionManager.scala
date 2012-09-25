@@ -20,8 +20,14 @@ object SessionManager {
     session = new Session(graphDB)
   }
 
+  def runInSession[T](body: Session => T): T = {
+    runInSession({body.apply(currentSession)})
+  }
+
+  
   def runInSession[T](body: => T): T = {
-    var value: T = null.asInstanceOf[T];
+    Configuration.checkStarted()
+    var value: T = null.asInstanceOf[T]
     
     try {
       session.beginTransaction()

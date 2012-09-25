@@ -1,20 +1,23 @@
 package uqbar.arena.persistence.configuration
 
 import java.lang.reflect.Method
+
+import org.apache.commons.lang.StringUtils
+import org.uqbar.commons.model.Entity
+
 import uqbar.arena.persistence.Configuration
+import uqbar.arena.persistence.ConfigurationException
 import uqbar.arena.persistence.annotations.PersistentClass
 import uqbar.arena.persistence.annotations.PersistentField
-import uqbar.arena.persistence.ConfigurationException
 import uqbar.arena.persistence.annotations.Relation
 import uqbar.arena.persistence.mapping.EntityMapping
 import uqbar.arena.persistence.mapping.FieldMapping
 import uqbar.arena.persistence.mapping.RelationMapping
-import org.apache.commons.lang.StringUtils
 
 class EntityVisitor() {
-  var entity: EntityMapping = null
+  var entity: EntityMapping[_] = null
 
-  def classAnotation(clazz: Class[_], annotation: PersistentClass) {
+  def classAnotation[T <: Entity](clazz: Class[T], annotation: PersistentClass) {
     entity = new EntityMapping(clazz)
     Configuration.entities.put(clazz.getCanonicalName(), entity)
   }

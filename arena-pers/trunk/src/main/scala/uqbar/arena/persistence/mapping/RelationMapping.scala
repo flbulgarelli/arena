@@ -27,17 +27,18 @@ class RelationMapping(name: String, fieldType: Type) extends Mapping {
 
   def persist(session: Session, node: Node, target: Object): Unit = {
     if (wrappedType.isCollectionOfPersistent)
-      return persistCollection(session,node,target)
+      return persistCollection(session, node, target)
 
     val value = ReflectionUtils.invokeGetter(target, this.name)
     val relType = DynamicRelationshipType.withName(this.name)
     val graphDB = session.graphDB
 
+    val r = node.getSingleRelationship(relType, Direction.OUTGOING)
+    if (r != null) {
+      r.delete()
+    }
+
     if (value == null) {
-      val r = node.getSingleRelationship(relType, Direction.OUTGOING)
-      if (r != null) {
-        r.delete()
-      }
       return ;
     }
 
@@ -53,57 +54,64 @@ class RelationMapping(name: String, fieldType: Type) extends Mapping {
     val relType = DynamicRelationshipType.withName(this.name)
     val graphDB = session.graphDB
     val rels = node.getRelationships(relType, Direction.OUTGOING)
-    for(r<-rels){
+    for (r <- rels) {
       r.delete();
     }
     val value = ReflectionUtils.invokeGetter(target, this.name).asInstanceOf[Collection[Entity]]
-    if(value == null || value.isEmpty())
+    if (value == null || value.isEmpty())
       return
-      
-    for(e <- value){
-	    if (e.isNew())
-	      session.save(e)
-	
-	    val otherNode = graphDB.getNodeById(e.getId().longValue())
-	    node.createRelationshipTo(otherNode, relType)      
+
+    for (e <- value) {
+      if (e.isNew())
+        session.save(e)
+
+      val otherNode = graphDB.getNodeById(e.getId().longValue())
+      node.createRelationshipTo(otherNode, relType)
     }
   }
-  
+
   def hidrateCollection(session: Session, node: Node, target: Object): Unit = {
     val relType = DynamicRelationshipType.withName(this.name)
     val graphDB = session.graphDB
     val rels = node.getRelationships(relType, Direction.OUTGOING)
 
     var value = ReflectionUtils.invokeGetter(target, this.name).asInstanceOf[Collection[Entity]]
-    
-    if(value == null || !value.isEmpty()){
+
+    if (value == null || !value.isEmpty()) {
       value = this.wrappedType.newInstance();
       ReflectionUtils.invokeSetter(target, this.name, value)
     }
-    
-    for(r<-rels){
+
+    for (r <- rels) {
       val otherNode = r.getEndNode()
       val entity: Entity = session.get(otherNode.getProperty("clazzName").toString(), otherNode.getId().intValue()).asInstanceOf[Entity]
       value.add(entity)
     }
   }
-  
+
   def hidrate(session: Session, node: Node, target: Object): Unit = {
     if (wrappedType.isCollectionOfPersistent)
-      return hidrateCollection(session,node,target)
+      return hidrateCollection(session, node, target)
 
     val relType = DynamicRelationshipType.withName(this.name)
     val graphDB = session.graphDB
     val r = node.getSingleRelationship(relType, Direction.OUTGOING)
-    
-    if(r == null){
+
+    if (r == null) {
       ReflectionUtils.invokeSetter(target, this.name, null)
       return
     }
 
-    val otherNode = r.getEndNode()    
-    
-    val entity:Any = session.get(otherNode.getProperty("clazzName").toString(), otherNode.getId().intValue())
+    val otherNode = r.getEndNode()
+
+    val entity: Any = session.get(otherNode.getProperty("clazzName").toString(), otherNode.getId().intValue())
     ReflectionUtils.invokeSetter(target, this.name, entity)
+  }
+
+  def query(queryBuilder: QueryBuilder, target: Object) {
+    val value = ReflectionUtils.invokeGetter(target, this.name).asInstanceOf[Collection[Entity]]
+    if (value != null) {
+      throw new Exception("No se puede hacer query by example con relaciones entre objetos.")
+    }
   }
 }

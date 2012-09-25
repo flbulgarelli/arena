@@ -9,15 +9,23 @@ import uqbar.arena.persistence.mapping.EntityMapping
 import scala.util.control.Exception
 import uqbar.arena.persistence.mapping.EntityMapping
 import uqbar.arena.persistence.mapping.EntityMapping
+import org.uqbar.commons.model.Entity
+import uqbar.arena.persistence.mapping.EntityMapping
 
 object Configuration {
 
-  var entities = new HashMap[String, EntityMapping];
-
+  var entities = new HashMap[String, EntityMapping[_]];
+  protected var initialized = false;
+  
   def clear() {
-    entities = new HashMap[String, EntityMapping];
+    entities = new HashMap[String, EntityMapping[_]];
   }
 
+  def checkStarted() {
+    if(!initialized)
+      throw new ConfigurationException("Se debe inicializar la configuración de la persistencia llamando a Configure.configure() antes de realizar cualquier cosa.")
+  }
+  
   def configure() {
     try {
       val classDescriptor = new ClassDescriptor();
@@ -28,23 +36,25 @@ object Configuration {
       for (clazz <- clazzes) {
         classDescriptor.describe(clazz, visitor);
       }
-      
+
       SessionManager.startDB();
+      initialized = true;
     } catch {
       case e: RuntimeException if e.getCause() != null && e.getCause().getClass() == classOf[ConfigurationException] => throw e.getCause()
       case e => throw e
     }
   }
 
-  def mappingFor(clazz: Class[_]): EntityMapping = {
-    mappingFor(clazz.getName())
+  def mappingFor[T <: Entity](clazz: Class[T]): EntityMapping[T] = {
+    mappingByName(clazz.getName()).asInstanceOf[EntityMapping[T]]
   }
 
-  def mappingFor(target: Object): EntityMapping = {
-    mappingFor(target.getClass())
+  def mappingFor[T <: Entity](target: T): EntityMapping[T] = {
+    mappingFor(target.getClass()).asInstanceOf[EntityMapping[T]]
   }
 
-  def mappingFor(className: String): EntityMapping = {
+  def mappingByName(className: String): EntityMapping[_] = {
+    checkStarted();
     this.entities.get(className).orNull
   }
 }

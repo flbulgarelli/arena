@@ -5,6 +5,9 @@ import scala.collection.mutable.Map
 import org.neo4j.graphdb.GraphDatabaseService
 import org.uqbar.commons.model.Entity
 import org.neo4j.graphdb.Transaction
+import scala.collection.JavaConversions._
+import org.neo4j.graphdb.Node
+import scala.collection.immutable.Nil
 
 class Session(graphDB: GraphDatabaseService) {
   protected var entities: Map[String, Object] = new HashMap[String, Object]()
@@ -45,6 +48,13 @@ class Session(graphDB: GraphDatabaseService) {
     return findOrCreate(clazz.getName, id).asInstanceOf[T]
   }
 
+  def delete(obj:Entity){
+    val node = graphDB.getNodeById(obj.getId().longValue());
+    for(r <- node.getRelationships())
+      r.delete();
+    node.delete();
+  }
+  
   def save(obj:Entity){
     Configuration.mappingFor(obj).persist(this, obj);
   }
@@ -59,5 +69,23 @@ class Session(graphDB: GraphDatabaseService) {
     Configuration.mappingFor(obj).hidrate(this, obj)
     
     return obj
+  }
+  
+  def getAll[T](clazz:Class[T]):List[T] = {
+    val nodes = graphDB.index().forNodes("CLASS").get("clazzName", clazz.getName()).iterator()
+    convertTo(clazz,nodes)
+  }
+  
+  def convertTo[T](clazz:Class[T], nodes: Iterator[Node]):List[T] = {
+    var r:List[T] = List[T]();
+    for(n <- nodes){
+    	val c:Any = this.get(n.getProperty("clazzName").toString(), n.getId().intValue) 
+    	r = c.asInstanceOf[T] :: r;
+    }
+    r
+  }
+  
+  def searchByExample[T <: Entity](example:T):List[T] = {
+    Configuration.mappingFor(example).searchByExample(example,this) 
   }
 }

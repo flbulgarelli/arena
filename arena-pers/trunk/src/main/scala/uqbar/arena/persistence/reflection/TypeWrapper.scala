@@ -27,6 +27,7 @@ class TypeWrapper(t: Type) {
         case "java.lang.Integer" => true
         case "java.lang.Float" => true
         case "java.lang.Double" => true
+        case "java.math.BigDecimal" => true
         case _ => false
       }
     }, { _ => false })
@@ -61,6 +62,10 @@ class TypeWrapper(t: Type) {
     runIfClass({ c: Class[_] => c.getName() == "java.util.Date" }, { _ => false })
   }
 
+  def isBigDecimal(): Boolean = {
+    runIfClass({ c: Class[_] => c.getName() == "java.math.BigDecimal" }, { _ => false })
+  }
+
   def isEnum(): Boolean = {
     runIfClass({ c: Class[_] => c.isEnum() }, { _ => false })
   }
@@ -82,7 +87,7 @@ class TypeWrapper(t: Type) {
           case z: Class[_] => z.newInstance().asInstanceOf[T]
         }
       }
-      case c:Class[_] => c.newInstance().asInstanceOf[T]
+      case c: Class[_] => c.newInstance().asInstanceOf[T]
     }
   }
 
