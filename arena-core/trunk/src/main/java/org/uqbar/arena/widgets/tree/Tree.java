@@ -7,9 +7,11 @@ import org.uqbar.arena.widgets.Container;
 import org.uqbar.arena.widgets.Control;
 import org.uqbar.arena.widgets.Node;
 import org.uqbar.arena.widgets.Panel;
+import org.uqbar.lacar.ui.impl.jface.tree.TreeBuilder;
 import org.uqbar.lacar.ui.model.Action;
 import org.uqbar.lacar.ui.model.ControlBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
+import org.uqbar.lacar.ui.model.bindings.Binding;
 import org.uqbar.lacar.ui.model.bindings.Observable;
 
 public class Tree<T>  extends Control implements Node<T>{
@@ -40,12 +42,11 @@ public class Tree<T>  extends Control implements Node<T>{
 	 * 
 	 * @return Este mismo Árbol, para enviar mensajes anidados
 	 */
-	public Tree<T> bindContents(Observable model) {
-		this.addBinding(model, new ObservableTreeContents());
-		return this;
+	public Binding<TreeBuilder<?>> bindContents(Observable model) {
+		return this.addBinding(model, new ObservableTreeContents());
 	}
 	
-	public Tree<T> bindContentsToProperty(String parentPropertyName, String childrenPropertyName) {
+	public Binding<TreeBuilder<?>> bindContentsToProperty(String parentPropertyName, String childrenPropertyName) {
 		return this.bindContents(new ObservableTwoProperty(parentPropertyName, childrenPropertyName));
 	}
 	

@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.uqbar.commons.utils.ReflectionUtils;
 
 import com.uqbar.apo.util.ExampleObject;
-import com.uqbar.apo.util.ExampleObservableObject;
 import com.uqbar.apo.util.IExampleObject;
 
 /**
@@ -28,11 +27,9 @@ public class TestChangeEvent extends AbstractTestObsevable{
 	
 
 	@Test
-	public void testListenerWithoutTransaction(){
+	public void testListenerWithoutTransaction() throws IllegalArgumentException, IllegalAccessException{
 		sourceObject = createSourceObject();
 		bindProperty(sourceObject, ExampleObject.NAME);
-		
-		sourceObject.setName(VALUE2);
 	}
 	
 	protected void bindProperty(Object observable, String property) {

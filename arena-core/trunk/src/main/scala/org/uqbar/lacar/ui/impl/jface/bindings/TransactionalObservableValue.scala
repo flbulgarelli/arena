@@ -12,14 +12,21 @@ import org.eclipse.core.databinding.observable.value.AbstractObservableValue
 import org.eclipse.core.internal.databinding.beans.JavaBeanObservableValue
 import org.eclipse.core.databinding.observable.Realm
 import java.beans.PropertyDescriptor
+import org.eclipse.core.internal.databinding.beans.JavaBeanObservableSet
+import org.eclipse.core.databinding.observable.set.AbstractObservableSet
+import org.eclipse.core.databinding.observable.set.SetDiff
+import org.eclipse.core.databinding.observable.AbstractObservable
+import org.eclipse.core.databinding.observable.set.SetChangeEvent
+import org.eclipse.core.databinding.observable.set.IObservableSet
 
-trait TransactionalObservableValue extends AbstractObservableValue {
-
+trait ObservableEvents {
   val isolationKey = "framework.aop.opo.isolationLevel";
-
   var objectTransactionImpl = ObjectTransactionManager.getTransaction()
   val isolationLevelEvents = IsolationLevelEvents.valueOf(AopConfig.getProperty(isolationKey))
 
+}
+
+trait TransactionalObservableValue extends AbstractObservableValue with ObservableEvents {
   override def fireValueChange(diff: ValueDiff) {
     if (this.isolationLevelEvents.check(this.objectTransactionImpl)) {
       super.fireValueChange(diff);
@@ -32,5 +39,5 @@ class DetailTransacionalObservableValue(outerObservableValue: IObservableValue, 
 
 class JavaBeanTransacionalObservableValue(realm: Realm, any: Any, descriptor: PropertyDescriptor)
   extends JavaBeanObservableValue(realm, any, descriptor) with TransactionalObservableValue
-  
+
 

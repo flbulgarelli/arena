@@ -1,18 +1,20 @@
 package org.uqbar.lacar.ui.impl.jface.tree;
 
-import java.util.Collection;
+import java.util.List;
 
-import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.uqbar.commons.utils.ReflectionUtils;
+import org.uqbar.lacar.ui.impl.jface.bindings.JFaceObservableFactory;
 
-class TreeContentProvider  implements ITreeContentProvider {
+public class TreeContentProvider  implements ITreeContentProvider {
 	
 	private IObservableValue observableParentValue;
-	private IObservableValue observableChildrenValue;
+	private IObservableSet observableChildrenValue;
 	private String parentPropertyName;
 	private String childrenPropertyName;
 	
@@ -24,12 +26,13 @@ class TreeContentProvider  implements ITreeContentProvider {
 
 
 	public Object[] getChildren(Object parentElement) {
-		Collection<?> value = (Collection<?>) this.observableChildrenValue.getValue();
-		return value != null ? value.toArray() : new Object[]{};
+//		return this.observableChildrenValue.toArray();
+		return ((List) ReflectionUtils.invokeGetter(parentElement, childrenPropertyName)).toArray();
 	}
 
 	public Object getParent(Object element) {
-		return observableParentValue.getValue();
+//		return observableParentValue.getValue();
+		return ReflectionUtils.invokeGetter(element, parentPropertyName);
 	}
 
 	public boolean hasChildren(Object element) {
@@ -55,14 +58,8 @@ class TreeContentProvider  implements ITreeContentProvider {
 
 				// Create new observer and listen to its changes.
 				if (newInput != null) {
-					this.observableChildrenValue = BeansObservables.observeValue(newInput, this.childrenPropertyName);
-					this.observableChildrenValue.addValueChangeListener(new IValueChangeListener() {
-						@Override
-						public void handleValueChange(ValueChangeEvent event) {
-							viewer.refresh();
-						}
-					});
-					this.observableParentValue = BeansObservables.observeValue(newInput, this.parentPropertyName);
+					this.observableChildrenValue = JFaceObservableFactory.observeSet(newInput, this.childrenPropertyName);
+					this.observableParentValue = JFaceObservableFactory.observeProperty(newInput, this.parentPropertyName);
 					this.observableParentValue.addValueChangeListener(new IValueChangeListener() {
 						@Override
 						public void handleValueChange(ValueChangeEvent event) {

@@ -2,7 +2,7 @@ package org.uqbar.arena.widgets.tree;
 
 import org.uqbar.arena.widgets.Container;
 import org.uqbar.commons.model.IModel;
-import org.uqbar.lacar.ui.impl.jface.tree.JFaceTreeContentsBindingBuilder;
+import org.uqbar.lacar.ui.impl.jface.tree.JFaceTreeItemsBindingBuilder;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.lacar.ui.model.bindings.Observable;
 
@@ -48,7 +48,7 @@ public class ObservableTwoProperty implements Observable{
 
 		@Override
 		public void configure(BindingBuilder binder) {
-			((JFaceTreeContentsBindingBuilder)binder).observeProperty(this.model.getSource(), this.propertyName1, this.propertyName2);
+			((JFaceTreeItemsBindingBuilder)binder).observeProperty(this.model.getSource(), this.propertyName1, this.propertyName2);
 		}
 		
 	}

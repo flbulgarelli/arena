@@ -2,8 +2,8 @@ package org.uqbar.arena.aop;
 
 import javassist.ClassPool;
 
-import com.uqbar.aop.AdviceWeaver;
 import com.uqbar.aop.APOClassLoader;
+import com.uqbar.aop.AdviceWeaver;
 
 
 /**
@@ -21,7 +21,7 @@ public class ArenaClassLoader extends APOClassLoader {
 	
 
 	protected AdviceWeaver createAdviceWeaver(ClassPool cp) {
-		return new AdviceWeaver(cp, new TransactionalAndObservableAdviceWeaverStrategy());
+		return new TransactionalAndObservableAdviceWeaver(cp);
 	}
 
 }

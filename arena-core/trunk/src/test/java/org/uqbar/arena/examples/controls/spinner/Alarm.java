@@ -3,13 +3,14 @@ package org.uqbar.arena.examples.controls.spinner;
 import net.sf.oval.constraint.Max;
 import net.sf.oval.constraint.Min;
 
-import org.uqbar.commons.model.ObservableObject;
+import org.uqbar.commons.utils.Observable;
 
 /**
  * 
  * @author jfernandes
  */
-public class Alarm extends ObservableObject {
+@Observable
+public class Alarm {
 	private int defCon;
 	private int annotatedDefCon; 
 
@@ -18,7 +19,7 @@ public class Alarm extends ObservableObject {
 	}
 
 	public void setDefCon(int defCon) {
-		this.setFieldValue("defCon", defCon);
+		this.defCon = defCon;
 	}
 
 	@Min(value = 1)
@@ -28,7 +29,7 @@ public class Alarm extends ObservableObject {
 	}
 	
 	public void setAnnotatedDefCon(int annotatedDefCon) {
-		this.setFieldValue("annotatedDefCon", annotatedDefCon);
+		this.annotatedDefCon = annotatedDefCon;
 	}
 
 }

@@ -2,49 +2,46 @@ package org.uqbar.lacar.ui.impl.jface.tree;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.collections15.map.HashedMap;
+import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Tree;
 import org.uqbar.arena.widgets.tree.TreeNodeBuilder;
-import org.uqbar.arena.widgets.tree.TreeNode;
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
 import org.uqbar.lacar.ui.impl.jface.JFaceControlBuilder;
+import org.uqbar.lacar.ui.impl.jface.bindings.JFaceBindingBuilder;
 import org.uqbar.lacar.ui.impl.jface.lists.SelectionChangeListener;
 import org.uqbar.lacar.ui.model.BindingBuilder;
 import org.uqbar.lacar.ui.model.LabelProvider;
 
 public class JFaceTreeBuilder<R> extends JFaceControlBuilder<Tree> implements TreeBuilder<R>{
 
-	private Map<org.eclipse.swt.widgets.TreeItem, TreeNode> mappingSWT_Arena;
-	private Map<TreeNode, org.eclipse.swt.widgets.TreeItem> mappingArena_SWT;
 	private TreeViewer viewer;
-	private final org.uqbar.arena.widgets.tree.Tree arenaTree;
+	private final org.uqbar.arena.widgets.tree.Tree<R> arenaTree;
 	private List<JFaceTreeNodeBuilder<R>> childs;
 	private String propertyNode;
 
 
-	public JFaceTreeBuilder(JFaceContainer container, org.uqbar.arena.widgets.tree.Tree arenaTree, String propertyNode) {
+	public JFaceTreeBuilder(JFaceContainer container, org.uqbar.arena.widgets.tree.Tree<R> arenaTree, String propertyNode) {
 		super(container);
 		this.arenaTree = arenaTree;
-		this.mappingSWT_Arena = new HashedMap<org.eclipse.swt.widgets.TreeItem, TreeNode>();
-		this.mappingArena_SWT = new HashedMap<TreeNode, org.eclipse.swt.widgets.TreeItem>();
 		this.propertyNode= propertyNode;
 		this.childs = new ArrayList<JFaceTreeNodeBuilder<R>>();
 		this.viewer = this.createTree(this.getContainer().getJFaceComposite());
 		this.initialize(this.viewer.getTree());	
+		
 	}
 
 
 	private TreeViewer createTree(Composite jFaceComposite) {
 		final TreeViewer treeViewer = new TreeViewer(jFaceComposite, SWT.MULTI | SWT.H_SCROLL	| SWT.V_SCROLL);
 		treeViewer.setLabelProvider(new ReflectionLabelProvider(propertyNode));
-		treeViewer.addSelectionChangedListener(new SelectionChangeListener(arenaTree.getOnClickItem()));
+		if(arenaTree.getOnClickItem() != null){
+			treeViewer.addSelectionChangedListener(new SelectionChangeListener(arenaTree.getOnClickItem()));
+		}
 		
 		return treeViewer;
 	}
@@ -62,7 +59,7 @@ public class JFaceTreeBuilder<R> extends JFaceControlBuilder<Tree> implements Tr
 
 	@Override
 	public BindingBuilder observeContents() {
-		return new JFaceTreeContentsBindingBuilder(this);
+		return new JFaceTreeItemsBindingBuilder(this);
 	}
 	
 
@@ -73,7 +70,7 @@ public class JFaceTreeBuilder<R> extends JFaceControlBuilder<Tree> implements Tr
 
 	@Override
 	public BindingBuilder observeValue() {
-		return null;
+		return new JFaceBindingBuilder(this, ViewersObservables.observeSingleSelection(this.getJFaceTreeViewer()));
 	}
 	
 	public TreeViewer getJFaceTreeViewer() {
@@ -83,6 +80,11 @@ public class JFaceTreeBuilder<R> extends JFaceControlBuilder<Tree> implements Tr
 
 	public List<JFaceTreeNodeBuilder<R>> getChilds() {
 		return childs;
+	}
+
+
+	public org.uqbar.arena.widgets.tree.Tree<R> getArenaTree() {
+		return arenaTree;
 	}
 
 

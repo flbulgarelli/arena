@@ -1,4 +1,6 @@
 package org.uqbar.arena.aop.potm
+import java.awt.Color
+
 import scala.collection.JavaConverters._
 import scala.collection.mutable.Buffer
 
@@ -35,8 +37,8 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
   def createTree(panel: Panel) {
     var tree = new Tree(panel)
     tree.onClickItem(new Function[ObjectTransactionImplObservable](onSelectedItem))
-    tree.bindContentsToProperty("parent", "children")
-    tree.bindNodeToProperty("id");
+//    tree.bindContentsToProperty("parent", "children")
+//    tree.bindNodeToProperty("id");
     tree.setHeigth(200);
     tree.setWidth(700);
 
@@ -69,8 +71,7 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
   }
 
   def createList(panel: Panel) = {
-    var list = new org.uqbar.arena.widgets.List(panel);
-    // list.bindItemsToProperty("listResult")
+    var list = new org.uqbar.arena.widgets.List(panel, "listResult");
     list.onSelection(new Function[IdentityWrapper](onSelectionInList))
     list.setWidth(500);
     list.setHeigth(200);
