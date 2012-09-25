@@ -11,13 +11,26 @@ import uqbar.arena.persistence.Session
 import java.math.BigDecimal
 
 object FieldMapping {
-  def create(name:String, fieldType:Type):FieldMapping = {
-    return new FieldMapping(name,fieldType)
+  def create(name: String, fieldType: Type): FieldMapping = {
+    val wrappedType = new TypeWrapper(fieldType)
+
+//    if (wrappedType.isEnum) {
+//      return new EnumFieldMapping(name, wrappedType)
+//    }
+//
+//    if (wrappedType.isDate) {
+//      return new DateFieldMapping(name, wrappedType)
+//    }
+//
+//    if (wrappedType.isBigDecimal) {
+//      return new BigDecimalFieldMapping(name, wrappedType)
+//    }
+
+    return new FieldMapping(name, wrappedType)
   }
 }
 
-class FieldMapping(name: String, fieldType: Type) extends Mapping {
-  val wrappedType = new TypeWrapper(fieldType)
+class FieldMapping(name: String, wrappedType: TypeWrapper) extends Mapping {
   checkNativeOrEnum();
 
   def checkNativeOrEnum() {
@@ -33,53 +46,57 @@ class FieldMapping(name: String, fieldType: Type) extends Mapping {
       node.removeProperty(this.name);
       session.graphDB.index().forNodes("Attr").remove(node, this.name)
     } else {
-      session.graphDB.index().forNodes("Attr-"+ target.getClass().toString()).add(node, this.name, v)
+      session.graphDB.index().forNodes("Attr-" + target.getClass().toString()).add(node, this.name, v)
       node.setProperty(this.name, v);
     }
   }
 
   protected def getValue(target: Object): Object = {
-    var v = ReflectionUtils.invokeGetter(target, this.name);
+    convertValueAfterGet(ReflectionUtils.invokeGetter(target, this.name));
+  }
 
+  protected def convertValueAfterGet(originalValue: Object): Object = {
     if (wrappedType.isEnum) {
-      v = if (v == null) null else v.toString()
+      return if (originalValue == null) null else originalValue.toString()
     }
 
     if (wrappedType.isDate) {
-      v = if (v == null) null else v.asInstanceOf[Date].getTime().asInstanceOf[java.lang.Long];
+      return if (originalValue == null) null else originalValue.asInstanceOf[Date].getTime().asInstanceOf[java.lang.Long];
     }
-    
-    if(wrappedType.isBigDecimal){
-      v = if (v == null) null else v.toString();
+
+    if (wrappedType.isBigDecimal) {
+      return if (originalValue == null) null else originalValue.toString();
     }
-    
-    return v
+
+    originalValue;
+  }
+
+  def convertValueBeforeSet(originalValue: Object): Object = {
+    if (wrappedType.isEnum) {
+      return wrappedType.enumValue(originalValue)
+    }
+
+    if (wrappedType.isDate) {
+      return new Date(originalValue.asInstanceOf[java.lang.Long])
+    }
+
+    if (wrappedType.isBigDecimal) {
+      return new BigDecimal(originalValue.asInstanceOf[String])
+    }
+
+    originalValue
   }
 
   def hidrate(session: Session, node: Node, target: Object) = {
-    var v: Object = node.getProperty(this.name, null)
-
-    if (wrappedType.isEnum) {
-      v = wrappedType.enumValue(v)
-    }
-
-    if (wrappedType.isDate) {
-      v = new Date(v.asInstanceOf[java.lang.Long])
-    }
-
-    if(wrappedType.isBigDecimal){
-    	v = new BigDecimal(v.asInstanceOf[String])
-    }
-    
-    ReflectionUtils.invokeSetter(target, this.name, v)
+    ReflectionUtils.invokeSetter(target, this.name, convertValueBeforeSet(node.getProperty(this.name, null)))
   }
 
   def query(queryBuilder: QueryBuilder, target: Object) {
     val v = this.getValue(target);
     if (v != null) {
       val stringValue = v.toString()
-      if(!stringValue.isEmpty())
-    	  queryBuilder.add(this.name, stringValue)
+      if (!stringValue.isEmpty())
+        queryBuilder.add(this.name, stringValue)
     }
   }
 }
