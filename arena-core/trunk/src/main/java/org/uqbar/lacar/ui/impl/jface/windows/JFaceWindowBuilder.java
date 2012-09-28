@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.uqbar.lacar.ui.impl.jface.JFaceContainer;
 import org.uqbar.lacar.ui.impl.jface.JFacePanelBuilder;
+import org.uqbar.lacar.ui.model.AbstractWidgetBuilder;
 import org.uqbar.lacar.ui.model.PanelBuilder;
 import org.uqbar.lacar.ui.model.ViewDescriptor;
 import org.uqbar.lacar.ui.model.WidgetBuilder;
@@ -24,7 +25,7 @@ import org.uqbar.ui.jface.view.ErrorViewer;
 import com.uqbar.commons.collections.CollectionFactory;
 import com.uqbar.commons.exceptions.ProgramException;
 
-public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, WidgetBuilder {
+public class JFaceWindowBuilder extends AbstractWidgetBuilder implements WindowBuilder, JFaceContainer {
 	private Window window;
 
 	private DataBindingContext dbc;
@@ -76,7 +77,7 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 
 		// Una configuración adicional.
 		window.setBlockOnOpen(true);
-		
+
 		window.getShell().addListener(SWT.Close, new Listener() {
 			public void handleEvent(Event event) {
 				windowDescriptor.close();
@@ -90,6 +91,7 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 
 	@Override
 	public void pack() {
+		super.pack();
 		for (WidgetBuilder child : this.children) {
 			child.pack();
 		}
@@ -104,9 +106,9 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 		this.windowDescriptor.showOn(builder);
 
 		this.pack();
-		
+
 		return builder.getWidget();
-		
+
 	}
 
 	// ********************************************************
@@ -138,7 +140,7 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 
 	@Override
 	public void close() {
-		if(this.getShell() != null){
+		if (this.getShell() != null) {
 			this.getShell().close();
 		}
 	}
@@ -193,7 +195,7 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 
 	protected Shell getShell() {
 		// WARNING: Este método falla si no se invocó el #create primero.
-		return this.getJFaceWindow().getShell(); 
+		return this.getJFaceWindow().getShell();
 	}
 
 	/**
@@ -216,5 +218,5 @@ public class JFaceWindowBuilder implements WindowBuilder, JFaceContainer, Widget
 			}
 		};
 	}
-	
+
 }

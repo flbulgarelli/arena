@@ -1,5 +1,6 @@
 package org.uqbar.lacar.ui.impl.jface.lists;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.viewers.AbstractListViewer;
 import org.eclipse.swt.widgets.Composite;
@@ -30,7 +31,29 @@ public abstract class JFaceAbstractListBuilder<T, Viewer extends AbstractListVie
 
 	@Override
 	public BindingBuilder observeValue() {
-		return new JFaceBindingBuilder(this, ViewersObservables.observeSingleSelection(this.getViewer()));
+		return new JFaceBindingBuilder(this, ViewersObservables.observeSingleSelection(this.getViewer())) {
+			@Override
+			protected Binding createBinding() {
+				final Binding binding = super.createBinding();
+				onPack(new Action() {
+					@Override
+					public void execute() {
+						// By the time of binding, it could happen that the contents of the list have not been
+						// set. So the value binding is not reflected in the view. Updating the model on the
+						// pack time allows to ensure that the view is updated (as we are sure that the
+						// contents of the list are set now). This allows the user to configure the bindings
+						// in whatever order he wants and it will allways work.
+						binding.updateModelToTarget();
+					}
+
+					@Override
+					public <T> void execute(T... objects) {
+						throw new UnsupportedOperationException();
+					}
+				});
+				return binding;
+			}
+		};
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package org.uqbar.lacar.ui.model;
 
-
 /**
  * Interfaz base para configurar un widget independientemente de la tecnología.
  * 
@@ -29,4 +28,11 @@ public interface WidgetBuilder {
 	 */
 	public void pack();
 
+	/**
+	 * Allows to configure an action that will be executed just before the default "pack" action.
+	 * 
+	 * @param action The action to be executed
+	 * @return this object
+	 */
+	public WidgetBuilder onPack(Action action);
 }

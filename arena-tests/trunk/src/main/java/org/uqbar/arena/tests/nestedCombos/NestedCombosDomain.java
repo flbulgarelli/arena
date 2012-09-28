@@ -14,7 +14,7 @@ public class NestedCombosDomain {
 	private int times = 0;
 
 	public NestedCombosDomain() {
-		this.addCountry("Argentina", "Buenos Aires", "Córdoba", "Santa Fé");
+		this.country = this.addCountry("Argentina", "Buenos Aires", "Córdoba", "Santa Fé");
 		this.addCountry("Bolivia", "Cochabamba", "Potosí", "La Paz");
 	}
 
@@ -26,12 +26,13 @@ public class NestedCombosDomain {
 		this.times++;
 	}
 
-	public void addCountry(String name, String... provinces) {
+	public Country addCountry(String name, String... provinces) {
 		Country country = new Country(name);
 		for (String provinceName : provinces) {
 			country.addProvince(provinceName);
 		}
 		this.possibleCountries.add(country);
+		return country;
 	}
 
 	public Country getCountry() {

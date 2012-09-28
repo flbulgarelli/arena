@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.uqbar.commons.utils.Observable;
 
+
 @Observable
 public class Country {
 	private String name;

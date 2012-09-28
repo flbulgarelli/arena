@@ -16,8 +16,8 @@ import com.uqbar.commons.collections.Closure;
 import com.uqbar.commons.collections.CollectionFactory;
 
 /**
- * Un {@link Widget} que permite la edición de un único valor específico. Superclase para todos los controles
- * más comúnes: cajas de texto, selectores, etc.
+ * A {@link Widget} that allows to edit a single value. Superclass for all of the most common widgets: text
+ * boxes, selectors, etc.
  * 
  * @author npasserini
  */
@@ -46,9 +46,10 @@ public abstract class Control extends Widget {
 	// ********************************************************
 
 	/**
-	 * Vincula el valor de este control con una propiedad del modelo del contenedor.
+	 * Binds the value hold by this control with a property of the model of the container. Shortcut to
+	 * {@link #bindValue(ObservableProperty)}.
 	 * 
-	 * @param modelProperty Una propiedad del modelo del contenedor.
+	 * @param modelProperty The name of a bindable property (getter/setter) in the model of the container.
 	 * @return this
 	 */
 	public <C extends ControlBuilder> Binding<C> bindValueToProperty(String modelProperty) {
@@ -56,9 +57,9 @@ public abstract class Control extends Widget {
 	}
 
 	/**
-	 * Vincula el valor de este control con una característica del modelo del contenedor.
+	 * Binds the value hold by this control with an {@link ObservableProperty}
 	 * 
-	 * @param modelObservable Una característica observable relativa al modelo del contenedor.
+	 * @param modelObservable an {@link ObservableProperty}
 	 * @return this
 	 */
 	public <C extends ControlBuilder> Binding<C> bindValue(ObservableProperty modelObservable) {
@@ -73,15 +74,18 @@ public abstract class Control extends Widget {
 			}
 		});
 	}
-	
+
 	/**
-	 * Shortcut method for bindEnabled(new ObservableProperty(propertyName))
-	 * It binds the enabled feature of this control to the value of the model's property given by parameter.
+	 * Binds the "enabled" property of this control to a property of the model of the container. Shortcut to
+	 * {@link #bindEnabled(ObservableProperty)}.
+	 * 
+	 * @param modelProperty The name of a bindable property (getter/setter) in the model of the container.
+	 * @return this
 	 */
 	public <C extends ControlBuilder> Binding<C> bindEnabledToProperty(String propertyName) {
 		return this.bindEnabled(new ObservableProperty(propertyName));
 	}
-	
+
 	public <C extends ControlBuilder> Binding<C> bindVisible(Observable modelObservable) {
 		return this.addBinding(modelObservable, new ViewObservable<C>() {
 			@Override
@@ -92,18 +96,18 @@ public abstract class Control extends Widget {
 	}
 
 	/**
-	 * Agrega un binding entre dos observables, validándolo en este contexto.
+	 * Adds a binding betweeen two observables, validating them in this context.
 	 * 
-	 * @param model Una característica observable del modelo asociado a este control.
-	 * @param view Una característica observable de este control.
-	 * @return Devuelve this como una comodidad para enviar mensajes anidados.
+	 * @param model An observable property associated to a model.
+	 * @param view An observable characteristic of this control.
+	 * @return A {@link Binding} that allows to configure further the creating binding between view and model.
 	 */
 	protected <C extends ControlBuilder> Binding<C> addBinding(Observable model, ViewObservable<C> view) {
 		model.setContainer(this.getContainer());
 
 		return this.addBinding(new Binding<C>(model, view));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <C extends ControlBuilder> Binding<C> addBinding(Binding<C> binding) {
 		this.bindings.add((Binding<ControlBuilder>) binding);
@@ -121,26 +125,22 @@ public abstract class Control extends Widget {
 		for (Closure<ControlBuilder> configuration : this.configurations) {
 			configuration.execute(builder);
 		}
-		
-		this.configure(builder);
 
-		// ATENCION: Las tablas necesitan que el pack se asigne antes que los bindings, esto es porque el
-		// binding necesita tener asignado un LabelProvider, que en la implementación actual se está asignando
-		// en el pack.
-		builder.pack();
+		this.configure(builder);
 
 		for (Binding<ControlBuilder> binding : this.bindings) {
 			binding.execute(builder);
 		}
+
+		builder.pack();
 	}
 
-	public void configure(ControlBuilder builder){
-		
+	public void configure(ControlBuilder builder) {
+
 	}
-	
+
 	protected abstract ControlBuilder createBuilder(PanelBuilder container);
-	
-	
+
 	public Control setWidth(final int preferredSize) {
 		this.configurations.add(new Closure<ControlBuilder>() {
 			@Override
@@ -150,7 +150,7 @@ public abstract class Control extends Widget {
 		});
 		return this;
 	}
-	
+
 	public Control setHeigth(final int preferredSize) {
 		this.configurations.add(new Closure<ControlBuilder>() {
 			@Override
@@ -158,7 +158,7 @@ public abstract class Control extends Widget {
 				builder.setHeigth(preferredSize);
 			}
 		});
-		
+
 		return this;
 	}
 }

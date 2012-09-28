@@ -1,5 +1,6 @@
 package org.uqbar.lacar.ui.impl.jface.bindings;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.conversion.IConverter;
@@ -96,6 +97,15 @@ public class JFaceBindingBuilder implements BindingBuilder {
 
 	@Override
 	public void build() {
-		this.dbc.bindValue(view, model, viewToModel, modelToView);
+		this.createBinding();
+	}
+
+	/**
+	 * Creates the JFace data binding. Useful for adding behavior in subclasses that are aware of JFace.
+	 * 
+	 * @return The JFace binding object
+	 */
+	protected Binding createBinding() {
+		return this.dbc.bindValue(view, model, viewToModel, modelToView);
 	}
 }
