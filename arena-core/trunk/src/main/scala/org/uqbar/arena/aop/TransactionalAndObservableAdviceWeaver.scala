@@ -17,9 +17,9 @@ import javassist.ClassPool
 
 class PrintMethodInterceptor extends MethodInterceptor {
 
-  before((method) => "System.out.println('" + "antes1->" + method.getMethodName() + "');")
-  before((method) => "System.out.println('" + "antes2->" + method.getMethodName() + "');")
-  after((method) => "System.out.println('" + "despues->" + method.getMethodName() + "');")
+  before((method) => "System.out.println('" + "antes1->" + method.getName() + "');")
+  before((method) => "System.out.println('" + "antes2->" + method.getName() + "');")
+  after((method) => "System.out.println('" + "despues->" + method.getName() + "');")
 
   override def getSpecificPropertyKey() = "ObservableFieldAccessInterceptor"
 }
