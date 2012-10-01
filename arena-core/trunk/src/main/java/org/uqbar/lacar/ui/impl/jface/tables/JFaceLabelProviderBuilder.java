@@ -58,9 +58,7 @@ public class JFaceLabelProviderBuilder<R> implements LabelProviderBuilder<R> {
 	@Override
 	public void addPropertyMappedColumn(String propertyName) {
 		this.columnPropertyNames.add(propertyName);
-
 		final int index = this.delegatedColumnIndex++;
-
 		this.addCalculatedColumn(this.columnsLabelProvider.getDelegatingTransformer(index));
 	}
 

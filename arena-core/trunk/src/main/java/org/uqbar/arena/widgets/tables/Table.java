@@ -12,6 +12,12 @@ import org.uqbar.lacar.ui.model.TableBuilder;
 import org.uqbar.lacar.ui.model.bindings.Binding;
 import org.uqbar.lacar.ui.model.bindings.Observable;
 
+/**
+ * 
+ * 
+ * @author npasserini
+ * @param <R> the type of the object model behind each row of the table.
+ */
 public class Table<R> extends Control {
 	private Class<R> itemType;
 	private List<Column<R>> columns = new ArrayList<Column<R>>();
@@ -30,7 +36,6 @@ public class Table<R> extends Control {
 	 * 
 	 * @param selected Nombre de la propiedad del modelo del contenedor desde la cuál se obtendrán los
 	 *            contenidos de esta tabla
-	 * 
 	 * @return Esta misma tabla, para enviar mensajes anidados
 	 */
 	public Binding<TableBuilder<?>> bindItemsToProperty(String propertyName) {
@@ -97,7 +102,6 @@ public class Table<R> extends Control {
 
 	/**
 	 * This method is retained only for backwards compatibility and will be removed in a future version.
-	 * 
 	 * @deprecated Use {@link #bindItemsToProperty(String)}
 	 */
 	public Table<R> bindContentsToProperty(String propertyName) {

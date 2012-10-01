@@ -3,6 +3,11 @@ package org.uqbar.arena.widgets.tables;
 import org.uqbar.lacar.ui.impl.jface.tables.LabelProviderBuilder;
 import org.uqbar.lacar.ui.model.LabelProvider;
 
+/**
+ * 
+ * @author npasserini
+ * @param <T>
+ */
 public class PropertyLabelProvider<T> implements LabelProvider<T> {
 	private final String propertyName;
 

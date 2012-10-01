@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>uqbar</groupId>
 		<artifactId>arena-parent</artifactId>
-		<version>1.1</version>
+		<version>1.2-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -25,6 +25,13 @@
 	</scm>
 
 	<dependencies>
+		<!-- UQBAR -->
+		<dependency>
+			<groupId>uqbar</groupId>
+			<artifactId>uqbar-class-descriptor</artifactId>
+			<version>1.2-SNAPSHOT</version>
+		</dependency>
+		<!-- /UQBAR -->
 		<!-- SCALA -->
 		<dependency>
 			<groupId>org.scala-lang</groupId>
@@ -82,11 +89,6 @@
 			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.uqbar</groupId>
-			<artifactId>uqbar-class-descriptor</artifactId>
-			<version>1.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -123,5 +125,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<groupId>uqbar</groupId>
 </project>

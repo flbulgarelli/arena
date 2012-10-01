@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>uqbar</groupId>
 	<artifactId>arena</artifactId>
 	<packaging>jar</packaging>
 	<version>${arena-version}</version>
@@ -10,7 +9,7 @@
 	<parent>
 		<groupId>uqbar</groupId>
 		<artifactId>arena-parent</artifactId>
-		<version>1.1</version>
+		<version>1.2-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -130,6 +129,16 @@
 			<artifactId>util-commons</artifactId>
 			<version>${arena-version}</version>
 		</dependency>
+		<dependency>
+			<groupId>uqbar</groupId>
+			<artifactId>pot</artifactId>
+			<version>${arena-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>uqbar</groupId>
+			<artifactId>poo</artifactId>
+			<version>${arena-version}</version>
+		</dependency>
 		<!-- /UQBAR -->
 
 		<!-- SCALA -->
@@ -143,13 +152,11 @@
 			<artifactId>scala-compiler</artifactId>
 			<version>2.9.1</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.scala-tools</groupId>
 			<artifactId>maven-scala-plugin</artifactId>
 			<version>2.10</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.scalatest</groupId>
 			<artifactId>scalatest_2.9.1</artifactId>
@@ -219,19 +226,6 @@
 			<artifactId>oval</artifactId>
 			<version>1.70</version>
 		</dependency>
-
-		<dependency>
-			<groupId>uqbar</groupId>
-			<artifactId>pot</artifactId>
-			<version>${arena-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>uqbar</groupId>
-			<artifactId>poo</artifactId>
-			<version>${arena-version}</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>

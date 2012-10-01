@@ -18,7 +18,6 @@ public class ArenaClassLoader extends APOClassLoader {
 	public ArenaClassLoader(ClassLoader parent) {
 		super(parent);
 	}
-	
 
 	protected AdviceWeaver createAdviceWeaver(ClassPool cp) {
 		return new TransactionalAndObservableAdviceWeaver(cp);

@@ -11,6 +11,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Layout;
 import org.uqbar.arena.widgets.tree.Tree;
 import org.uqbar.lacar.ui.impl.jface.bindings.ObservableErrorPanelForegroundColor;
 import org.uqbar.lacar.ui.impl.jface.bindings.ObservableStatusMessage;
@@ -128,8 +129,10 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 
 	@Override
 	public void setHorizontalLayout() {
-		RowLayout layout = new RowLayout(SWT.HORIZONTAL);
+		this.setLayout(new RowLayout(SWT.HORIZONTAL));
+	}
 
+	protected void setLayout(Layout layout) {
 		this.getWidget().setLayout(layout);
 	}
 
@@ -137,13 +140,12 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 	public void setVerticalLayout() {
 		RowLayout layout = new RowLayout(SWT.VERTICAL);
 		layout.fill = true;
-
-		this.getWidget().setLayout(layout);
+		this.setLayout(layout);
 	}
 
 	@Override
 	public void setLayoutInColumns(int columnCount) {
-		this.getWidget().setLayout(new GridLayout(columnCount, false));
+		this.setLayout(new GridLayout(columnCount, false));
 	}
 
 	@Override

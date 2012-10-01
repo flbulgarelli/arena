@@ -41,7 +41,6 @@ public class Column<R> {
 				builder.setTitle(title);
 			}
 		});
-		
 		return this;
 	}
 
@@ -52,7 +51,6 @@ public class Column<R> {
 				builder.setWeight(preferredSize);
 			}
 		});
-		
 		return this;
 	}
 	

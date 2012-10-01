@@ -15,6 +15,10 @@ import com.uqbar.pot.aop.TTransactionalAdviceWeaver
 
 import javassist.ClassPool
 
+/**
+ * 
+ * @author ?
+ */
 class PrintMethodInterceptor extends MethodInterceptor {
 
   before((method) => "System.out.println('" + "antes1->" + method.getName() + "');")
@@ -28,29 +32,26 @@ trait TTransactionalAndObservableAdviceWeaver extends TObservableAdviceWeaver wi
   val methodInterceptor = new PrintMethodInterceptor()
 
   override def configureAdvices() {
-    var observableWI = new JoinPoint();
+    // Transactional
     var transactionalWI = new JoinPoint();
-    var observableAndTransactionalWI = new JoinPoint();
-
-    observableWI.addInterceptor(observableFieldInterceptor);
     transactionalWI.addInterceptor(transactionInterceptor);
-    this.configureJoinPoint(observableAndTransactionalWI)
-
-    //    // transactional
     advices.append(new Advice(new PointCut with AnnotationPointCut with FieldPointCut {
       hasAnnotation(classOf[Transactional].getName())
     }, transactionalWI));
-    //
-    //    // Obbservable
+    
+    // Observable
+    var observableWI = new JoinPoint();
+    observableWI.addInterceptor(observableFieldInterceptor);
     advices.append(new Advice(new PointCut with AnnotationPointCut with FieldPointCut {
       hasAnnotation(classOf[Observable].getName())
     }, observableWI));
 
-    // transactional and observable
+    // Transactional and observable
+    var observableAndTransactionalWI = new JoinPoint();
+    this.configureJoinPoint(observableAndTransactionalWI)
     advices.append(new Advice(new PointCut with AnnotationPointCut with FieldPointCut {
       hasAnnotation(classOf[TransactionalAndObservable].getName())
     }, observableAndTransactionalWI));
-
 
     //    advices.append(new Advice(
     //      new PointCut with MatchPointCut with ClassPointCut with MethodPointCut {
@@ -72,4 +73,3 @@ trait TTransactionalAndObservableAdviceWeaver extends TObservableAdviceWeaver wi
 
 class TransactionalAndObservableAdviceWeaver(cp: ClassPool) extends AdviceWeaver(cp) with TTransactionalAndObservableAdviceWeaver {
 }
-
