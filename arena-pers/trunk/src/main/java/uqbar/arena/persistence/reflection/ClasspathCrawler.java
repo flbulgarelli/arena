@@ -37,7 +37,7 @@ public class ClasspathCrawler {
 		    Enumeration<URL> urls = this.classLoader.getResources(packageName);
 		    while (urls.hasMoreElements()) {
 		        URL url = urls.nextElement();
-		        File dir = new File(url.getFile());
+		        File dir = new File(url.getFile().replace("%20"," "));
 		        set.add(dir);
 		    }
 		    return crawl(set);
@@ -107,10 +107,10 @@ public class ClasspathCrawler {
 	protected String getClassName(String path){
 		String name = path;
 		
-		if(name.startsWith("/"))
+		if(name.startsWith("/") || name.startsWith("\\"))
 			name = name.substring(1);
 
-		name = name.split(".class")[0].replace("/", ".");
+		name = name.split(".class")[0].replace("/", ".").replace("\\",".");
 		
 		return name;
 	}
