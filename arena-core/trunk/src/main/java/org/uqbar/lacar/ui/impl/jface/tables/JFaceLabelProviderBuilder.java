@@ -10,6 +10,7 @@ import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.uqbar.lacar.ui.impl.jface.bindings.JFaceObservableFactory;
 import org.uqbar.lacar.ui.model.LabelProvider;
 
 import com.uqbar.commons.collections.Transformer;
@@ -43,7 +44,7 @@ public class JFaceLabelProviderBuilder<R> implements LabelProviderBuilder<R> {
 			labelProvider.configure(this);
 		}
 
-		IObservableMap[] attributeMaps = BeansObservables.observeMaps(tableContents, this.table.getItemType(),
+		IObservableMap[] attributeMaps = JFaceObservableFactory.observeMaps(tableContents, this.table.getItemType(),
 			this.columnPropertyNames.toArray(new String[this.columnPropertyNames.size()]));
 
 		this.columnsLabelProvider.initialize(new ObservableMapLabelProvider(attributeMaps), this.calculatedColumns);

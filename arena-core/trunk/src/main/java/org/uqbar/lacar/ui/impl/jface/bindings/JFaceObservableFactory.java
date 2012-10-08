@@ -18,6 +18,7 @@ import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.internal.databinding.beans.BeanObservableSetDecorator;
 import org.eclipse.core.internal.databinding.beans.BeanObservableValueDecorator;
+import org.eclipse.core.internal.databinding.beans.JavaBeanPropertyObservableMap;
 
 import scala.actors.threadpool.Arrays;
 
@@ -109,24 +110,17 @@ public class JFaceObservableFactory {
 	}
 	
 
-	 public static IObservableMap[] observeMaps(IObservableSet domain, Class beanClass, String[] propertyNames) {
+	 public static IObservableMap[] observeMaps(IObservableSet domain, Class<?> beanClass, String[] propertyNames) {
 		 IObservableMap[] result = new IObservableMap[propertyNames.length];
 		 int i = 0;
 		 for (String propertyChain : propertyNames) {
 			 List<String> propertyChainParts = getChainParts(propertyChain);
 			 if (propertyChainParts.size() > 1) {
-//				 IObservableValue master = observeProperty(bean, beanClass, propertyChainParts.subList(0, propertyChainParts.size() - 1));
-				 IObservableValue master = new JavaBeanTransacionalObservableValue(Realm.getDefault(), beanClass, getPropertyDescriptor(
-							beanClass, propertyChain));
-				 result[i] = observeDetailMap(master, propertyChainParts.get(propertyChainParts.size() - 1));
+				 result[i] = new JavaBeanTransacionalObservableMap(domain, getPropertyDescriptor(beanClass, propertyChain));
 			 }else{
-//				 IObservableValue master = observeProperty(bean, beanClass, propertyChainParts);
-				 IObservableValue master = new JavaBeanTransacionalObservableValue(Realm.getDefault(), beanClass, getPropertyDescriptor(
-							beanClass, propertyChain));
-				 result[i] = observeDetailMap(master, propertyChainParts.get(0));
+				 result[i] = new JavaBeanTransacionalObservableMap(domain, getPropertyDescriptor(beanClass, propertyChain));
 			 }
 			 i++;
-			
 		}
 		 
 		 return result;
@@ -147,8 +141,8 @@ public class JFaceObservableFactory {
 		}
 	}
 
-	public static IObservableMap observeDetailMap(IObservableValue master, String propertyName) {
-		return BeansObservables.observeMap(Realm.getDefault(), master, propertyName);
+	public static IObservableMap observeDetailMap(JavaBeanTransacionalObservableValue master, String propertyName) {
+		return new JavaBeanPropertyObservableMap(Realm.getDefault(), master , getPropertyDescriptor((Class<?>) master.getObserved(), propertyName));
 	}
 
 	public static PropertyDescriptor getPropertyDescriptor(Class<?> beanClass, String propertyName) {
