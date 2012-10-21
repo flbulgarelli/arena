@@ -1,6 +1,5 @@
 package org.uqbar.lacar.ui.impl.jface.lists;
 
-import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
@@ -24,7 +23,7 @@ public class JFaceListItemsBindingBuilder extends JFaceItemsBindingBuilder imple
 
 	@Override
 	public <M, V> BindingBuilder adaptItemsUsingProperty(Class<?> modelType, String propertyName) {
-		IObservableMap labelProviderMap = BeansObservables.observeMap(itemsObservableSet, modelType, propertyName);
+		IObservableMap labelProviderMap = JFaceObservableFactory.observeMap(itemsObservableSet, modelType, propertyName);
 		this.getViewer().setLabelProvider(new ObservableMapLabelProvider(labelProviderMap));
 		return this;
 	}

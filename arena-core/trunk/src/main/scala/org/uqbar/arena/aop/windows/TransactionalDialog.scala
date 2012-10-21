@@ -51,11 +51,9 @@ abstract class TransactionalDialog[T](owner: WindowOwner, model: T) extends Dial
 
 	def execute(target: Object, methodName: String): MessageSend =
 		new MessageSend(target, methodName) {
-			override def execute(): Unit = doTransactionally({
-				return super.execute()
-			})
+			override def execute(): Unit = doTransactionally(super.execute())
 		}
-
+	
 	def doTransactionally[A](transactionBody: => A): A = {
 		try {
 			ObjectTransactionManager.begin(this)

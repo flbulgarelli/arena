@@ -16,9 +16,11 @@ import org.eclipse.core.databinding.observable.masterdetail.IObservableFactory;
 import org.eclipse.core.databinding.observable.masterdetail.MasterDetailObservables;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.internal.databinding.beans.BeanObservableMapDecorator;
 import org.eclipse.core.internal.databinding.beans.BeanObservableSetDecorator;
 import org.eclipse.core.internal.databinding.beans.BeanObservableValueDecorator;
 import org.eclipse.core.internal.databinding.beans.JavaBeanPropertyObservableMap;
+import org.eclipse.core.internal.databinding.observable.masterdetail.DetailObservableMap;
 
 import scala.actors.threadpool.Arrays;
 
@@ -116,15 +118,27 @@ public class JFaceObservableFactory {
 		 for (String propertyChain : propertyNames) {
 			 List<String> propertyChainParts = getChainParts(propertyChain);
 			 if (propertyChainParts.size() > 1) {
-				 result[i] = new JavaBeanTransacionalObservableMap(domain, getPropertyDescriptor(beanClass, propertyChain));
+				 result[i] = observeMap(domain, beanClass, propertyChain);
 			 }else{
-				 result[i] = new JavaBeanTransacionalObservableMap(domain, getPropertyDescriptor(beanClass, propertyChain));
+				 result[i] = observeMap(domain, beanClass, propertyChain);
 			 }
 			 i++;
 		}
 		 
 		 return result;
 	 }
+
+	public static JavaBeanTransacionalObservableMap observeMap(IObservableSet domain, Class<?> beanClass, String propertyChain) {
+		return new JavaBeanTransacionalObservableMap(domain, getPropertyDescriptor(beanClass, propertyChain));
+	}
+	
+	public static IObservableMap observeDetailMap(IObservableValue master, String propertyName) {
+		DetailObservableMap detailObservableMap = new DetailObservableMap(BeansObservables.mapPropertyFactory(Realm.getDefault(), propertyName), master);
+		
+		BeanObservableMapDecorator decorator = new BeanObservableMapDecorator(
+				detailObservableMap, master, getValueTypePropertyDescriptor(master,	propertyName));
+		return decorator;
+	}
 
 	public static IObservableList observeList(Object bean, String propertyChain) {
 		List<String> propertyChainParts = getChainParts(propertyChain);
