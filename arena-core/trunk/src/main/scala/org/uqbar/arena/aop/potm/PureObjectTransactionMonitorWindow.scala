@@ -23,6 +23,8 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
   var ot: ObjectTransactionImpl = null
 
   override def createFormPanel(mainPanel: Panel) = {
+    setTitle("Monitor de Transacciones")
+    setTaskDescription("Transaccones abiertas")
     mainPanel.setLayout(new VerticalLayout())
     ot = getModelObject().getObjectTransaction()
 
@@ -37,8 +39,8 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
   def createTree(panel: Panel) {
     var tree = new Tree(panel)
     tree.onClickItem(new Function[ObjectTransactionImplObservable](onSelectedItem))
-//    tree.bindContentsToProperty("parent", "children")
-//    tree.bindNodeToProperty("id");
+    tree.bindContentsToProperty("parent", "children")
+    tree.bindNodeToProperty("id");
     tree.setHeigth(200);
     tree.setWidth(700);
 

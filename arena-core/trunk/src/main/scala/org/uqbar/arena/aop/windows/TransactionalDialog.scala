@@ -19,14 +19,14 @@ abstract class TransactionalDialog[T](owner: WindowOwner, model: T) extends Dial
 	ObjectTransactionManager.begin(this)
 	var inTransaction: Boolean = true
 
-	//	protected override def createMainTemplate(mainPanel: Panel) = {
-	//		new Button(mainPanel)
-	//			.setCaption("Open Monitor")
-	//			.onClick(new MessageSend(this, "openMonitor"))
-	//			.setWidth(100)
-	//			.setHeigth(25);
-	//		super.createMainTemplate(mainPanel);
-	//	}
+		protected override def createMainTemplate(mainPanel: Panel) = {
+			new Button(mainPanel)
+				.setCaption("Open Monitor")
+				.onClick(new MessageSend(this, "openMonitor"))
+				.setWidth(50)
+				.setHeigth(25);
+			super.createMainTemplate(mainPanel);
+		}
 
 	override def getName(): String = this.getTitle()
 

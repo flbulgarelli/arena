@@ -1,11 +1,12 @@
 package org.uqbar.arena;
 
-import org.uqbar.arena.aop.ArenaClassLoader;
 import org.uqbar.arena.windows.Window;
 import org.uqbar.arena.windows.WindowOwner;
 import org.uqbar.lacar.ui.impl.jface.JFaceApplicationBuilder;
 import org.uqbar.lacar.ui.model.ApplicationRunner;
 import org.uqbar.lacar.ui.model.WindowFactory;
+
+import com.uqbar.aop.APOClassLoader;
 
 /**
  * Punto de entrada a una aplicación Arena.
@@ -40,7 +41,7 @@ public abstract class Application implements WindowOwner, Runnable {
 	 * @return
 	 */
 	protected String getNecesaryClassLoaderName() {
-		return ArenaClassLoader.class.getName();
+		return APOClassLoader.class.getName();
 	}
 
 	/**

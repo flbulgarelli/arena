@@ -41,8 +41,8 @@ class ObjectTransactionImplObservable(var objectTransaction:ObjectTransactionImp
 
 	def setListResult[A](listResult:List[A]) = this.listResult = listResult.toList;
 	
-	def getChildren():java.util.List[Any] = {
-		var result = Buffer[Any]();
+	def getChildren():java.util.List[ObjectTransactionImplObservable] = {
+		var result = Buffer[ObjectTransactionImplObservable]();
 		if(objectTransaction != null){
 			result.append(new ObjectTransactionImplObservable(objectTransaction));
 			objectTransaction.getParent() match {
@@ -51,11 +51,10 @@ class ObjectTransactionImplObservable(var objectTransaction:ObjectTransactionImp
 			};
 		}
 		return result;
-				
 	}
 	
 	def getId() = objectTransaction.getId()
 	
-	def getParent() = objectTransaction.getParent()
+	def getParent() = new ObjectTransactionImplObservable(objectTransaction.getParent())
 
 }
