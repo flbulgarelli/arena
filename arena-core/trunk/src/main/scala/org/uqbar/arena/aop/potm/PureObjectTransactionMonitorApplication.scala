@@ -4,9 +4,9 @@ import org.uqbar.arena.windows.Window
 import org.uqbar.arena.Application
 import org.uqbar.commons.utils.Observable
 
-class PureObjectTransactionMonitorApplication(var model:ObjectTransactionImplObservable) extends Application {
+class PureObjectTransactionMonitorApplication(var model:MonitorApplicationModel) extends Application {
   
-  protected  def createMainWindow():Window[ObjectTransactionImplObservable] = {
+  protected  def createMainWindow():Window[MonitorApplicationModel] = {
 	  return new PureObjectTransactionMonitorWindow(this, model) 
   }
   

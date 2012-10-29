@@ -10,22 +10,17 @@ import org.uqbar.commons.utils.Observable
 @Observable
 class ObjectTransactionImplObservable(var objectTransaction:ObjectTransactionImpl){
 	
-	var tableResult = Buffer[Entry]()
-	var listResult = List[Any]()
-	
-
-	def this() {
-		this(ObjectTransactionManager.getTransaction() match{
-		  case obTransactionImp:ObjectTransactionImpl => obTransactionImp
-		});
-	}
+	var transactions:java.util.List[ObjectTransactionImplObservable] = Buffer[ObjectTransactionImplObservable](this)
 	
 	def this (objectTransaction:ObjectTransaction) {
-		this(ObjectTransactionManager.getTransaction() match{
+		this(objectTransaction match{
 		  case obTransactionImp:ObjectTransactionImpl => obTransactionImp
 		});
 	}
-
+	
+	def this() {
+		this(ObjectTransactionManager.getTransaction());
+	}
 	
 	def getObjectTransaction() = objectTransaction
 
@@ -33,28 +28,16 @@ class ObjectTransactionImplObservable(var objectTransaction:ObjectTransactionImp
 	
 	def getIdentityWrapper() = this.objectTransaction.getAttributeMap().keySet().toList
 
-	def getTableResult() = tableResult.asJava
-
-	def setTableResult(tableResult:Buffer[Entry]) = this.tableResult = tableResult
-
-	def getListResult() = listResult.asJava
-
-	def setListResult[A](listResult:List[A]) = this.listResult = listResult.toList;
-	
 	def getChildren():java.util.List[ObjectTransactionImplObservable] = {
-		var result = Buffer[ObjectTransactionImplObservable]();
-		if(objectTransaction != null){
-			result.append(new ObjectTransactionImplObservable(objectTransaction));
-			objectTransaction.getParent() match {
-			  case transactionImp:ObjectTransactionImpl => this.objectTransaction = transactionImp 
-			  case _ => this.objectTransaction = null
-			};
-		}
-		return result;
+		if(objectTransaction != null) convertToModel(objectTransaction.getChildren()) else List()
 	}
 	
 	def getId() = objectTransaction.getId()
 	
 	def getParent() = new ObjectTransactionImplObservable(objectTransaction.getParent())
-
+	
+	def getTransactions()  = this.transactions
+	def setTransactions(list:java.util.List[ObjectTransactionImplObservable]) = this.transactions = list
+	
+	def convertToModel(list:java.util.List[ObjectTransactionImpl]) = list.map(o => new ObjectTransactionImplObservable(o))
 }

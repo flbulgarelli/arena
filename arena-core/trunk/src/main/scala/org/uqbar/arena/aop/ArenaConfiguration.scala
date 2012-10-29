@@ -30,8 +30,8 @@ class ArenaConfiguration extends ObservableConfiguration with TransactionalConfi
     }
 
     OandTAdvice
-      .addInterceptor(transactionInterceptor)
       .addInterceptor(observableFieldInterceptor)
+      .addInterceptor(transactionInterceptor)
 
     super.createAdvices().::(OandTAdvice)
   }

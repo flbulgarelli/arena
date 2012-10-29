@@ -8,6 +8,7 @@ import org.uqbar.arena.widgets.Button
 import org.uqbar.arena.widgets.Panel
 import org.uqbar.commons.model.UserException
 import org.uqbar.commons.utils.Observable
+import org.uqbar.arena.aop.potm.MonitorApplicationModel
 
 import com.uqbar.aop.transaction.ObjectTransactionManager
 import com.uqbar.common.transaction.ObjectTransaction
@@ -93,5 +94,5 @@ trait TransactionalWindowTrait[T] extends DialogTrait[T] with TaskOwner {
 		this.inTransaction = false;
 	}
 
-	def openMonitor() = new PureObjectTransactionMonitorWindow(this, new ObjectTransactionImplObservable()).open();
+	def openMonitor() = new PureObjectTransactionMonitorWindow(this, new MonitorApplicationModel()).open();
 }

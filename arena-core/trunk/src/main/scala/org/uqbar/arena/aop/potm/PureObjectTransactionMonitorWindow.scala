@@ -1,9 +1,4 @@
 package org.uqbar.arena.aop.potm
-import java.awt.Color
-
-import scala.collection.JavaConverters._
-import scala.collection.mutable.Buffer
-
 import org.uqbar.arena.actions.MessageSend
 import org.uqbar.arena.layout.VerticalLayout
 import org.uqbar.arena.widgets.tables.Column
@@ -13,20 +8,25 @@ import org.uqbar.arena.widgets.Button
 import org.uqbar.arena.widgets.Panel
 import org.uqbar.arena.windows.SimpleWindow
 import org.uqbar.arena.windows.WindowOwner
-
-import com.uqbar.aop.transaction.IdentityWrapper
 import com.uqbar.aop.transaction.ObjectTransactionImpl
+import org.uqbar.arena.bindings.PropertyAdapter
+import com.uqbar.aop.transaction.IdentityWrapper
+import org.uqbar.ui.jface.builder.ErrorsPanel
 
-class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTransactionImplObservable)
-  extends SimpleWindow[ObjectTransactionImplObservable](parent, model) with CollectionUtil {
+class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: MonitorApplicationModel)
+  extends SimpleWindow[MonitorApplicationModel](parent, model) {
 
-  var ot: ObjectTransactionImpl = null
+  var ot: ObjectTransactionImpl = _
+  
+  override def createErrorsPanel(mainPanel:Panel):ErrorsPanel = {
+	setTaskDescription("Transaccones abiertas");
+	super.createErrorsPanel(mainPanel)
+  }
 
   override def createFormPanel(mainPanel: Panel) = {
     setTitle("Monitor de Transacciones")
-    setTaskDescription("Transaccones abiertas")
     mainPanel.setLayout(new VerticalLayout())
-    ot = getModelObject().getObjectTransaction()
+    ot = getModelObject().getParent().getObjectTransaction()
 
     createTree(mainPanel)
     var panel = new Panel(mainPanel)
@@ -38,9 +38,9 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
 
   def createTree(panel: Panel) {
     var tree = new Tree(panel)
-    tree.onClickItem(new Function[ObjectTransactionImplObservable](onSelectedItem))
     tree.bindContentsToProperty("parent", "children")
     tree.bindNodeToProperty("id");
+	tree.bindValueToProperty("transaction");
     tree.setHeigth(200);
     tree.setWidth(700);
 
@@ -73,35 +73,16 @@ class PureObjectTransactionMonitorWindow(parent: WindowOwner, model: ObjectTrans
   }
 
   def createList(panel: Panel) = {
-    var list = new org.uqbar.arena.widgets.List(panel, "listResult");
-    list.onSelection(new Function[IdentityWrapper](onSelectionInList))
+    var list = new org.uqbar.arena.widgets.List(panel)
+    list.bindItemsToProperty("listResult")
+    list.bindValueToProperty("transactionalObject")
     list.setWidth(500);
     list.setHeigth(200);
   }
 
-  def onSelectedItem(tI: ObjectTransactionImplObservable*) = {
-    tI.head.getObjectTransaction() match {
-      case objectT: ObjectTransactionImpl => {
-        getModelObject().setListResult(convertSetToList(objectT.getAttributeMap().keySet()))
-        this.ot = objectT
-        getModelObject().setTableResult(Buffer())
-      }
-    }
-  }
-
-  def onSelectionInList(objects: IdentityWrapper*) {
-    if (ot != null) {
-      var provider = convertSetToListOfEntry(ot.getAttributeMap().get(objects.head).entrySet(), objects.head.getKey())
-      if (provider == null) {
-        provider = Buffer()
-      }
-      getModelObject().setTableResult(provider)
-    }
-  }
-
   override def addActions(actionsPanel: Panel) = {
-    var close = new Button(actionsPanel).setCaption("close")
-    close.setFontSize(25).setWidth(100).setHeigth(50)
+    var close = new Button(actionsPanel).setCaption("Close")
+//    close.setFontSize(25)//.setWidth(100).setHeigth(50)
     close.onClick(new MessageSend(this, "close"))
   }
 }
