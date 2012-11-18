@@ -16,24 +16,24 @@ object Configuration {
 
   var entities = new HashMap[String, EntityMapping[_]];
   protected var initialized = false;
-  
+
   def clear() {
     entities = new HashMap[String, EntityMapping[_]];
   }
 
   def checkStarted() {
-    if(!initialized)
+    if (!initialized)
       throw new ConfigurationException("Se debe inicializar la configuración de la persistencia llamando a Configure.configure() antes de realizar cualquier cosa.")
   }
-  
+
   def configure() {
     try {
       val classDescriptor = new ClassDescriptor();
-      val visitor = new EntityVisitor();
 
       val clazzes = new ClasspathCrawler(this.getClass().getClassLoader()).getClasses();
 
       for (clazz <- clazzes) {
+        val visitor = new EntityVisitor(clazz.asInstanceOf[Class[Entity]]);
         classDescriptor.describe(clazz, visitor);
       }
 

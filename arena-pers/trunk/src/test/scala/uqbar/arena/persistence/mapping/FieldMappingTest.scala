@@ -9,6 +9,7 @@ import uqbar.arena.persistence.testDomain.Modelo
 import uqbar.arena.persistence.testDomain.Persona
 import java.util.Date
 import uqbar.arena.persistence.SessionManager
+import uqbar.arena.persistence.testDomain.CelularCheto
 
 class FieldMappingTest extends AbstractArenaPersistenceTest {
 
@@ -57,6 +58,30 @@ class FieldMappingTest extends AbstractArenaPersistenceTest {
 
       Assert.assertNotSame(per, newPer);
       Assert.assertEquals(per, newPer);
+    })
+  }
+   
+  @Test
+  def testCheto {
+    SessionManager.runInSession({
+      var cel = new CelularCheto(Modelo.MOTOROLA_1100, "12345", null, 1.25, 0.25);
+      var celMapping = Configuration.mappingFor(cel);
+
+      Assert.assertNotNull(celMapping);
+
+      var n = graphDb.createNode();
+      for (m <- celMapping.getAllFields()) {
+        m.persist(SessionManager.currentSession, n, cel);
+      }
+
+      var newCel = new CelularCheto();
+
+      for (m <- celMapping.getAllFields()) {
+        m.hidrate(SessionManager.currentSession, n, newCel);
+      }
+
+      Assert.assertNotSame(cel, newCel);
+      Assert.assertEquals(cel, newCel);
     })
   }
 }

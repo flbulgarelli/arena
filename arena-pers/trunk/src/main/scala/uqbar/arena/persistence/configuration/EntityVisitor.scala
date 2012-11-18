@@ -14,28 +14,44 @@ import uqbar.arena.persistence.mapping.EntityMapping
 import uqbar.arena.persistence.mapping.FieldMapping
 import uqbar.arena.persistence.mapping.RelationMapping
 
-class EntityVisitor() {
+class EntityVisitor[T <: Entity](entityClazz: Class[T]) {
   var entity: EntityMapping[_] = null
 
-  def classAnotation[T <: Entity](clazz: Class[T], annotation: PersistentClass) {
-    entity = new EntityMapping(clazz)
-    Configuration.entities.put(clazz.getCanonicalName(), entity)
+  if (isEntity(entityClazz)) {
+    entity = new EntityMapping(entityClazz)
+    Configuration.entities.put(entityClazz.getCanonicalName(), entity)
+  }
+
+  def isEntity(clazz: Class[_]): Boolean = {
+    if (clazz == classOf[Object] || clazz == null)
+      return false
+    else if (clazz.isAnnotationPresent(classOf[PersistentClass]))
+      true
+    else
+      isEntity(clazz.getSuperclass())
   }
 
   def methodAnnotation(clazz: Class[_], method: Method, annotation: PersistentField) {
-	val name = extractName(method,annotation.annotationType().getName())
-	val fieldType = method.getGenericReturnType();
-	this.entity.mappings += FieldMapping.create(name, fieldType)
+    checkPersistentClass(method, clazz)
+    val name = extractName(method, annotation.annotationType().getName())
+    val fieldType = method.getGenericReturnType();
+    this.entity.mappings += FieldMapping.create(name, fieldType)
   }
 
   def methodAnnotation(clazz: Class[_], method: Method, annotation: Relation) {
-	val name = extractName(method,annotation.annotationType().getName())
-	val fieldType = method.getGenericReturnType();
-	this.entity.mappings += RelationMapping.create(name, fieldType)
+    checkPersistentClass(method, clazz)
+    val name = extractName(method, annotation.annotationType().getName())
+    val fieldType = method.getGenericReturnType();
+    this.entity.mappings += RelationMapping.create(name, fieldType)
   }
-  
-  def extractName(method:Method, annotationName:String):String = {
-    if(!method.getName().startsWith("get")){
+
+  def checkPersistentClass(method: Method, clazz: Class[_]) {
+    if (this.entity == null)
+      throw new ConfigurationException("El metodo anotado se encuentra en una clase no anotada:" + method.getName() + " en:" + clazz.getCanonicalName())
+  }
+
+  def extractName(method: Method, annotationName: String): String = {
+    if (!method.getName().startsWith("get")) {
       throw new ConfigurationException("La annotation " + annotationName + " solo es válida anotando un getter");
     }
     return StringUtils.uncapitalize(method.getName().substring(3));

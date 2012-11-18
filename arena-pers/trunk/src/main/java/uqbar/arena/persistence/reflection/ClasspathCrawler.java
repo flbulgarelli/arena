@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.zip.ZipException;
+
+import org.apache.commons.logging.LogFactory;
 
 public class ClasspathCrawler {
 	private ClassLoader classLoader = null;
@@ -87,15 +90,19 @@ public class ClasspathCrawler {
 
 	protected Set<Class<?>> crawlJar(File f) throws Exception {
 		Set<Class<?>> result = new HashSet<Class<?>>();
-		
 		String path = f.getPath().split("!")[0].substring(5);
-		Enumeration<JarEntry> entries = new JarFile(path).entries();
-		while(entries.hasMoreElements()){
-			String entry = entries.nextElement().getName();
-			if(isClass(entry)){
-				result.add(Class.forName(this.getClassName(entry)));
+
+		try{
+			Enumeration<JarEntry> entries = new JarFile(path).entries();
+			while(entries.hasMoreElements()){
+				String entry = entries.nextElement().getName();
+				if(isClass(entry)){
+					result.add(Class.forName(this.getClassName(entry)));
+				}
 			}
-		}
+		}catch(ZipException e){
+			LogFactory.getLog(this.getClass()).warn("Error leyendo el jar: " + path + " se ignora y se continua.", e);
+		}		
 		
 		return result;
 	}

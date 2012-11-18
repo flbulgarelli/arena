@@ -49,6 +49,8 @@ class Session(graphDB: GraphDatabaseService) {
   }
 
   def delete(obj:Entity){
+    assert(obj != null, "El objeto a borrar no puede ser null")
+
     val node = graphDB.getNodeById(obj.getId().longValue());
     for(r <- node.getRelationships())
       r.delete();
@@ -56,6 +58,7 @@ class Session(graphDB: GraphDatabaseService) {
   }
   
   def save(obj:Entity){
+    assert(obj != null, "El objeto a salvar no puede ser null")
     Configuration.mappingFor(obj).persist(this, obj);
   }
   
@@ -72,7 +75,16 @@ class Session(graphDB: GraphDatabaseService) {
   }
   
   def getAll[T](clazz:Class[T]):List[T] = {
-    val nodes = graphDB.index().forNodes("CLASS").get("clazzName", clazz.getName()).iterator()
+    assert(clazz != null, "La clase a buscar no puede ser null")
+    
+    val index = graphDB.index().forNodes("CLASS")
+    
+    assert(index != null, "El indice para CLASS es null !!!!")
+    val indexHits = index.get("clazzName", clazz.getName())
+    
+    assert(indexHits != null, "El indexHits para " + clazz.getName() + " es null!!!!")
+    
+    val nodes = indexHits.iterator()
     convertTo(clazz,nodes)
   }
   
@@ -86,6 +98,7 @@ class Session(graphDB: GraphDatabaseService) {
   }
   
   def searchByExample[T <: Entity](example:T):List[T] = {
+    assert(example != null, "El objeto ejemplo no puede ser null")
     Configuration.mappingFor(example).searchByExample(example,this) 
   }
 }
