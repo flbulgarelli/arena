@@ -6,15 +6,15 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.internal.databinding.observable.masterdetail.DetailObservableSet;
 import org.uqbar.arena.isolation.IsolationLevelEvents;
 
-import com.uqbar.aop.AopConfig;
 import com.uqbar.aop.transaction.ObjectTransactionManager;
+import com.uqbar.apo.APOConfig;
 import com.uqbar.common.transaction.ObjectTransaction;
 
 public class DetailTransactionalObservableSet extends DetailObservableSet{
 	
 	private final String isolationKey = "framework.aop.opo.isolationLevel";
 	private ObjectTransaction objectTransactionImpl = ObjectTransactionManager.getTransaction();
-	private IsolationLevelEvents isolationLevelEvents = IsolationLevelEvents.valueOf(AopConfig.getProperty(isolationKey));
+	private IsolationLevelEvents isolationLevelEvents = IsolationLevelEvents.valueOf(APOConfig.getProperty(isolationKey));
 
 	public DetailTransactionalObservableSet(IObservableFactory factory,
 		  IObservableValue outerObservableValue, Object detailType) {

@@ -1,7 +1,6 @@
 package org.uqbar.lacar.ui.impl.jface.bindings
 
 import java.beans.PropertyDescriptor
-
 import org.eclipse.core.databinding.observable.masterdetail.IObservableFactory
 import org.eclipse.core.databinding.observable.value.AbstractObservableValue
 import org.eclipse.core.databinding.observable.value.IObservableValue
@@ -10,14 +9,13 @@ import org.eclipse.core.databinding.observable.Realm
 import org.eclipse.core.internal.databinding.beans.JavaBeanObservableValue
 import org.eclipse.core.internal.databinding.observable.masterdetail.DetailObservableValue
 import org.uqbar.arena.isolation.IsolationLevelEvents
-
 import com.uqbar.aop.transaction.ObjectTransactionManager
-import com.uqbar.aop.AopConfig
+import com.uqbar.apo.APOConfig
 
 trait ObservableEvents {
-  val isolationKey = "framework.aop.opo.isolationLevel";
+  val isolationKey = "framework.apo.poo.isolationLevel";
   var objectTransactionImpl = ObjectTransactionManager.getTransaction()
-  val isolationLevelEvents = IsolationLevelEvents.valueOf(AopConfig.getProperty(isolationKey))
+  val isolationLevelEvents = IsolationLevelEvents.valueOf(APOConfig.getProperty(isolationKey))
 
 }
 

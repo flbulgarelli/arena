@@ -6,7 +6,7 @@ import org.uqbar.lacar.ui.impl.jface.JFaceApplicationBuilder;
 import org.uqbar.lacar.ui.model.ApplicationRunner;
 import org.uqbar.lacar.ui.model.WindowFactory;
 
-import com.uqbar.aop.APOClassLoader;
+import com.uqbar.apo.APOClassLoader;
 
 /**
  * Punto de entrada a una aplicación Arena.

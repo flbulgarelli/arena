@@ -7,15 +7,15 @@ import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.internal.databinding.beans.JavaBeanObservableMap;
 import org.uqbar.arena.isolation.IsolationLevelEvents;
 
-import com.uqbar.aop.AopConfig;
 import com.uqbar.aop.transaction.ObjectTransactionManager;
+import com.uqbar.apo.APOConfig;
 import com.uqbar.common.transaction.ObjectTransaction;
 
 public class JavaBeanTransacionalObservableMap extends JavaBeanObservableMap{
 	
-	private final String isolationKey = "framework.aop.opo.isolationLevel";
+	private final String isolationKey = "framework.apo.poo.isolationLevel";
 	private ObjectTransaction objectTransactionImpl = ObjectTransactionManager.getTransaction();
-	private IsolationLevelEvents isolationLevelEvents = IsolationLevelEvents.valueOf(AopConfig.getProperty(isolationKey));
+	private IsolationLevelEvents isolationLevelEvents = IsolationLevelEvents.valueOf(APOConfig.getProperty(isolationKey));
 
 	
 	public JavaBeanTransacionalObservableMap(IObservableSet domain, PropertyDescriptor propertyDescriptor) {

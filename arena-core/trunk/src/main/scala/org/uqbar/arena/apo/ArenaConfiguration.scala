@@ -1,14 +1,13 @@
-package org.uqbar.arena.aop
+package org.uqbar.arena.apo
+
 import org.uqbar.commons.utils.TransactionalAndObservable
-import com.uqbar.aop.pointcut.AnnotationPointCut
-import com.uqbar.aop.pointcut.FieldPointCut
-import com.uqbar.aop.pointcut.PointCut
-import com.uqbar.aop.Advice
-import com.uqbar.poo.aop.ObservableConfiguration
-import javassist.ClassPool
-import com.uqbar.aop.AdviceWeaver
+import com.uqbar.apo.Advice
+import com.uqbar.apo.pointcut.PointCut
+import com.uqbar.apo.pointcut.AnnotationPointCut
 import com.uqbar.pot.aop.TransactionalConfiguration
+import com.uqbar.apo.pointcut.FieldPointCut
 import javassist.CtClass
+import com.uqbar.poo.aop.ObservableConfiguration
 /**
  *
  * @author nny

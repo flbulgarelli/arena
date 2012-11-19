@@ -35,7 +35,11 @@ public class JFacePanelBuilder extends JFaceWidgetBuilder<Composite> implements 
 	private List<WidgetBuilder> children = CollectionFactory.createList();
 
 	public JFacePanelBuilder(JFaceContainer container) {
-		super(container, new Composite(container.getJFaceComposite(), SWT.NONE));
+		this(container, new Composite(container.getJFaceComposite(), SWT.NONE));
+	}
+	
+	public JFacePanelBuilder(JFaceContainer container, Composite composite) {
+		super(container, composite);
 	}
 
 	// ********************************************************
