@@ -94,6 +94,7 @@ class TypeWrapper(t: Type) {
   def name(): String = {
     return t match {
       case c: Class[_] => c.getName()
+      case x => "" + x
     }
   }
 }

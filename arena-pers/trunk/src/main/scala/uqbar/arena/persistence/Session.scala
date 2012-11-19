@@ -59,7 +59,10 @@ class Session(graphDB: GraphDatabaseService) {
   
   def save(obj:Entity){
     assert(obj != null, "El objeto a salvar no puede ser null")
-    Configuration.mappingFor(obj).persist(this, obj);
+    val mapping = Configuration.mappingFor(obj)
+    
+    assert(mapping != null, "No se encontro el mapping para la clase:" + obj.getClass().getName() + " revisar los annotations")
+    mapping.persist(this, obj);
   }
   
   def createEntity(clazzName: String, id: Int): Object = {
