@@ -260,6 +260,33 @@
 					<tagBase>${scm.svnServer.xpdev}/${scm-xpdev-arena}/tags</tagBase>
 				</configuration>
 			</plugin>
+
+			<!-- mvn assembly:assembly -DdescriptorId=jar-with-dependencies -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-5</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+<!-- 						<manifest> -->
+<!-- 							<mainClass>class</mainClass> -->
+<!-- 						</manifest> -->
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 

@@ -16,7 +16,7 @@ import com.uqbar.apo.util.IExampleObject;
 /**
  * @author nny
  * 
- *  * -Djava.system.class.loader=org.unqbar.arena.aop.VideoclubClassLoader
+ *  -Djava.system.class.loader=com.uqbar.apo.APOClassLoader
  *
  */
 public class TestChangeEvent extends AbstractTestObsevable{
