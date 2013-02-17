@@ -66,16 +66,27 @@ public class Table<R> extends Control {
 	}
 
 	/**
+	 * @deprecated Use {@link #bindSelectionToProperty(String)} instead
+	 */
+	@Deprecated
+	public <C extends ControlBuilder> Binding<C> bindSelection(String selected) {
+		return bindSelectionToProperty(selected);
+	}
+
+	/**
 	 * Vincula la fila seleccionada de esta tabla con una propiedad del modelo asociado al contenedor.
+	 * 
+	 * This is just a synonym of {@link #bindValueToProperty(String)} 
 	 * 
 	 * @param selected Nombre de la propiedad contra la cual se desea vincular la fila seleccionada de esta
 	 *            tabla.
 	 * 
 	 * @return Esta misma tabla, para enviar mensajes anidados
 	 */
-	public <C extends ControlBuilder> Binding<C> bindSelection(String selected) {
-		return this.bindValue(new ObservableProperty(selected));
+	public <C extends ControlBuilder> Binding<C> bindSelectionToProperty(String selected) {
+		return this.bindValueToProperty(selected);
 	}
+	
 
 	// ********************************************************
 	// ** Columns

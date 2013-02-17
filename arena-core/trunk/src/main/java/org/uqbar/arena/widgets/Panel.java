@@ -50,12 +50,20 @@ public class Panel extends Widget implements Container {
 	// ********************************************************
 
 	/**
+	 * @deprecated Use {@link #bindContentsToProperty(String)} instead
+	 */
+	@Deprecated
+	public Panel bindContents(String propertyName) {
+		return bindContentsToProperty(propertyName);
+	}
+
+	/**
 	 * Vincula el contenido de este panel con una propiedad del panel padre.
 	 * 
 	 * TODO WARNING: Este no es exactamente un "binding", se asigna el modelo correspondiente pero no quedan
 	 * "vinculados", en caso de modificaciones posteriores al modelo el panel no se entera.
 	 */
-	public Panel bindContents(String propertyName) {
+	public Panel bindContentsToProperty(String propertyName) {
 		Object propertyModel = this.getModel().getProperty(propertyName);
 		if (propertyModel instanceof IModel) {
 			this.model = (IModel<?>) propertyModel;

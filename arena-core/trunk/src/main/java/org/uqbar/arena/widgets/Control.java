@@ -94,6 +94,10 @@ public abstract class Control extends Widget {
 			}
 		});
 	}
+	
+	public <C extends ControlBuilder> Binding<C> bindVisibleToProperty(String propertyName) {
+		return this.bindVisible(new ObservableProperty(propertyName));
+	}
 
 	/**
 	 * Adds a binding betweeen two observables, validating them in this context.
