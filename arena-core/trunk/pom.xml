@@ -170,9 +170,9 @@
 		<!-- /SCALA -->
 		<!-- ECLIPSE -->
 		<dependency>
-			<groupId>com.ibm</groupId>
-			<artifactId>com.ibm.icu</artifactId>
-			<version>3.8.1.v20080530</version>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
+			<version>50.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.core</groupId>
